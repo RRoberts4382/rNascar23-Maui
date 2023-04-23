@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net7.0;net7.0-maccatalyst</TargetFrameworks>
@@ -14,20 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Platforms\Android\**" />
-	  <Compile Remove="Platforms\iOS\**" />
-	  <EmbeddedResource Remove="Platforms\Android\**" />
-	  <EmbeddedResource Remove="Platforms\iOS\**" />
-	  <MauiCss Remove="Platforms\Android\**" />
-	  <MauiCss Remove="Platforms\iOS\**" />
-	  <MauiXaml Remove="Platforms\Android\**" />
-	  <MauiXaml Remove="Platforms\iOS\**" />
-	  <None Remove="Platforms\Android\**" />
-	  <None Remove="Platforms\iOS\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="RestSharp" Version="109.0.1" />
@@ -35,7 +22,19 @@
 
 	<ItemGroup>
 	  <Folder Include="Flags\" />
+	  <Folder Include="LapTimes\" />
+	  <Folder Include="LiveFeeds\" />
+	  <Folder Include="LoopData\" />
+	  <Folder Include="Schedules\" />
+	  <Folder Include="Points\" />
+	  <Folder Include="PitStops\" />
 	  <Folder Include="Service\Flags\" />
+	  <Folder Include="Service\LapTimes\" />
+	  <Folder Include="Service\LiveFeeds\" />
+	  <Folder Include="Service\LoopData\" />
+	  <Folder Include="Service\Points\" />
+	  <Folder Include="Service\PitStops\" />
+	  <Folder Include="Service\Schedules\" />
 	</ItemGroup>
 
 </Project>

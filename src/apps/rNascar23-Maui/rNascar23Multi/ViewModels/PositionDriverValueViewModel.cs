@@ -1,11 +1,20 @@
 ﻿using rNascar23Multi.Models;
 using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
+using rNascar23Multi.Logic;
+using rNascar23Multi.Sdk.Points.Ports;
+using rNascar23Multi.Sdk.Common;
 
 namespace rNascar23Multi.ViewModels
 {
     public partial class PositionDriverValueViewModel : ObservableObject
     {
+        ILogger<DriverValueViewModel> _logger;
+        IPointsRepository _pointsRepository;
+
+        private GridViewTypes _gridViewType;
+
         private ObservableCollection<PositionDriverValueModel> _models = new ObservableCollection<PositionDriverValueModel>();
 
         public ObservableCollection<PositionDriverValueModel> Models
@@ -35,13 +44,18 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _headerBackgroundColor, value);
         }
 
-        public PositionDriverValueViewModel()
-        {
-            LoadFromSource();
-        }
-
         public PositionDriverValueViewModel(GridViewTypes gridViewType)
         {
+            _gridViewType = gridViewType;
+
+            _logger = App.serviceProvider.GetService<ILogger<DriverValueViewModel>>();
+
+            _pointsRepository = App.serviceProvider.GetService<IPointsRepository>();
+
+            var updateHandler = App.serviceProvider.GetService<UpdateNotificationHandler>();
+
+            updateHandler.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
+
             switch (gridViewType)
             {
                 case GridViewTypes.Points:
@@ -67,75 +81,115 @@ namespace rNascar23Multi.ViewModels
                         break;
                     }
             }
-
-            LoadFromSource();
         }
 
-        protected virtual void LoadFromSource()
+        private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
         {
-            Models.Add(new PositionDriverValueModel()
+            try
             {
-                Driver = "Jim Smith",
-                Value = 0.123F
-            });
+                _logger.LogInformation($"PositionDriverValueViewModel - UpdateTimer_UpdateTimerElapsed GridViewType:{_gridViewType}");
 
-            Models.Add(new PositionDriverValueModel()
+                await LoadModelsAsync(e.SessionDetails);
+            }
+            catch (Exception ex)
             {
-                Driver = "Frank Rizzo",
-                Value = 2.472F
-            });
+                _logger.LogError(ex, "Error in PositionDriverValueViewModel:UpdateTimer_UpdateTimerElapsed");
+            }
+        }
 
-            Models.Add(new PositionDriverValueModel()
+        private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
+        {
+            try
             {
-                Driver = "Parker Kligerman",
-                Value = 3.472F
-            });
+                switch (_gridViewType)
+                {
+                    case GridViewTypes.Points:
+                        {
+                            if (sessionDetails != null)
+                            {
+                                await BuildDriverPointsDataAsync(
+                                    sessionDetails.SeriesId,
+                                    sessionDetails.RaceId);
+                            }
 
-            Models.Add(new PositionDriverValueModel()
-            {
-                Driver = "Joey Gase",
-                Value = 4.472F
-            });
+                            break;
+                        }
+                    case GridViewTypes.StagePoints:
+                        {
+                            if (sessionDetails != null)
+                            {
+                                await BuildStagePointsDataAsync(
+                                    sessionDetails.SeriesId,
+                                    sessionDetails.RaceId);
+                            }
 
-            Models.Add(new PositionDriverValueModel()
+                            break;
+                        }
+                    case GridViewTypes.Movers:
+                    case GridViewTypes.Fallers:
+                    case GridViewTypes.Best5Laps:
+                    case GridViewTypes.Best10Laps:
+                    case GridViewTypes.Best15Laps:
+                    case GridViewTypes.Last5Laps:
+                    case GridViewTypes.Last10Laps:
+                    case GridViewTypes.Last15Laps:
+                    case GridViewTypes.None:
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
             {
-                Driver = "Austin Hill",
-                Value = 5.472F
-            });
+                _logger.LogError(ex, $"Error in DriverValueViewModel:LoadModelsAsync GridViewType:{_gridViewType}");
+            }
+        }
 
-            Models.Add(new PositionDriverValueModel()
-            {
-                Driver = "Dale Earnhardt",
-                Value = 0.123F
-            });
+        private async Task BuildDriverPointsDataAsync(int seriesId, int raceId)
+        {
+            var driverPoints = await _pointsRepository.GetDriverPointsAsync((SeriesTypes)seriesId, raceId);
 
-            Models.Add(new PositionDriverValueModel()
-            {
-                Driver = "Red Byron",
-                Value = 2.472F
-            });
+            Models.Clear();
 
-            Models.Add(new PositionDriverValueModel()
-            {
-                Driver = "Curtis Turner",
-                Value = 3.472F
-            });
+            var models = driverPoints.
+                Select(p => new PositionDriverValueModel()
+                {
+                    Position = p.PointsPosition,
+                    Driver = p.Driver,
+                    Value = p.Points
+                }).OrderBy(p => p.Position).ToList();
 
-            Models.Add(new PositionDriverValueModel()
+            foreach (var model in models)
             {
-                Driver = "Junior Johnson",
-                Value = 4.472F
-            });
+                Models.Add(model);
+            }
+        }
 
-            Models.Add(new PositionDriverValueModel()
-            {
-                Driver = "Jeff Gordon",
-                Value = 5.472F
-            });
+        private async Task BuildStagePointsDataAsync(int seriesId, int raceId)
+        {
+            var stagePoints = await _pointsRepository.GetStagePointsAsync((SeriesTypes)seriesId, raceId);
 
-            for (int i = 0; i < Models.Count; i++)
+            Models.Clear();
+
+            if (stagePoints == null || stagePoints.Count() == 0)
+                return;
+
+            //stagePoints = stagePoints.Where(s => s.RaceId == raceId).ToList();
+
+            int i = 1;
+            foreach (var driverStagePoints in stagePoints.
+                Where(s => (s.Stage1Points + s.Stage2Points + s.Stage3Points) > 0).
+                OrderByDescending(s => (s.Stage1Points + s.Stage2Points + s.Stage3Points)))
             {
-                Models[i].Position = i;
+                var model = new PositionDriverValueModel()
+                {
+                    Position = i,
+                    Driver = $"{driverStagePoints.FirstName} {driverStagePoints.LastName}",
+                    Value = driverStagePoints.Stage1Points + driverStagePoints.Stage2Points + driverStagePoints.Stage3Points
+                };
+
+                Models.Add(model);
+
+                i++;
             }
         }
     }

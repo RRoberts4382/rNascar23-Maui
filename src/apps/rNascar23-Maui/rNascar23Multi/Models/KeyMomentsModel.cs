@@ -2,6 +2,20 @@
 {
     public class KeyMomentsModel : NotifyModel
     {
+        private int _noteId;
+        public int NoteId
+        {
+            get
+            {
+                return _noteId;
+            }
+            set
+            {
+                _noteId = value;
+                OnPropertyChanged(nameof(NoteId));
+            }
+        }
+
         private int _flagState;
         public int FlagState
         {
@@ -41,20 +55,6 @@
             {
                 _comments = value;
                 OnPropertyChanged(nameof(Comments));
-            }
-        }
-
-        private DateTime _timestamp;
-        public DateTime Timestamp
-        {
-            get
-            {
-                return _timestamp;
-            }
-            set
-            {
-                _timestamp = value;
-                OnPropertyChanged(nameof(Timestamp));
             }
         }
     }

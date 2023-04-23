@@ -31,9 +31,24 @@ namespace rNascar23Multi.ViewModels
                 ViewType = GridViewTypes.StagePoints
             });
 
+            //Models.Add(new GridViewModel()
+            //{
+            //    ViewType = GridViewTypes.LapLeaders
+            //});
+
+            //Models.Add(new GridViewModel()
+            //{
+            //    ViewType = GridViewTypes.FastestLaps
+            //});
+
             Models.Add(new GridViewModel()
             {
-                ViewType = GridViewTypes.LapLeaders
+                ViewType = GridViewTypes.Movers
+            });
+
+            Models.Add(new GridViewModel()
+            {
+                ViewType = GridViewTypes.Fallers
             });
         }
     }

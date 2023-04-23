@@ -1,11 +1,23 @@
-﻿using rNascar23Multi.Models;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.PlatformUI;
+using rNascar23Multi.Logic;
+using rNascar23Multi.Models;
+using rNascar23Multi.Sdk.Common;
+using rNascar23Multi.Sdk.Data.LiveFeeds.Ports;
+using rNascar23Multi.Sdk.LapTimes.Models;
+using rNascar23Multi.Sdk.LapTimes.Ports;
 using System.Collections.ObjectModel;
 
 namespace rNascar23Multi.ViewModels
 {
     public partial class DriverValueViewModel : ObservableObject
     {
+        ILogger<DriverValueViewModel> _logger;
+        private ILiveFeedRepository _liveFeedRepository;
+        private IMoversFallersService _moversFallersService;
+        private ILapTimesRepository _lapTimeRepository;
+        private GridViewTypes _gridViewType;
+
         private ObservableCollection<DriverValueModel> _models = new ObservableCollection<DriverValueModel>();
 
         public ObservableCollection<DriverValueModel> Models
@@ -35,14 +47,23 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _headerBackgroundColor, value);
         }
 
-        public DriverValueViewModel()
-        {
-            LoadFromSource();
-        }
-
         public DriverValueViewModel(GridViewTypes gridViewType)
         {
-            switch (gridViewType)
+            _gridViewType = gridViewType;
+
+            _logger = App.serviceProvider.GetService<ILogger<DriverValueViewModel>>();
+
+            _liveFeedRepository = App.serviceProvider.GetService<ILiveFeedRepository>();
+
+            _moversFallersService = App.serviceProvider.GetService<IMoversFallersService>();
+
+            _lapTimeRepository = App.serviceProvider.GetService<ILapTimesRepository>();
+
+            var updateHandler = App.serviceProvider.GetService<UpdateNotificationHandler>();
+
+            updateHandler.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
+
+            switch (_gridViewType)
             {
                 case GridViewTypes.FastestLaps:
                     {
@@ -106,71 +127,187 @@ namespace rNascar23Multi.ViewModels
                         break;
                     }
             }
-
-            LoadFromSource();
         }
 
-        protected virtual void LoadFromSource()
+        private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
         {
-            Models.Add(new DriverValueModel()
+            try
             {
-                Driver = "Jim Smith",
-                Value = 0.123F
-            });
+                _logger.LogInformation($"DriverValueViewModel - UpdateTimer_UpdateTimerElapsed GridViewType:{_gridViewType}");
 
-            Models.Add(new DriverValueModel()
+                await LoadModelsAsync(e.SessionDetails);
+            }
+            catch (Exception ex)
             {
-                Driver = "Frank Rizzo",
-                Value = 2.472F
-            });
+                _logger.LogError(ex, "Error in DriverValueViewModel:UpdateTimer_UpdateTimerElapsed");
+            }
+        }
 
-            Models.Add(new DriverValueModel()
+        private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
+        {
+            try
             {
-                Driver = "Parker Kligerman",
-                Value = 3.472F
-            });
+                switch (_gridViewType)
+                {
+                    case GridViewTypes.FastestLaps:
+                        {
+                            await BuildFastestLapsDataAsync();
+                            break;
+                        }
+                    case GridViewTypes.LapLeaders:
+                        {
+                            await BuildLapLeadersDataAsync();
+                            break;
+                        }
+                    case GridViewTypes.Movers:
+                        {
+                            if (sessionDetails != null)
+                            {
+                                await BuildMoversDataAsync(
+                                    sessionDetails.SeriesId,
+                                    sessionDetails.RaceId);
+                            }
 
-            Models.Add(new DriverValueModel()
-            {
-                Driver = "Joey Gase",
-                Value = 4.472F
-            });
+                            break;
+                        }
+                    case GridViewTypes.Fallers:
+                        {
+                            if (sessionDetails != null)
+                            {
+                                await BuildFallersDataAsync(
+                                    sessionDetails.SeriesId,
+                                    sessionDetails.RaceId);
+                            }
 
-            Models.Add(new DriverValueModel()
+                            break;
+                        }
+                    case GridViewTypes.StagePoints:
+                    case GridViewTypes.Best5Laps:
+                    case GridViewTypes.Best10Laps:
+                    case GridViewTypes.Best15Laps:
+                    case GridViewTypes.Last5Laps:
+                    case GridViewTypes.Last10Laps:
+                    case GridViewTypes.Last15Laps:
+                    case GridViewTypes.None:
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
             {
-                Driver = "Austin Hill",
-                Value = 5.472F
-            });
+                _logger.LogError(ex, $"Error in DriverValueViewModel:LoadModelsAsync GridViewType:{_gridViewType}");
+            }
+        }
 
-            Models.Add(new DriverValueModel()
-            {
-                Driver = "Dale Earnhardt",
-                Value = 0.123F
-            });
+        private async Task BuildLapLeadersDataAsync()
+        {
+            var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
 
-            Models.Add(new DriverValueModel()
-            {
-                Driver = "Red Byron",
-                Value = 2.472F
-            });
+            Models.Clear();
 
-            Models.Add(new DriverValueModel()
+            int i = 1;
+            foreach (var lapLedLeader in liveFeed.Vehicles.
+                Where(v => v.LapsLed.Count > 0).
+                OrderByDescending(v => v.LapsLed.Sum(l => l.EndLap - l.StartLap)).
+                Take(5))
             {
-                Driver = "Curtis Turner",
-                Value = 3.472F
-            });
+                var lapLeader = new DriverValueModel()
+                {
+                    Driver = lapLedLeader.Driver.FullName,
+                    Value = lapLedLeader.LapsLed.Sum(l => l.EndLap - l.StartLap)
+                };
 
-            Models.Add(new DriverValueModel()
-            {
-                Driver = "Junior Johnson",
-                Value = 4.472F
-            });
+                Models.Add(lapLeader);
+                i++;
+            }
+        }
 
-            Models.Add(new DriverValueModel()
+        private async Task BuildFastestLapsDataAsync()
+        {
+            var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
+
+            Models.Clear();
+
+            //if (UserSettings.FastestLapsDisplayType == SpeedTimeType.MPH)
+            //{
+            var laps = liveFeed.Vehicles.
+                Where(v => v.BestLapSpeed > 0).
+                OrderByDescending(v => v.BestLapSpeed).
+                Take(5).
+                Select(v => new DriverValueModel()
+                {
+                    Driver = v.Driver.FullName,
+                    Value = (float)Math.Round(v.BestLapSpeed, 3)
+                }).
+                ToList();
+
+            foreach (var lap in laps)
             {
-                Driver = "Jeff Gordon",
-                Value = 5.472F
-            });
+                Models.Add(lap);
+            }
+
+            //}
+            //else
+            //{
+            //    models = liveFeed.Vehicles.
+            //        Where(v => v.BestLapTime > 0).
+            //        OrderBy(v => v.BestLapTime).
+            //        Take(10).
+            //        Select(v => new DriverValueModel()
+            //        {
+            //            Driver = v.Driver.FullName,
+            //            Value = (float)Math.Round(v.BestLapTime, 3)
+            //        }).ToList();
+            //}
+        }
+
+        private async Task BuildMoversDataAsync(int seriesId, int raceId)
+        {
+            LapTimeData lapTimeData = await _lapTimeRepository.GetLapTimeDataAsync((SeriesTypes)seriesId, raceId);
+
+            Models.Clear();
+
+            var changes = _moversFallersService.GetDriverPositionChanges(lapTimeData);
+
+            var laps = changes.
+                OrderByDescending(c => c.ChangeSinceFlagChange).
+                Where(c => c.ChangeSinceFlagChange > 0).
+                Select(c => new DriverValueModel()
+                {
+                    Driver = c.Driver,
+                    Value = c.ChangeSinceFlagChange
+                }).
+                Take(5).
+                ToList();
+
+            foreach (var lap in laps)
+            {
+                Models.Add(lap);
+            }
+        }
+
+        private async Task BuildFallersDataAsync(int seriesId, int raceId)
+        {
+            LapTimeData lapTimeData = await _lapTimeRepository.GetLapTimeDataAsync((SeriesTypes)seriesId, raceId);
+
+            Models.Clear();
+
+            var changes = _moversFallersService.GetDriverPositionChanges(lapTimeData);
+
+            var laps = changes.
+                OrderBy(c => c.ChangeSinceFlagChange).
+                Where(c => c.ChangeSinceFlagChange < 0).
+                Select(c => new DriverValueModel()
+                {
+                    Driver = c.Driver,
+                    Value = c.ChangeSinceFlagChange
+                }).
+                ToList();
+
+            foreach (var lap in laps)
+            {
+                Models.Add(lap);
+            }
         }
     }
 }

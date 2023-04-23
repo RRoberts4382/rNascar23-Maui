@@ -6,7 +6,7 @@ namespace rNascar23Multi.Sdk.Common
     {
         #region consts
 
-        private const string DefaultRootDirectory = "rNascar23\\";
+        private const string DefaultRootDirectory = "rNascar23Multi.Sdk\\";
         private const string DefaultDataDirectory = "Data\\";
         private const string DefaultLogDirectory = "Logs\\";
         private const string UserSettingsFileName = "UserSettings.json";

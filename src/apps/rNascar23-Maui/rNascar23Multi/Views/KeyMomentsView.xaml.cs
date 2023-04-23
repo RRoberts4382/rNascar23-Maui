@@ -6,11 +6,11 @@ public partial class KeyMomentsView : ContentView
 {
     private KeyMomentsViewModel _viewModel;
 
-    public KeyMomentsView()
-	{
-		InitializeComponent();
+    public KeyMomentsView(KeyMomentsViewModel viewModel)
+    {
+        InitializeComponent();
 
-        _viewModel = new KeyMomentsViewModel();
+        _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
 
         BindingContext = _viewModel;
     }

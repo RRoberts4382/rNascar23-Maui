@@ -10,7 +10,16 @@ public partial class LeaderboardView : ContentView
     {
         InitializeComponent();
 
-        _viewModel = new LeaderboardViewModel();
+        _viewModel = App.serviceProvider.GetService<LeaderboardViewModel>();
+
+        BindingContext = _viewModel;
+    }
+
+    public LeaderboardView(LeaderboardViewModel viewModel)
+    {
+        InitializeComponent();
+
+        _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
 
         BindingContext = _viewModel;
     }

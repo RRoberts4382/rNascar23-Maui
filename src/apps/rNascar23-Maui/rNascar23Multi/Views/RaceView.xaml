@@ -13,8 +13,10 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="225"/>
         </Grid.ColumnDefinitions>
-        <local:RpqHeader Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
-        <local:LeaderboardView Grid.Column="0" Grid.Row="1"/>
+        <local:RpqHeaderView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
+        <Border Grid.Column="0" Grid.Row="1">
+            <local:LeaderboardView BackgroundColor="Pink" />
+        </Border>
         <local:VerticalGridView Grid.Column="1" Grid.Row="1" BackgroundColor="Black" />
         <local:HorizontalGridView Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="Black" />
     </Grid>

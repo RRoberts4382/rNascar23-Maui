@@ -1,6 +1,6 @@
 ﻿namespace rNascar23Multi.Sdk.Common
 {
-    public enum VehicleEventStatus
+    public enum VehicleStatusTypes
     {
         VehicleEventStatus0,
         OnTrack = 1,

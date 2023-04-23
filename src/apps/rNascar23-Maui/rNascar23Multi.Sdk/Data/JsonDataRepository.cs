@@ -4,62 +4,105 @@ using System.Xml.Serialization;
 
 namespace rNascar23Multi.Sdk.Data
 {
-    public class JsonDataRepository
+    public abstract class JsonDataRepository
     {
-        private readonly ILogger<JsonDataRepository> _logger;
+        #region consts
+
+        private const string UserAgentTag = "rNascar23";
+
+        #endregion
+
+        #region fields
+
+        protected readonly ILogger<JsonDataRepository> _logger;
+
+        #endregion
+
+        #region ctor
 
         protected JsonDataRepository(ILogger<JsonDataRepository> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        protected string Get(string url)
+        #endregion
+
+        #region protected
+
+        protected virtual string Get(string url)
         {
-            var client = new RestClient(url);
-
-            var request = new RestRequest(string.Empty, Method.Get);
-            // Add HTTP headers
-            request.AddHeader("User-Agent", "Nothing");
-
-            // Execute the request and automatically deserialize the result.
-            var result = client.Execute(request);
-
-            var json = result.Content;
-
-            if (json.Contains("<Error>"))
+            try
             {
-                HandleXmlError(url, json);
+                var client = new RestClient(url);
 
-                return string.Empty;
+                var request = new RestRequest(string.Empty, Method.Get);
+
+                request.AddHeader("User-Agent", UserAgentTag);
+
+                var result = client.Execute(request);
+
+                var json = result.Content;
+
+                if (json.Contains("<Error>"))
+                {
+                    HandleXmlError(url, json);
+
+                    return string.Empty;
+                }
+
+                return json;
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler(ex, $"Error in JsonDataRepository.Get. Url: {url}");
             }
 
-            return json;
+            return string.Empty;
         }
 
-        protected async Task<string> GetAsync(string url)
+        protected virtual async Task<string> GetAsync(string url, CancellationToken cancellationToken = default)
         {
-            var client = new RestClient(url);
-
-            var request = new RestRequest(string.Empty, Method.Get);
-            // Add HTTP headers
-            request.AddHeader("User-Agent", "Nothing");
-
-            // Execute the request and automatically deserialize the result.
-            var result = await client.ExecuteGetAsync(request);
-
-            var json = result.Content;
-
-            if (json.Contains("<Error>"))
+            try
             {
-                HandleXmlError(url, json);
+                var client = new RestClient(url);
 
-                return string.Empty;
+                var request = new RestRequest(string.Empty, Method.Get);
+
+                request.AddHeader("User-Agent", UserAgentTag);
+
+                var result = await client.ExecuteGetAsync(request, cancellationToken);
+
+                var json = result.Content;
+
+                if (json.Contains("<Error>"))
+                {
+                    HandleXmlError(url, json);
+
+                    return string.Empty;
+                }
+
+                return json;
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler(ex, $"Error in JsonDataRepository.GetAsync. Url: {url}");
             }
 
-            return json;
+            return string.Empty;
         }
 
-        protected virtual void HandleXmlError(string url, string xml)
+        protected virtual void ExceptionHandler(Exception ex, string message = null)
+        {
+            string errorMessage = String.IsNullOrEmpty(message) ? ex.Message : message;
+
+            _logger.LogError(ex, errorMessage);
+        }
+
+        #endregion
+
+        #region private
+
+        private void HandleXmlError(string url, string xml)
         {
             try
             {
@@ -69,8 +112,10 @@ namespace rNascar23Multi.Sdk.Data
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error handling XmlError. Xml: {xml}");
+                ExceptionHandler(ex, $"Error handling XmlError. Xml: {xml}");
             }
         }
+
+        #endregion
     }
 }

@@ -41,7 +41,7 @@ namespace rNascar23Multi.Converters
                     }
                 case GridViewTypes.KeyMoments:
                     {
-                        return new KeyMomentsView();
+                        return App.serviceProvider.GetService<KeyMomentsView>();
                     }
                 default:
                     {

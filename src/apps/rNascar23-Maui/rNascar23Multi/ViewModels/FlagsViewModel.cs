@@ -1,14 +1,17 @@
-﻿using rNascar23Multi.Models;
+﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.PlatformUI;
-using System.Collections.ObjectModel;
+using rNascar23Multi.Logic;
+using rNascar23Multi.Models;
 using rNascar23Multi.Sdk.Flags.Ports;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace rNascar23Multi.ViewModels
 {
-    public class FlagsViewModel : ObservableObject
+    public partial class FlagsViewModel : ObservableObject
     {
-        private readonly Task initTask;
-
+        ILogger<FlagsViewModel> _logger;
         private IFlagStateRepository _flagStateRepository;
 
         private ObservableCollection<FlagsModel> _models = new ObservableCollection<FlagsModel>();
@@ -26,35 +29,80 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _listHeader, value);
         }
 
-        public FlagsViewModel() // public FlagsViewModel(IFlagStateRepository flagStateRepository)
+        public FlagsViewModel(
+            ILogger<FlagsViewModel> logger,
+            IFlagStateRepository flagStateRepository,
+            UpdateNotificationHandler updateTimer)
         {
-            //_flagStateRepository = flagStateRepository ?? throw new ArgumentNullException(nameof(flagStateRepository));
+            _flagStateRepository = flagStateRepository ?? throw new ArgumentNullException(nameof(flagStateRepository));
 
-            this.initTask = LoadModelsAsync();
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            updateTimer.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
+        }
+
+        private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+        {
+            try
+            {
+                _logger.LogInformation($"FlagsViewModel - UpdateTimer_UpdateTimerElapsed");
+
+                if (e.SessionDetails != null)
+                {
+                    await LoadModelsAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in FlagsViewModel:UpdateTimer_UpdateTimerElapsed");
+            }
+        }
+
+        [RelayCommand]
+        private async Task InitAsync()
+        {
+            try
+            {
+                await LoadModelsAsync();
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in FlagsViewModel:InitAsync");
+            }
         }
 
         private async Task LoadModelsAsync()
         {
             try
             {
-                _flagStateRepository = App.serviceProvider.GetService<IFlagStateRepository>();
-
                 var flagStates = await _flagStateRepository.GetFlagStatesAsync();
 
                 foreach (var flagState in flagStates)
                 {
-                    Models.Add(new FlagsModel()
+                    var existing = Models.FirstOrDefault(m => m.Lap == flagState.LapNumber && m.FlagState == (int)flagState.State);
+
+                    if (existing != null)
                     {
-                        FlagState = (int)flagState.State,
-                        Lap = flagState.LapNumber,
-                        CautionFor = flagState.Comment,
-                        Timestamp = flagState.TimeOfDayOs
-                    });
+                        existing.CautionFor = flagState.Comment;
+                        existing.LuckyDog = flagState.Beneficiary;
+                    }
+                    else
+                    {
+                        Models.Add(new FlagsModel()
+                        {
+                            FlagState = (int)flagState.State,
+                            Lap = flagState.LapNumber,
+                            CautionFor = flagState.Comment,
+                            LuckyDog = flagState.Beneficiary,
+                            Timestamp = flagState.TimeOfDayOs
+                        });
+                    }
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                _logger.LogError(ex, "Error in FlagsViewModel:LoadModelsAsync");
             }
         }
     }

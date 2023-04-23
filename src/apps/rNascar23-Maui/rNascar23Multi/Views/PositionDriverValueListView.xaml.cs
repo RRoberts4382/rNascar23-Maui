@@ -7,14 +7,14 @@ public partial class PositionDriverValueListView : ContentView
 {
     private PositionDriverValueViewModel _viewModel;
 
-    public PositionDriverValueListView()
-    {
-        InitializeComponent();
+    //public PositionDriverValueListView()
+    //{
+    //    InitializeComponent();
 
-        _viewModel = new PositionDriverValueViewModel();
+    //    _viewModel = new PositionDriverValueViewModel();
 
-        BindingContext = _viewModel;
-    }
+    //    BindingContext = _viewModel;
+    //}
 
     public PositionDriverValueListView(GridViewTypes gridViewType)
     {

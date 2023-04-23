@@ -6,12 +6,12 @@ namespace rNascar23Multi.Views;
 public partial class DriverValueListView : ContentView
 {
     private DriverValueViewModel _viewModel;
-    
+
     public DriverValueListView()
     {
         InitializeComponent();
 
-        _viewModel = new DriverValueViewModel();
+        _viewModel = new DriverValueViewModel(GridViewTypes.None);
 
         BindingContext = _viewModel;
     }

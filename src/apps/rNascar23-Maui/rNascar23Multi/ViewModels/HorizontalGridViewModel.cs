@@ -26,10 +26,15 @@ namespace rNascar23Multi.ViewModels
                 ViewType = GridViewTypes.Flags
             });
 
-            //Models.Add(new GridViewModel()
-            //{
-            //    ViewType = GridViewTypes.FastestLaps
-            //});
+            Models.Add(new GridViewModel()
+            {
+                ViewType = GridViewTypes.FastestLaps
+            });
+
+            Models.Add(new GridViewModel()
+            {
+                ViewType = GridViewTypes.LapLeaders
+            });
 
             //Models.Add(new GridViewModel()
             //{
@@ -56,10 +61,10 @@ namespace rNascar23Multi.ViewModels
             //    ViewType = GridViewTypes.Last15Laps
             //});
 
-            //Models.Add(new GridViewModel()
-            //{
-            //    ViewType = GridViewTypes.KeyMoments
-            //});
+            Models.Add(new GridViewModel()
+            {
+                ViewType = GridViewTypes.KeyMoments
+            });
         }
     }
 }

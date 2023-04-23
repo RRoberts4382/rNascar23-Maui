@@ -1,11 +1,18 @@
-﻿using rNascar23Multi.Models;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.PlatformUI;
+using rNascar23Multi.Logic;
+using rNascar23Multi.Models;
+using rNascar23Multi.Sdk.Common;
+using rNascar23Multi.Sdk.LiveFeeds.Ports;
 using System.Collections.ObjectModel;
 
 namespace rNascar23Multi.ViewModels
 {
     public class KeyMomentsViewModel : ObservableObject
     {
+        ILogger<KeyMomentsViewModel> _logger;
+        private IKeyMomentsRepository _keyMomentsRepository;
+
         private ObservableCollection<KeyMomentsModel> _models = new ObservableCollection<KeyMomentsModel>();
 
         public ObservableCollection<KeyMomentsModel> Models
@@ -21,60 +28,68 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _listHeader, value);
         }
 
-        public KeyMomentsViewModel()
+        public KeyMomentsViewModel(
+            ILogger<KeyMomentsViewModel> logger, 
+            IKeyMomentsRepository keyMomentsRepository, 
+            UpdateNotificationHandler updateTimer)
         {
-            LoadFromSource();
+            _keyMomentsRepository = keyMomentsRepository ?? throw new ArgumentNullException(nameof(keyMomentsRepository));
+
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            updateTimer.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
         }
 
-        private void LoadFromSource()
+        private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
         {
-            Models.Add(new KeyMomentsModel()
+            try
             {
-                FlagState = 8,
-                Comments = "Track is hot",
-                Lap = 0,
-                Timestamp = DateTime.Now.AddMinutes(-60)
-            });
+                _logger.LogInformation($"KeyMomentsViewModel - UpdateTimer_UpdateTimerElapsed");
 
-            Models.Add(new KeyMomentsModel()
+                if (e.SessionDetails != null)
+                {
+                    await LoadModelsAsync(e.SessionDetails);
+                }
+            }
+            catch (Exception ex)
             {
-                FlagState = 1,
-                Comments = "Green Flag!",
-                Lap = 0,
-                Timestamp = DateTime.Now.AddMinutes(-45)
-            });
+                _logger.LogError(ex, "Error in KeyMomentsViewModel:UpdateTimer_UpdateTimerElapsed");
+            }
+        }
 
-            Models.Add(new KeyMomentsModel()
+        private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
+        {
+            try
             {
-                FlagState = 2,
-                Lap = 12,
-                Comments = "#1, #11 are involved in a big wreck in turn 2, everyone else gets away cleanly",
-                Timestamp = DateTime.Now.AddMinutes(-36)
-            });
+                var keyMoments = await _keyMomentsRepository.GetKeyMomentsAsync(
+                    (SeriesTypes)sessionDetails.SeriesId,
+                    sessionDetails.RaceId,
+                    sessionDetails.Year);
 
-            Models.Add(new KeyMomentsModel()
-            {
-                FlagState = 1,
-                Comments = "Green Flag",
-                Lap = 18,
-                Timestamp = DateTime.Now.AddMinutes(-22)
-            });
+                foreach (var keyMoment in keyMoments)
+                {
+                    var existing = Models.FirstOrDefault(m => m.NoteId == keyMoment.NoteId);
 
-            Models.Add(new KeyMomentsModel()
+                    if (existing != null)
+                    {
+                        existing.Comments = keyMoment.Note;
+                    }
+                    else
+                    {
+                        Models.Add(new KeyMomentsModel()
+                        {
+                            NoteId = keyMoment.NoteId,
+                            FlagState = (int)keyMoment.FlagState,
+                            Lap = keyMoment.LapNumber,
+                            Comments = keyMoment.Note,
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
             {
-                FlagState = 4,
-                Comments = "White Flag",
-                Lap = 85,
-                Timestamp = DateTime.Now.AddMinutes(-15)
-            });
-
-            Models.Add(new KeyMomentsModel()
-            {
-                FlagState = 9,
-                Comments = "Track is cold",
-                Lap = 99,
-                Timestamp = DateTime.Now.AddMinutes(-12)
-            });
+                _logger.LogError(ex, "Error in KeyMomentsViewModel:LoadModelsAsync");
+            }
         }
     }
 }
