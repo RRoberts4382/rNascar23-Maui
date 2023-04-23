@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:rNascar23.Views"
+             xmlns:root="clr-namespace:rNascar23"
+             x:Class="rNascar23.rNascar23Main">
+    <Grid BackgroundColor="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <local:NavigationPanel Grid.Row="0"/>
+        <local:RaceView  Grid.Row="1" />
+    </Grid>
+</ContentPage>

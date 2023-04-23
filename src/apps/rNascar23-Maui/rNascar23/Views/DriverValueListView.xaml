@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="rNascar23.Views.DriverValueListView">
+
+    <VerticalStackLayout>
+        <Border 
+            Stroke="{Binding HeaderBackgroundColor}"
+            StrokeThickness="1"
+            Padding="2,0,0,0"
+            BackgroundColor="{Binding HeaderBackgroundColor}">
+            <Label 
+                Text="{Binding ListHeader}"
+                FontAttributes="Bold"
+                TextColor ="{Binding HeaderTextColor}"
+                BackgroundColor ="{Binding HeaderBackgroundColor}"/>
+        </Border>
+        
+        <ScrollView>
+            <ListView x:Name="GenericListView"
+                Margin="5,0,0,0"
+                ItemsSource="{Binding Models}"
+                BackgroundColor="Black">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout 
+                                Orientation="Horizontal" 
+                                HorizontalOptions="Start" >
+
+                                <Label Text="{Binding Driver}"
+                                    TextColor="White"
+                                    WidthRequest="150"
+                                    HorizontalOptions="CenterAndExpand" />
+
+                                <Label Text="{Binding Value}"
+                                    TextColor="White"
+                                    WidthRequest="50"
+                                    HorizontalOptions="End" />
+
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentView>
