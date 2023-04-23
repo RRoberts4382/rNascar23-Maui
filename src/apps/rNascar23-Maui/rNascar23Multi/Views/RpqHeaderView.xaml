@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             x:Class="rNascar23Multi.Views.RpqHeaderView">
+
+    <ContentView.Resources>
+        <converters:FlagColorConverter x:Key="flagColorConverter" />
+    </ContentView.Resources>
+
+    <VerticalStackLayout>
+        <Grid BackgroundColor ="Black">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" BackgroundColor = "#232323">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
+
+                <Label 
+                    Grid.Row="0" Grid.Column="0"
+                    Text="{Binding EventName}"
+                    Margin="5,0,0,0"
+                    FontAttributes="Bold"
+                    TextColor ="WhiteSmoke"
+                    HorizontalTextAlignment="Start"
+                    VerticalOptions="CenterAndExpand"/>
+
+                <Label 
+                    Grid.Row="0" Grid.Column="1"
+                    Text="{Binding RaceLapInfo}"
+                    Margin="5,0,0,0"
+                    FontAttributes="Bold"
+                    TextColor ="WhiteSmoke"
+                    HorizontalTextAlignment="Start"
+                    VerticalOptions="CenterAndExpand"/>
+
+                <Label 
+                    Grid.Row="0" Grid.Column="2"
+                    Text="{Binding StageLapInfo}"
+                    Margin="5,0,0,0"
+                    FontAttributes="Bold"
+                    TextColor ="WhiteSmoke"
+                    HorizontalTextAlignment="Start"
+                    VerticalOptions="CenterAndExpand"/>
+            </Grid>
+
+            <Label Grid.Row="1" Grid.Column="0"
+                BackgroundColor="{Binding FlagState, Converter={StaticResource flagColorConverter}}"/>
+
+        </Grid>
+
+    </VerticalStackLayout>
+</ContentView>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:rNascar23Multi.Views"
+             xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             x:Class="rNascar23Multi.Views.VerticalGridView">
+    
+    <ScrollView>
+        <StackLayout BindableLayout.ItemsSource="{Binding Models}" Orientation="Vertical">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <ContentView Margin="2,3,2,3" Content="{Binding ViewType, Converter={x:Static converters:GridViewConverter.Instance}}"/>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </StackLayout>
+    </ScrollView>
+    
+</ContentView>

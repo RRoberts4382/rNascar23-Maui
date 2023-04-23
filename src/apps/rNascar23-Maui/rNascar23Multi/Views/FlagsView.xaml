@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             x:Class="rNascar23Multi.Views.FlagsView">
+    
+    <ContentView.Resources>
+        <converters:FlagColorConverter x:Key="flagColorConverter" />
+        <converters:FlagTextColorConverter x:Key="flagTextColorConverter" />
+    </ContentView.Resources>
+    
+    <VerticalStackLayout>
+        <!-- Grid Header -->
+        <Label 
+            Text="{Binding ListHeader}"
+            Margin="2,0,0,0"
+            FontAttributes="Bold"
+            TextColor ="Black"
+            BackgroundColor ="Gold"/>
+
+        <!-- Column Headers -->
+        <Grid BackgroundColor ="Black">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="36" />
+                <ColumnDefinition Width="175" />
+                <ColumnDefinition Width="36" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
+            <Label Text="Lap"  Grid.Column="0" TextColor="White" Margin="1,0,0,0"/>
+            <Label Text="Caution For" Grid.Column="1" TextColor="White" Margin="7,0,0,0"/>
+            <Label Text="Pass" Grid.Column="2" TextColor="White" Margin="7,0,0,0"/>
+            <Label Text="Time" Grid.Column="3" TextColor="White" Margin="7,0,0,0"/>
+        </Grid>
+
+        <!-- Items -->
+        <ScrollView>
+            <ListView x:Name="GenericListView"
+                ItemsSource="{Binding Models}"
+                BackgroundColor="Black">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <HorizontalStackLayout>
+                                <Border StrokeThickness="0.5" Margin="0,1,0,0"
+                                        Stroke="DimGray"
+                                        BackgroundColor="{Binding FlagState, Converter={StaticResource flagColorConverter}}">
+                                    <Label Text="{Binding Lap}"
+                                        Margin="2,0,0,0"
+                                        TextColor="{Binding FlagState, Converter={StaticResource flagTextColorConverter}}"
+                                        WidthRequest="35"
+                                        HorizontalOptions="Start" />
+                                </Border>
+                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
+                                    <Label Text="{Binding CautionFor}"
+                                        Margin="2,0,0,0"
+                                        WidthRequest="175"
+                                        TextColor="White"
+                                        HorizontalOptions="CenterAndExpand" />
+                                </Border>
+                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
+                                    <Label Text="{Binding LuckyDog}"
+                                        Margin="2,0,0,0"
+                                        WidthRequest="35"
+                                        TextColor="White"
+                                        HorizontalOptions="End" />
+                                </Border>
+                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
+                                    <Label Text="{Binding Timestamp, StringFormat='{0:h:mm tt}'}"
+                                        Margin="2,0,0,0"
+                                        WidthRequest="60"
+                                        TextColor="White"
+                                        HorizontalOptions="End" />
+                                </Border>
+                            </HorizontalStackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentView>
