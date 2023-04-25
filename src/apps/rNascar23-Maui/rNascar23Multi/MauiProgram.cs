@@ -28,7 +28,6 @@ namespace rNascar23Multi
             builder
                .UseMauiApp<App>()
                .UseMauiCommunityToolkit()
-               .UseMauiCommunityToolkitMediaElement()
                .RegisterViewModels()
                .RegisterViews()
                .RegisterSdk()

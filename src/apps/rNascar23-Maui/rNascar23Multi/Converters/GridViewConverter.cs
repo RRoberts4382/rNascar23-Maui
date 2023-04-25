@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.Settings;
-using rNascar23Multi.Models;
+﻿using rNascar23Multi.Models;
 using rNascar23Multi.ViewModels;
 using rNascar23Multi.Views;
 using System.Globalization;

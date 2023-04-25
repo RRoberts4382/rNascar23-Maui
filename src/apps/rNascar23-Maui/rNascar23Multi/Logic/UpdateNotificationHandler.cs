@@ -5,7 +5,7 @@ namespace rNascar23Multi.Logic
 {
     public class UpdateNotificationHandler
     {
-        ILogger<UpdateNotificationHandler> _logger;
+        private readonly ILogger<UpdateNotificationHandler> _logger;
 
         public event EventHandler<UpdateNotificationEventArgs> UpdateTimerElapsed;
 

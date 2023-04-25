@@ -36,8 +36,10 @@ namespace rNascar23Multi.Sdk.Service.Flags.Adapters
             }
             catch (Exception ex)
             {
-                throw;
+                ExceptionHandler(ex);
             }
+
+            return new List<FlagState>();
         }
     }
 }
