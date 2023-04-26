@@ -1,7 +1,10 @@
-﻿using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.Points.Models;
+﻿using rNascar23.Sdk.Common;
+using rNascar23.Sdk.Points.Models;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Points.Ports
+namespace rNascar23.Sdk.Points.Ports
 {
     public interface IPointsRepository
     {

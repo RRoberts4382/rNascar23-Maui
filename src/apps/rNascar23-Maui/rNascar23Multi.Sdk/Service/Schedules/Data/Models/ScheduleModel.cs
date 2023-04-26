@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace rNascar23Multi.Sdk.Service.Schedules.Data.Models
+namespace rNascar23.Sdk.Service.Schedules.Data.Models
 {
     public class ScheduleModel
     {

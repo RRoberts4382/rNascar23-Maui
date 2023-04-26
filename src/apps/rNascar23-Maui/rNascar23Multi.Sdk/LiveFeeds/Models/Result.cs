@@ -1,6 +1,6 @@
-﻿using rNascar23Multi.Sdk.Common;
+﻿using rNascar23.Sdk.Common;
 
-namespace rNascar23Multi.Sdk.LiveFeeds.Models
+namespace rNascar23.Sdk.LiveFeeds.Models
 {
     public class Result
     {

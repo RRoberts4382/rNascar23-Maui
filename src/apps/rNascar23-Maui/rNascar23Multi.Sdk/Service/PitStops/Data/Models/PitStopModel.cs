@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.Service.PitStops.Data.Models
+﻿namespace rNascar23.Sdk.Service.PitStops.Data.Models
 {
     public class PitStopModel
     {

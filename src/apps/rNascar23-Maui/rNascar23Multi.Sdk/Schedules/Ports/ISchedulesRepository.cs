@@ -1,6 +1,8 @@
-﻿using rNascar23Multi.Sdk.Schedules.Models;
+﻿using rNascar23.Sdk.Schedules.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Schedules.Ports
+namespace rNascar23.Sdk.Schedules.Ports
 {
     public interface ISchedulesRepository
     {

@@ -1,12 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
-using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.Data;
-using rNascar23Multi.Sdk.Media.Models;
-using rNascar23Multi.Sdk.Media.Ports;
+using rNascar23.Sdk.Common;
+using rNascar23.Sdk.Data;
+using rNascar23.Sdk.Media.Models;
+using rNascar23.Sdk.Media.Ports;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Service.Media
+namespace rNascar23.Sdk.Service.Media
 {
     internal class MediaRepository : JsonDataRepository, IMediaRepository
     {
@@ -72,7 +77,7 @@ namespace rNascar23Multi.Sdk.Service.Media
                 ExceptionHandler(ex, $"Error loading car number media for series id {seriesId}, car number {carNumber}");
             }
 
-            return null;
+            return Array.Empty<byte>();
         }
 
         public virtual MediaImage GetCarNumberImage(SeriesTypes seriesId, int carNumber)

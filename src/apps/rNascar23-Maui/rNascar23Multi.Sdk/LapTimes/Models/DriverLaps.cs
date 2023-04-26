@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace rNascar23Multi.Sdk.LapTimes.Models
+namespace rNascar23.Sdk.LapTimes.Models
 {
     public class DriverLaps
     {

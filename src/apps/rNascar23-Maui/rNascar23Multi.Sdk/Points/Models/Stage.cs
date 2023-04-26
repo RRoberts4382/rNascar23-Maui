@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace rNascar23Multi.Sdk.Points.Models
+namespace rNascar23.Sdk.Points.Models
 {
     public class Stage
     {

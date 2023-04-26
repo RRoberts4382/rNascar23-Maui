@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using rNascar23Multi.Sdk.PitStops.Models;
-using rNascar23Multi.Sdk.Service.PitStops.Data.Models;
+using rNascar23.Sdk.PitStops.Models;
+using rNascar23.Sdk.Service.PitStops.Data.Models;
 
-namespace rNascar23Multi.Sdk.Service.PitStops.Mappings
+namespace rNascar23.Sdk.Service.PitStops.Mappings
 {
     internal class PitStopMappingProfile : Profile
     {

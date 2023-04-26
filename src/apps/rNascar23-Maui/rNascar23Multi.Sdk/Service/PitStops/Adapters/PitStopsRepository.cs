@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.Data;
-using rNascar23Multi.Sdk.PitStops.Models;
-using rNascar23Multi.Sdk.PitStops.Ports;
-using rNascar23Multi.Sdk.Service.PitStops.Data.Models;
+using rNascar23.Sdk.Common;
+using rNascar23.Sdk.Data;
+using rNascar23.Sdk.PitStops.Models;
+using rNascar23.Sdk.PitStops.Ports;
+using rNascar23.Sdk.Service.PitStops.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Service.PitStops.Adapters
+namespace rNascar23.Sdk.Service.PitStops.Adapters
 {
     internal class PitStopsRepository : JsonDataRepository, IPitStopsRepository
     {

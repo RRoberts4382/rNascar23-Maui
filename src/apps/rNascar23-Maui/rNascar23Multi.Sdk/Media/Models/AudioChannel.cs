@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.Media.Models
+﻿namespace rNascar23.Sdk.Media.Models
 {
     public class AudioChannel
     {

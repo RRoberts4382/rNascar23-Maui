@@ -1,4 +1,6 @@
-﻿namespace rNascar23Multi.Sdk.Media.Models
+﻿using System.Collections.Generic;
+
+namespace rNascar23.Sdk.Media.Models
 {
     public class VideoConfiguration
     {

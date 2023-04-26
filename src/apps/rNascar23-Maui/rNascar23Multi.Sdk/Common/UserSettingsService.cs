@@ -1,12 +1,16 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
-namespace rNascar23Multi.Sdk.Common
+namespace rNascar23.Sdk.Common
 {
     public class UserSettingsService
     {
         #region consts
 
-        private const string DefaultRootDirectory = "rNascar23Multi.Sdk\\";
+        private const string DefaultRootDirectory = "rNascar23\\";
+        private const string DefaultBackupDirectory = "Backups\\";
         private const string DefaultDataDirectory = "Data\\";
         private const string DefaultLogDirectory = "Logs\\";
         private const string UserSettingsFileName = "UserSettings.json";
@@ -92,7 +96,8 @@ namespace rNascar23Multi.Sdk.Common
             var userSettings = new UserSettings()
             {
                 LogDirectory = Path.Combine(rootDirectory, DefaultLogDirectory),
-                DataDirectory = Path.Combine(rootDirectory, DefaultDataDirectory)
+                DataDirectory = Path.Combine(rootDirectory, DefaultDataDirectory),
+                BackupDirectory = Path.Combine(rootDirectory, DefaultBackupDirectory)
             };
 
             EnsureDirectoryExists(userSettings.BackupDirectory);

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using rNascar23Multi.Sdk.Data.LiveFeeds.Ports;
-using rNascar23Multi.Sdk.LiveFeeds.Ports;
-using rNascar23Multi.Sdk.Service.LiveFeeds.Adapters;
+using rNascar23.Sdk.Data.LiveFeeds.Ports;
+using rNascar23.Sdk.LiveFeeds.Ports;
+using rNascar23.Sdk.Service.LiveFeeds.Adapters;
 
-namespace rNascar23Multi.Sdk.Service.LiveFeeds
+namespace rNascar23.Sdk.Service.LiveFeeds
 {
     public static class ServiceCollectionExtensions
     {

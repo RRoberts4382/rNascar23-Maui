@@ -1,9 +1,9 @@
-﻿using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.LoopData.Models;
+﻿using rNascar23.Sdk.Common;
+using rNascar23.Sdk.LoopData.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.LoopData.Ports
+namespace rNascar23.Sdk.LoopData.Ports
 {
     public interface ILoopDataRepository
     {

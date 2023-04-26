@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using rNascar23Multi.Sdk.LoopData.Models;
-using rNascar23Multi.Sdk.Service.LoopData.Data.Models;
+using rNascar23.Sdk.LoopData.Models;
+using rNascar23.Sdk.Service.LoopData.Data.Models;
 
-namespace rNascar23Multi.Sdk.Service.LoopData.Mappings
+namespace rNascar23.Sdk.Service.LoopData.Mappings
 {
     internal class LoopDataMappingProfile : Profile
     {

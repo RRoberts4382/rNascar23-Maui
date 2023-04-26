@@ -1,7 +1,7 @@
-﻿using rNascar23Multi.Sdk.LapTimes.Models;
+﻿using rNascar23.Sdk.LapTimes.Models;
 using System.Collections.Generic;
 
-namespace rNascar23Multi.Sdk.LapTimes.Ports
+namespace rNascar23.Sdk.LapTimes.Ports
 {
     public interface IMoversFallersService
     {

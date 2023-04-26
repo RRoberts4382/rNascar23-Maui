@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.LiveFeeds.Models;
-using rNascar23Multi.Sdk.Service.LiveFeeds.Data.Models;
+using rNascar23.Sdk.Common;
+using rNascar23.Sdk.LiveFeeds.Models;
+using rNascar23.Sdk.Service.LiveFeeds.Data.Models;
 
-namespace rNascar23Multi.Sdk.Service.LiveFeeds.Mappings
+namespace rNascar23.Sdk.Service.LiveFeeds.Mappings
 {
     internal class WeekendFeedMappingProfile : Profile
     {

@@ -1,8 +1,8 @@
-﻿using rNascar23Multi.Sdk.LiveFeeds.Models;
+﻿using rNascar23.Sdk.LiveFeeds.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Data.LiveFeeds.Ports
+namespace rNascar23.Sdk.Data.LiveFeeds.Ports
 {
     public interface ILiveFeedRepository
     {

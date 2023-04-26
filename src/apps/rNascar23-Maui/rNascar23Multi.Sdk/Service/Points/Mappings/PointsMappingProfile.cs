@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using rNascar23Multi.Sdk.Points.Models;
-using rNascar23Multi.Sdk.Service.Points.Data.Models;
+using rNascar23.Sdk.Points.Models;
+using rNascar23.Sdk.Service.Points.Data.Models;
 
-namespace rNascar23Multi.Sdk.Service.Points.Mappings
+namespace rNascar23.Sdk.Service.Points.Mappings
 {
     internal class PointsMappingProfile : Profile
     {

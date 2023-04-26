@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.Service.LoopData.Data.Models
+﻿namespace rNascar23.Sdk.Service.LoopData.Data.Models
 {
     internal class EventLoopDataModel
     {

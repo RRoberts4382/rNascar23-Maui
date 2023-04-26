@@ -1,6 +1,6 @@
-﻿using rNascar23Multi.Sdk.Common;
+﻿using rNascar23.Sdk.Common;
 
-namespace rNascar23Multi.Sdk.Service.LiveFeeds.Data.Models
+namespace rNascar23.Sdk.Service.LiveFeeds.Data.Models
 {
     internal class KeyMomentModel
     {

@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.Service.LapTimes.Data.Models
+﻿namespace rNascar23.Sdk.Service.LapTimes.Data.Models
 {
     internal class LapAveragesModel
     {

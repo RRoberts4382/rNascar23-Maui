@@ -1,10 +1,11 @@
 ﻿using Microsoft.VisualStudio.PlatformUI;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
-using rNascar23Multi.Sdk.Data.LiveFeeds.Ports;
-using rNascar23Multi.Sdk.LiveFeeds.Models;
-using rNascar23Multi.Sdk.Schedules.Models;
-using rNascar23Multi.Sdk.Schedules.Ports;
+using rNascar23.Sdk.Common;
+using rNascar23.Sdk.Data.LiveFeeds.Ports;
+using rNascar23.Sdk.LiveFeeds.Models;
+using rNascar23.Sdk.Schedules.Models;
+using rNascar23.Sdk.Schedules.Ports;
 
 namespace rNascar23Multi.ViewModels
 {
@@ -14,7 +15,7 @@ namespace rNascar23Multi.ViewModels
         private ISchedulesRepository _schedulesRepository;
         private SeriesEvent _seriesEvent;
         private int? _raceId = null;
-        
+
         private RpqHeaderModel _model = new RpqHeaderModel();
         public RpqHeaderModel Model
         {
@@ -66,11 +67,11 @@ namespace rNascar23Multi.ViewModels
                 _raceId = liveFeed.RaceId;
             }
 
-            Model.RaceLapInfo = (liveFeed.RunType == Sdk.Common.RunTypes.Race) ?
+            Model.RaceLapInfo = (liveFeed.RunType == RunTypes.Race) ?
                 $"Race: Lap {liveFeed.LapNumber} of {liveFeed.LapsInRace}" :
                 "";
 
-            Model.StageLapInfo = (liveFeed.RunType == Sdk.Common.RunTypes.Race && _seriesEvent.Stage1Laps > 0) ?
+            Model.StageLapInfo = (liveFeed.RunType == RunTypes.Race && _seriesEvent.Stage1Laps > 0) ?
                BuildStageLaps(liveFeed.Stage.Number, liveFeed.LapNumber, liveFeed.Stage.FinishAtLap, liveFeed.Stage.LapsInStage) :
                "";
         }

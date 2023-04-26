@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using rNascar23Multi.Sdk.Points.Ports;
-using rNascar23Multi.Sdk.Service.Points.Adapters;
+using rNascar23.Sdk.Points.Ports;
+using rNascar23.Sdk.Service.Points.Adapters;
 
-namespace rNascar23Multi.Sdk.Service.Points
+namespace rNascar23.Sdk.Service.Points
 {
     public static class ServiceCollectionExtensions
     {

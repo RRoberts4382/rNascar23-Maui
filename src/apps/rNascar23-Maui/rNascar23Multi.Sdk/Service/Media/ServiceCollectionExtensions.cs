@@ -1,6 +1,7 @@
-﻿using rNascar23Multi.Sdk.Media.Ports;
+﻿using Microsoft.Extensions.DependencyInjection;
+using rNascar23.Sdk.Media.Ports;
 
-namespace rNascar23Multi.Sdk.Service.Media
+namespace rNascar23.Sdk.Service.Media
 {
     public static class ServiceCollectionExtensions
     {

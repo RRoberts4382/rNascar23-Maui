@@ -1,8 +1,9 @@
-﻿using rNascar23Multi.Sdk.LoopData.Ports;
-using rNascar23Multi.Sdk.Service.LoopData.Adapters;
-using rNascar23Multi.Sdk.Service.Schedules;
+﻿using Microsoft.Extensions.DependencyInjection;
+using rNascar23.Sdk.LoopData.Ports;
+using rNascar23.Sdk.Service.LoopData.Adapters;
+using rNascar23.Sdk.Service.Schedules;
 
-namespace rNascar23Multi.Sdk.Service.LoopData
+namespace rNascar23.Sdk.Service.LoopData
 {
     public static class ServiceCollectionExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace rNascar23Multi.Sdk.LiveFeeds.Models
+namespace rNascar23.Sdk.LiveFeeds.Models
 {
     public class StageResults
     {

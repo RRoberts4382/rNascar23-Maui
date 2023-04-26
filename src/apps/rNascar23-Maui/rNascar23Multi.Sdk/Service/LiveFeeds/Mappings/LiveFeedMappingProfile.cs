@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using rNascar23Multi.Sdk.LiveFeeds.Models;
-using rNascar23Multi.Sdk.Service.LiveFeeds.Data.Models;
+using rNascar23.Sdk.LiveFeeds.Models;
+using rNascar23.Sdk.Service.LiveFeeds.Data.Models;
 
-namespace rNascar23Multi.Sdk.LiveFeeds.Mappings
+namespace rNascar23.Sdk.LiveFeeds.Mappings
 {
     internal class LiveFeedMappingProfile : Profile
     {

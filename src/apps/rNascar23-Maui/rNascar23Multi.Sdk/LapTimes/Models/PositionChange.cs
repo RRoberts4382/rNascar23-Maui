@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.LapTimes.Models
+﻿namespace rNascar23.Sdk.LapTimes.Models
 {
     public class PositionChange
     {

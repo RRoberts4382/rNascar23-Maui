@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using rNascar23Multi.Sdk.PitStops.Ports;
-using rNascar23Multi.Sdk.Service.PitStops.Adapters;
+using rNascar23.Sdk.PitStops.Ports;
+using rNascar23.Sdk.Service.PitStops.Adapters;
 
-namespace rNascar23Multi.Sdk.Service.PitStops
+namespace rNascar23.Sdk.Service.PitStops
 {
     public static class ServiceCollectionExtensions
     {

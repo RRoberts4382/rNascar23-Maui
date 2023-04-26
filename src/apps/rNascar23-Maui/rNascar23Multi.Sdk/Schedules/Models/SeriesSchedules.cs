@@ -1,4 +1,7 @@
-﻿namespace rNascar23Multi.Sdk.Schedules.Models
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace rNascar23.Sdk.Schedules.Models
 {
     public class SeriesSchedules
     {

@@ -1,6 +1,6 @@
-﻿using rNascar23Multi.Sdk.Common;
+﻿using rNascar23.Sdk.Common;
 
-namespace rNascar23Multi.Sdk.Media.Models
+namespace rNascar23.Sdk.Media.Models
 {
     public class MediaImage
     {

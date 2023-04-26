@@ -1,8 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using RestSharp;
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace rNascar23Multi.Sdk.Data
+namespace rNascar23.Sdk.Data
 {
     public abstract class JsonDataRepository
     {
@@ -43,11 +47,14 @@ namespace rNascar23Multi.Sdk.Data
 
                 var json = result.Content;
 
+                if (String.IsNullOrEmpty(json))
+                    return String.Empty;
+
                 if (json.Contains("<Error>"))
                 {
                     HandleXmlError(url, json);
 
-                    return string.Empty;
+                    return String.Empty;
                 }
 
                 return json;
@@ -74,6 +81,9 @@ namespace rNascar23Multi.Sdk.Data
 
                 var json = result.Content;
 
+                if (String.IsNullOrEmpty(json))
+                    return String.Empty;
+
                 if (json.Contains("<Error>"))
                 {
                     HandleXmlError(url, json);
@@ -91,7 +101,7 @@ namespace rNascar23Multi.Sdk.Data
             return string.Empty;
         }
 
-        protected virtual void ExceptionHandler(Exception ex, string message = null)
+        protected virtual void ExceptionHandler(Exception ex, string message = "")
         {
             string errorMessage = String.IsNullOrEmpty(message) ? ex.Message : message;
 

@@ -1,4 +1,6 @@
-﻿namespace rNascar23Multi.Sdk.Common
+﻿using System.Collections.Generic;
+
+namespace rNascar23.Sdk.Common
 {
     public class UserSettings
     {
@@ -14,11 +16,11 @@
         public bool UseGraphicalCarNumbers { get; set; } = false;
         public bool UseDarkTheme { get; set; } = false;
         public bool AutoUpdateEnabledOnStart { get; set; } = true;
-        public bool UseLowScreenResolutionSizes { get; set; } = true;
+        public bool UseLowScreenResolutionSizes { get; set; } = false;
         public bool DisplayTimeDifference { get; set; } = false;
-        public string OverrideFontName { get; set; }
-        public float? OverrideFontSize { get; set; }
-        public int? OverrideFontStyle { get; set; }
+        public string OverrideFontName { get; set; } = "Arial";
+        public float? OverrideFontSize { get; set; } = 10;
+        public int? OverrideFontStyle { get; set; } = 0;
         public IList<int> RaceViewBottomGrids { get; set; } = new List<int>();
         public IList<int> RaceViewRightGrids { get; set; } = new List<int>();
         public IList<int> QualifyingViewBottomGrids { get; set; } = new List<int>();
@@ -26,5 +28,6 @@
         public IList<int> PracticeViewBottomGrids { get; set; } = new List<int>();
         public IList<int> PracticeViewRightGrids { get; set; } = new List<int>();
         public int? DataDelayInSeconds { get; set; } = null;
+        public float? AudioDelayInSeconds { get; set; } = null;
     }
 }

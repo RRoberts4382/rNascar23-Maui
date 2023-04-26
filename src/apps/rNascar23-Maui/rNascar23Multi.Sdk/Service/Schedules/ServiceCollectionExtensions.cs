@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using rNascar23Multi.Sdk.Schedules.Ports;
-using rNascar23Multi.Sdk.Service.Schedules.Adapters;
+using rNascar23.Sdk.Schedules.Ports;
+using rNascar23.Sdk.Service.Schedules.Adapters;
 
-namespace rNascar23Multi.Sdk.Service.Schedules
+namespace rNascar23.Sdk.Service.Schedules
 {
     public static class ServiceCollectionExtensions
     {

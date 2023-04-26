@@ -3,8 +3,8 @@ using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.ObjectModel;
 using Microsoft.Extensions.Logging;
 using rNascar23Multi.Logic;
-using rNascar23Multi.Sdk.Points.Ports;
-using rNascar23Multi.Sdk.Common;
+using rNascar23.Sdk.Points.Ports;
+using rNascar23.Sdk.Common;
 
 namespace rNascar23Multi.ViewModels
 {

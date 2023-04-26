@@ -1,7 +1,9 @@
-﻿using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.Media.Models;
+﻿using rNascar23.Sdk.Common;
+using rNascar23.Sdk.Media.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Media.Ports
+namespace rNascar23.Sdk.Media.Ports
 {
     public interface IMediaRepository
     {

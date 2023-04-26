@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using rNascar23Multi.Sdk.LapTimes.Models;
-using rNascar23Multi.Sdk.Service.LapTimes.Data.Models;
+using rNascar23.Sdk.LapTimes.Models;
+using rNascar23.Sdk.Service.LapTimes.Data.Models;
 
-namespace rNascar23Multi.Sdk.Service.Flags.Mappings
+namespace rNascar23.Sdk.Service.Flags.Mappings
 {
     internal class LapTimesMappingProfile : Profile
     {

@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.LoopData.Models
+﻿namespace rNascar23.Sdk.LoopData.Models
 {
     public class DriverLoopData
     {

@@ -1,4 +1,6 @@
-﻿namespace rNascar23Multi.Sdk.Common
+﻿using System;
+
+namespace rNascar23.Sdk.Common
 {
     [Flags()]
     public enum PitStopChanges

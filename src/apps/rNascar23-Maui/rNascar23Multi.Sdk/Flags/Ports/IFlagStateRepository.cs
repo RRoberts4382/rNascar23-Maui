@@ -1,6 +1,8 @@
-﻿using rNascar23Multi.Sdk.Flags.Models;
+﻿using rNascar23.Sdk.Flags.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Flags.Ports
+namespace rNascar23.Sdk.Flags.Ports
 {
     public interface IFlagStateRepository
     {

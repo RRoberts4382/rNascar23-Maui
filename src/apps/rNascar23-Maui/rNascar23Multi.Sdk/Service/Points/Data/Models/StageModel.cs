@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.Service.Points.Data.Models
+﻿namespace rNascar23.Sdk.Service.Points.Data.Models
 {
     internal class StageModel
     {

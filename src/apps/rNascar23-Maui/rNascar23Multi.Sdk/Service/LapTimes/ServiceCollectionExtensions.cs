@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using rNascar23Multi.Sdk.LapTimes.Ports;
-using rNascar23Multi.Sdk.Service.LapTimes.Adapters;
+using rNascar23.Sdk.LapTimes.Ports;
+using rNascar23.Sdk.Service.LapTimes.Adapters;
 
-namespace rNascar23Multi.Sdk.Service.LapTimes
+namespace rNascar23.Sdk.Service.LapTimes
 {
     public static class ServiceCollectionExtensions
     {

@@ -1,6 +1,7 @@
-﻿using rNascar23Multi.Sdk.Common;
+﻿using rNascar23.Sdk.Common;
+using System;
 
-namespace rNascar23Multi.Sdk.Flags.Models
+namespace rNascar23.Sdk.Flags.Models
 {
     public class FlagState
     {

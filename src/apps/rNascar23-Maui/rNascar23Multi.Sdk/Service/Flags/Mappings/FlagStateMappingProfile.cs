@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.Flags.Models;
-using rNascar23Multi.Sdk.Service.Flags.Data.Models;
+using rNascar23.Sdk.Common;
+using rNascar23.Sdk.Flags.Models;
+using rNascar23.Sdk.Service.Flags.Data.Models;
 
-namespace rNascar23Multi.Sdk.Service.Flags.Mappings
+namespace rNascar23.Sdk.Service.Flags.Mappings
 {
     internal class FlagStateMappingProfile : Profile
     {

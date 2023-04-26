@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.Service.LiveFeeds.Data.Models
+﻿namespace rNascar23.Sdk.Service.LiveFeeds.Data.Models
 {
     internal class DriverStageResultModel
     {

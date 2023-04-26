@@ -1,10 +1,10 @@
 ﻿using rNascar23Multi.Models;
 using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.ObjectModel;
-using rNascar23Multi.Sdk.Data.LiveFeeds.Ports;
+using rNascar23.Sdk.Data.LiveFeeds.Ports;
 using rNascar23Multi.Logic;
 using System.Diagnostics;
-using rNascar23Multi.Sdk.LiveFeeds.Models;
+using rNascar23.Sdk.LiveFeeds.Models;
 using Microsoft.Extensions.Logging;
 
 namespace rNascar23Multi.ViewModels

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
-using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.LapTimes.Models;
-using rNascar23Multi.Sdk.LapTimes.Ports;
+using rNascar23.Sdk.Common;
+using rNascar23.Sdk.LapTimes.Models;
+using rNascar23.Sdk.LapTimes.Ports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace rNascar23Multi.Sdk.Service.LapTimes.Adapters
+namespace rNascar23.Sdk.Service.LapTimes.Adapters
 {
     internal class MoversFallersService : IMoversFallersService
     {

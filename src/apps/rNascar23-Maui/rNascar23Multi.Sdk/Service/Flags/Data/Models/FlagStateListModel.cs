@@ -1,4 +1,6 @@
-﻿namespace rNascar23Multi.Sdk.Service.Flags.Data.Models
+﻿using System.Collections.Generic;
+
+namespace rNascar23.Sdk.Service.Flags.Data.Models
 {
     public class FlagStateListModel
     {

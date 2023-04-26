@@ -1,7 +1,8 @@
-﻿using rNascar23Multi.Sdk.Flags.Ports;
-using rNascar23Multi.Sdk.Service.Flags.Adapters;
+﻿using Microsoft.Extensions.DependencyInjection;
+using rNascar23.Sdk.Flags.Ports;
+using rNascar23.Sdk.Service.Flags.Adapters;
 
-namespace rNascar23Multi.Sdk.Service.Flags
+namespace rNascar23.Sdk.Service.Flags
 {
     public static class ServiceCollectionExtensions
     {

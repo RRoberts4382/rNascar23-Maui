@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using rNascar23Multi.Sdk.Data;
-using rNascar23Multi.Sdk.Schedules.Models;
-using rNascar23Multi.Sdk.Schedules.Ports;
-using rNascar23Multi.Sdk.Service.Schedules.Data.Models;
+using rNascar23.Sdk.Data;
+using rNascar23.Sdk.Schedules.Models;
+using rNascar23.Sdk.Schedules.Ports;
+using rNascar23.Sdk.Service.Schedules.Data.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Service.Schedules.Adapters
+namespace rNascar23.Sdk.Service.Schedules.Adapters
 {
     internal class SchedulesRepository : JsonDataRepository, ISchedulesRepository
     {
         #region fields
 
         protected readonly IMapper _mapper;
-        protected ScheduleCache _cache = null;
+        protected ScheduleCache _cache;
         protected readonly TimeSpan _cacheDuration = new TimeSpan(0, 15, 0);
 
         #endregion

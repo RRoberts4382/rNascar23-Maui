@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using rNascar23Multi.Sdk.Data;
-using rNascar23Multi.Sdk.Flags.Models;
-using rNascar23Multi.Sdk.Flags.Ports;
-using rNascar23Multi.Sdk.Service.Flags.Data.Models;
+using rNascar23.Sdk.Data;
+using rNascar23.Sdk.Flags.Models;
+using rNascar23.Sdk.Flags.Ports;
+using rNascar23.Sdk.Service.Flags.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Service.Flags.Adapters
+namespace rNascar23.Sdk.Service.Flags.Adapters
 {
     internal class FlagStateRepository : JsonDataRepository, IFlagStateRepository
     {

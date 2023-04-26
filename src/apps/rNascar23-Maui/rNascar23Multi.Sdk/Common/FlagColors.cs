@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.Common
+﻿namespace rNascar23.Sdk.Common
 {
     public enum FlagColors
     {

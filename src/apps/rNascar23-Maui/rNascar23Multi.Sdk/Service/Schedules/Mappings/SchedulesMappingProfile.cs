@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using rNascar23Multi.Sdk.Schedules.Models;
-using rNascar23Multi.Sdk.Service.Schedules.Data.Models;
+using rNascar23.Sdk.Schedules.Models;
+using rNascar23.Sdk.Service.Schedules.Data.Models;
 
-namespace rNascar23Multi.Sdk.Service.Schedules.Mappings
+namespace rNascar23.Sdk.Service.Schedules.Mappings
 {
     internal class SchedulesMappingProfile : Profile
     {

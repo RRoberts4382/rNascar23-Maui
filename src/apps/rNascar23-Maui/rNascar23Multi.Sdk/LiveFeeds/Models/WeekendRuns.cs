@@ -1,8 +1,8 @@
-﻿using rNascar23Multi.Sdk.Common;
+﻿using rNascar23.Sdk.Common;
 using System;
 using System.Collections.Generic;
 
-namespace rNascar23Multi.Sdk.LiveFeeds.Models
+namespace rNascar23.Sdk.LiveFeeds.Models
 {
     public class WeekendRuns
     {

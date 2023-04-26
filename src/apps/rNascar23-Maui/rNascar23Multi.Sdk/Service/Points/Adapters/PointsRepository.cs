@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.Data;
-using rNascar23Multi.Sdk.Points.Models;
-using rNascar23Multi.Sdk.Points.Ports;
-using rNascar23Multi.Sdk.Service.Points.Data.Models;
+using rNascar23.Sdk.Common;
+using rNascar23.Sdk.Data;
+using rNascar23.Sdk.Points.Models;
+using rNascar23.Sdk.Points.Ports;
+using rNascar23.Sdk.Service.Points.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Service.Points.Adapters
+namespace rNascar23.Sdk.Service.Points.Adapters
 {
     internal class PointsRepository : JsonDataRepository, IPointsRepository
     {

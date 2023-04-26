@@ -1,7 +1,7 @@
-﻿using rNascar23Multi.Sdk.Common;
+﻿using rNascar23.Sdk.Common;
 using System.Collections.Generic;
 
-namespace rNascar23Multi.Sdk.LoopData.Models
+namespace rNascar23.Sdk.LoopData.Models
 {
     public class EventLoopData
     {

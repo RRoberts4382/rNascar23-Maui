@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using rNascar23Multi.Sdk.Common;
-using rNascar23Multi.Sdk.Data;
-using rNascar23Multi.Sdk.LapTimes.Models;
-using rNascar23Multi.Sdk.LapTimes.Ports;
-using rNascar23Multi.Sdk.Service.LapTimes.Data.Models;
+using rNascar23.Sdk.Common;
+using rNascar23.Sdk.Data;
+using rNascar23.Sdk.LapTimes.Models;
+using rNascar23.Sdk.LapTimes.Ports;
+using rNascar23.Sdk.Service.LapTimes.Data.Models;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace rNascar23Multi.Sdk.Service.LapTimes.Adapters
+namespace rNascar23.Sdk.Service.LapTimes.Adapters
 {
     internal class LapTimesRepository : JsonDataRepository, ILapTimesRepository
     {

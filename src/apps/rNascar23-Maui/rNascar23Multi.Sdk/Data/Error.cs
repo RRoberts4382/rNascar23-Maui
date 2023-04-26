@@ -1,4 +1,4 @@
-﻿namespace rNascar23Multi.Sdk.Data
+﻿namespace rNascar23.Sdk.Data
 {
     // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
     /// <remarks/>
