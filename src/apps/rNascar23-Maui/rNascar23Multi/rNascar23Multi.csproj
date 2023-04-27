@@ -58,7 +58,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.5.33428.366" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="rNascar23.Sdk" Version="1.0.2" />
+		<PackageReference Include="rNascar23.Sdk" Version="1.0.5" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
