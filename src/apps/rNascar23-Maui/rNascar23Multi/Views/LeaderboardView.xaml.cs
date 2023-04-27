@@ -4,23 +4,23 @@ namespace rNascar23Multi.Views;
 
 public partial class LeaderboardView : ContentView
 {
-    private LeaderboardViewModel _viewModel;
+    public LeaderboardViewModel ViewModel { get; set; }
 
     public LeaderboardView()
     {
         InitializeComponent();
 
-        _viewModel = App.serviceProvider.GetService<LeaderboardViewModel>();
+        ViewModel = App.serviceProvider.GetService<LeaderboardViewModel>();
 
-        BindingContext = _viewModel;
+        BindingContext = ViewModel;
     }
 
     public LeaderboardView(LeaderboardViewModel viewModel)
     {
         InitializeComponent();
 
-        _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+        ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
 
-        BindingContext = _viewModel;
+        BindingContext = ViewModel;
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:rNascar23Multi.Views"
+             x:Class="rNascar23Multi.Pages.LeaderboardPage"
+             Title="Leaderboard"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="75" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="225" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+
+        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Models}"
+            Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <Button Text="Race" Clicked="OnRaceButtonClicked"/>
+            <Button Text="Qualifying" Clicked="OnQualifyingButtonClicked"/>
+            <Button Text="Practice" Clicked="OnPracticeButtonClicked"/>
+        </HorizontalStackLayout>
+
+        <Grid x:Name="headerViewHolder"
+             Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+        </Grid>
+
+        <Grid x:Name="leaderboardViewHolder"
+             Grid.Column="0" Grid.Row="2">
+        </Grid>
+
+        <Grid x:Name="verticalGridViewHolder"
+             Grid.Column="1" Grid.Row="2">
+        </Grid>
+
+        <Grid x:Name="horizontalGridViewHolder"
+             Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+        </Grid>
+    </Grid>
+</ContentPage>

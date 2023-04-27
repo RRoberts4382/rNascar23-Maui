@@ -1,25 +1,34 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.PlatformUI;
-using rNascar23Multi.Logic;
-using rNascar23Multi.Models;
 using rNascar23.Sdk.Common;
-using rNascar23.Sdk.Data.LiveFeeds.Ports;
 using rNascar23.Sdk.LapTimes.Models;
 using rNascar23.Sdk.LapTimes.Ports;
+using rNascar23.Sdk.LiveFeeds.Ports;
+using rNascar23Multi.Logic;
+using rNascar23Multi.Models;
+using rNascar23Multi.Settings.Ports;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace rNascar23Multi.ViewModels
 {
-    public partial class DriverValueViewModel : ObservableObject
+    public partial class DriverValueViewModel : ObservableObject, INotifyUpdateTarget, IDisposable
     {
+        #region fields
+
         ILogger<DriverValueViewModel> _logger;
         private ILiveFeedRepository _liveFeedRepository;
         private IMoversFallersService _moversFallersService;
         private ILapTimesRepository _lapTimeRepository;
+        private ISettingsRepository _settingsRepository;
         private GridViewTypes _gridViewType;
 
-        private ObservableCollection<DriverValueModel> _models = new ObservableCollection<DriverValueModel>();
+        #endregion
 
+        #region properties
+
+        private ObservableCollection<DriverValueModel> _models = new ObservableCollection<DriverValueModel>();
         public ObservableCollection<DriverValueModel> Models
         {
             get => _models;
@@ -47,6 +56,10 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _headerBackgroundColor, value);
         }
 
+        #endregion
+
+        #region ctor
+
         public DriverValueViewModel(GridViewTypes gridViewType)
         {
             _gridViewType = gridViewType;
@@ -59,15 +72,15 @@ namespace rNascar23Multi.ViewModels
 
             _lapTimeRepository = App.serviceProvider.GetService<ILapTimesRepository>();
 
-            var updateHandler = App.serviceProvider.GetService<UpdateNotificationHandler>();
+            _settingsRepository = App.serviceProvider.GetService<ISettingsRepository>();
 
-            updateHandler.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
+            var userSettings = _settingsRepository.GetSettings();
 
             switch (_gridViewType)
             {
                 case GridViewTypes.FastestLaps:
                     {
-                        ListHeader = "Fastest Laps";
+                        ListHeader = userSettings.UseMph ? "Fastest Laps (M.P.H.)" : "Fastest Laps (Lap Time)";
                         HeaderTextColor = Colors.Black;
                         HeaderBackgroundColor = Colors.LightSteelBlue;
                         break;
@@ -129,19 +142,35 @@ namespace rNascar23Multi.ViewModels
             }
         }
 
-        private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+        #endregion
+
+        #region public
+
+        public async Task UserSettingsUpdatedAsync()
+        {
+
+        }
+
+        public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
         {
             try
             {
-                _logger.LogInformation($"DriverValueViewModel - UpdateTimer_UpdateTimerElapsed GridViewType:{_gridViewType}");
+                _logger.LogInformation($"DriverValueViewModel - UpdateTimer_UpdateTimerElapsed {_gridViewType}");
 
-                await LoadModelsAsync(e.SessionDetails);
+                if (e.SessionDetails != null)
+                {
+                    await LoadModelsAsync(e.SessionDetails);
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in DriverValueViewModel:UpdateTimer_UpdateTimerElapsed");
             }
         }
+
+        #endregion
+
+        #region private
 
         private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
         {
@@ -201,11 +230,10 @@ namespace rNascar23Multi.ViewModels
 
         private async Task BuildLapLeadersDataAsync()
         {
+            IList<DriverValueModel> driverValues = new List<DriverValueModel>();
+
             var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
 
-            Models.Clear();
-
-            int i = 1;
             foreach (var lapLedLeader in liveFeed.Vehicles.
                 Where(v => v.LapsLed.Count > 0).
                 OrderByDescending(v => v.LapsLed.Sum(l => l.EndLap - l.StartLap)).
@@ -217,59 +245,56 @@ namespace rNascar23Multi.ViewModels
                     Value = lapLedLeader.LapsLed.Sum(l => l.EndLap - l.StartLap)
                 };
 
-                Models.Add(lapLeader);
-                i++;
+                driverValues.Add(lapLeader);
             }
+
+            UpdateModels(driverValues);
         }
 
         private async Task BuildFastestLapsDataAsync()
         {
+            IList<DriverValueModel> driverValues;
+
             var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
 
-            Models.Clear();
+            var userSettings = _settingsRepository.GetSettings();
 
-            //if (UserSettings.FastestLapsDisplayType == SpeedTimeType.MPH)
-            //{
-            var laps = liveFeed.Vehicles.
-                Where(v => v.BestLapSpeed > 0).
-                OrderByDescending(v => v.BestLapSpeed).
-                Take(5).
-                Select(v => new DriverValueModel()
-                {
-                    Driver = v.Driver.FullName,
-                    Value = (float)Math.Round(v.BestLapSpeed, 3)
-                }).
-                ToList();
-
-            foreach (var lap in laps)
+            if (userSettings.UseMph)
             {
-                Models.Add(lap);
+                driverValues = liveFeed.Vehicles.
+                    Where(v => v.BestLapSpeed > 0).
+                    OrderByDescending(v => v.BestLapSpeed).
+                    Take(5).
+                    Select(v => new DriverValueModel()
+                    {
+                        Driver = v.Driver.FullName,
+                        Value = (float)Math.Round(v.BestLapSpeed, 3)
+                    }).
+                    ToList();
+            }
+            else
+            {
+                driverValues = liveFeed.Vehicles.
+                    Where(v => v.BestLapTime > 0).
+                    OrderBy(v => v.BestLapTime).
+                    Take(10).
+                    Select(v => new DriverValueModel()
+                    {
+                        Driver = v.Driver.FullName,
+                        Value = (float)Math.Round(v.BestLapTime, 3)
+                    }).ToList();
             }
 
-            //}
-            //else
-            //{
-            //    models = liveFeed.Vehicles.
-            //        Where(v => v.BestLapTime > 0).
-            //        OrderBy(v => v.BestLapTime).
-            //        Take(10).
-            //        Select(v => new DriverValueModel()
-            //        {
-            //            Driver = v.Driver.FullName,
-            //            Value = (float)Math.Round(v.BestLapTime, 3)
-            //        }).ToList();
-            //}
+            UpdateModels(driverValues);
         }
 
         private async Task BuildMoversDataAsync(int seriesId, int raceId)
         {
             LapTimeData lapTimeData = await _lapTimeRepository.GetLapTimeDataAsync((SeriesTypes)seriesId, raceId);
 
-            Models.Clear();
-
             var changes = _moversFallersService.GetDriverPositionChanges(lapTimeData);
 
-            var laps = changes.
+            var driverValues = changes.
                 OrderByDescending(c => c.ChangeSinceFlagChange).
                 Where(c => c.ChangeSinceFlagChange > 0).
                 Select(c => new DriverValueModel()
@@ -280,21 +305,16 @@ namespace rNascar23Multi.ViewModels
                 Take(5).
                 ToList();
 
-            foreach (var lap in laps)
-            {
-                Models.Add(lap);
-            }
+            UpdateModels(driverValues);
         }
 
         private async Task BuildFallersDataAsync(int seriesId, int raceId)
         {
             LapTimeData lapTimeData = await _lapTimeRepository.GetLapTimeDataAsync((SeriesTypes)seriesId, raceId);
 
-            Models.Clear();
-
             var changes = _moversFallersService.GetDriverPositionChanges(lapTimeData);
 
-            var laps = changes.
+            var driverValues = changes.
                 OrderBy(c => c.ChangeSinceFlagChange).
                 Where(c => c.ChangeSinceFlagChange < 0).
                 Select(c => new DriverValueModel()
@@ -304,10 +324,61 @@ namespace rNascar23Multi.ViewModels
                 }).
                 ToList();
 
-            foreach (var lap in laps)
+            UpdateModels(driverValues);
+        }
+
+        private void UpdateModels(IList<DriverValueModel> driverValues)
+        {
+            if (Models.Count > driverValues.Count)
             {
-                Models.Add(lap);
+                for (int i = driverValues.Count - 1; i > Models.Count - 1; i--)
+                {
+                    Models.RemoveAt(i);
+                }
+            }
+
+            for (int i = 0; i < driverValues.Count; i++)
+            {
+                if (Models.Count <= i)
+                {
+                    Models.Add(driverValues[i]);
+                }
+                else
+                {
+                    Models[i].Driver = driverValues[i].Driver;
+                    Models[i].Value = driverValues[i].Value;
+                }
             }
         }
+
+        #endregion
+
+        #region IDisposable
+
+        private bool _disposed;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _logger = null;
+                _liveFeedRepository = null;
+                _moversFallersService = null;
+                _lapTimeRepository = null;
+            }
+            // free native resources if there are any.
+        }
+
+        #endregion
     }
 }

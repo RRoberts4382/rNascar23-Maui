@@ -4,10 +4,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:rNascar23Multi"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:pages="clr-namespace:rNascar23Multi.Pages">
 
-    <ShellContent
-        ContentTemplate="{DataTemplate local:rNascar23Main}"
-        Route="rNascar23Main" />
+    <ShellContent Title="Leaderboard" Route="Leaderboard" ContentTemplate="{DataTemplate pages:LeaderboardPage}" />
+    <ShellContent Title="Schedules" Route="Schedules" ContentTemplate="{DataTemplate pages:SchedulesPage}" />
+    <ShellContent Title="Pit Stops" Route="PitStops" ContentTemplate="{DataTemplate pages:PitStopsPage}" />
+    <ShellContent Title="Settings" Route="Settings" ContentTemplate="{DataTemplate pages:SettingsPage}" />
+    <ShellContent Title="Exit" Route="Exit" ContentTemplate="{DataTemplate pages:QuitPage}"/>
 
 </Shell>

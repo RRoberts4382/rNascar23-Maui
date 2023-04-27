@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:rNascar23Multi.Views"
+             xmlns:views="clr-namespace:rNascar23Multi.Views"
              x:Class="rNascar23Multi.Views.RaceView">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="75" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="220" />
+            <RowDefinition Height="225" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-        <local:RpqHeaderView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
-        <Border Grid.Column="0" Grid.Row="1">
-            <local:LeaderboardView BackgroundColor="Pink" />
-        </Border>
-        <local:VerticalGridView Grid.Column="1" Grid.Row="1" BackgroundColor="Black" />
-        <local:HorizontalGridView Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="Black" />
+
+        <views:RpqHeaderView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
+
+        <views:LeaderboardView Grid.Column="0" Grid.Row="1"
+            BackgroundColor="Pink" />
+
+        <views:VerticalGridView 
+            ViewType ="Race"
+            Grid.Column="1" Grid.Row="1"/>
+
+        <views:HorizontalGridView
+            ViewType ="Race"
+            Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"/>
     </Grid>
 </ContentView>

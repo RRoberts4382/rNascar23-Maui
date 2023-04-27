@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="rNascar23Multi.Resources.Styles.DarkTheme">
+    <Color x:Key="PageBackgroundColor">Black</Color>
+    <Color x:Key="NavigationBarColor">SteelBlue</Color>
+    <Color x:Key="PrimaryColor">SteelBlue</Color>
+    <Color x:Key="SecondaryColor">White</Color>
+    <Color x:Key="PrimaryBackgroundColor">Black</Color>
+    <Color x:Key="SecondaryBackgroundColor">#202020</Color>
+    <Color x:Key="CheckColor">SteelBlue</Color>
+    <Color x:Key="PrimaryTextColor">DarkGray</Color>
+    <Color x:Key="SecondaryTextColor">SteelBlue</Color>
+    <Color x:Key="TertiaryTextColor">Gray</Color>
+    <Color x:Key="TransparentColor">Transparent</Color>
+</ResourceDictionary>

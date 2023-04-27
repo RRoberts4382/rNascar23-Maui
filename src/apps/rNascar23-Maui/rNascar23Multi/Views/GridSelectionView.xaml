@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="rNascar23Multi.Views.GridSelectionView">
+    <ScrollView>
+        <StackLayout BindableLayout.ItemsSource="{Binding Models}" Orientation="Vertical">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout
+                        Orientation="Horizontal" 
+                        HorizontalOptions="Start" >
+
+                        <Label Text="{Binding GridName}"
+                               Margin="10,0,0,0"
+                                WidthRequest="100"
+                                HorizontalOptions="Start" />
+
+                        <Label Text="{Binding GridIndex}"
+                                WidthRequest="20"
+                                HorizontalOptions="Center" />
+
+                        <CheckBox IsChecked="{Binding Selected}"
+                                  Margin="20,0,20,0"
+                                  WidthRequest="40"
+                                  HorizontalOptions="End"/>
+
+                    </StackLayout>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </StackLayout>
+    </ScrollView>
+</ContentView>

@@ -5,12 +5,6 @@
              xmlns:converters="clr-namespace:rNascar23Multi.Converters"
              x:Class="rNascar23Multi.Views.HorizontalGridView">
 
-    <StackLayout BindableLayout.ItemsSource="{Binding Models}" Orientation="Horizontal">
-        <BindableLayout.ItemTemplate>
-            <DataTemplate>
-                <ContentView Margin="2,0,2,0" Content="{Binding ViewType, Converter={x:Static converters:GridViewConverter.Instance}}"/>               
-            </DataTemplate>
-        </BindableLayout.ItemTemplate>
-    </StackLayout>
-    
+    <HorizontalStackLayout x:Name="gridLayout">
+    </HorizontalStackLayout>
 </ContentView>

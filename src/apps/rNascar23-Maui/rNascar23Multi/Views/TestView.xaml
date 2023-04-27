@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="rNascar23Multi.Views.TestView">
+
+    <VerticalStackLayout>
+        
+        <Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+            <Button  Grid.Row="0" Text="Practice" Clicked="OnPracticeButtonClicked" />
+            <Button  Grid.Row="1" Text="Qualifying" Clicked="OnQualifyingButtonClicked" />
+            <Button  Grid.Row="2" Text="Race" Clicked="OnRaceButtonClicked" />
+        </Grid>
+        <Grid x:Name="currentContentViewHolder">
+            <Label Text="Goobye!"/>
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>
+
+    

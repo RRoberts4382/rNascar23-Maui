@@ -6,9 +6,154 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+                <!--<ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />-->
+                <ResourceDictionary Source="Resources/Styles/LightTheme.xaml" />
+                <!--<ResourceDictionary Source="Resources/Styles/DarkTheme.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+
+        <Style x:Key="LargeLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource PrimaryTextColor}" />
+            <Setter Property="FontSize"
+                    Value="24" />
+        </Style>
+
+        <Style x:Key="MediumLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource SecondaryTextColor}" />
+            <Setter Property="FontSize"
+                    Value="20" />
+        </Style>
+
+        <Style x:Key="SmallLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource TertiaryTextColor}" />
+            <Setter Property="FontSize"
+                    Value="15" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="Center" />
+        </Style>
+
+        <Style x:Key="RpqHeaderLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource SecondaryTextColor}" />
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="FontAttributes"
+                    Value="Bold" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="Center"/>
+            <Setter Property="VerticalOptions"
+                    Value="Fill" />
+        </Style>
+
+        <Style x:Key="GridHeaderLabelStyle"
+               TargetType="Label">
+            <Setter Property="FontSize"
+                    Value="15" />
+            <Setter Property="FontAttributes"
+                    Value="Bold" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalTextAlignment"
+                    Value="Start" />
+            <Setter Property="HorizontalOptions"
+                    Value="Fill" />
+        </Style>
+
+        <Style x:Key="GridColumnHeaderLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource SecondaryTextColor}" />
+            <Setter Property="BackgroundColor" 
+                    Value="{DynamicResource SecondaryBackgroundColor}" />
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalTextAlignment"
+                    Value="Start" />
+        </Style>
+
+        <Style x:Key="GridNameLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource PrimaryTextColor}" />
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalTextAlignment"
+                    Value="Start" />
+        </Style>
+
+        <Style x:Key="GridValueLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource PrimaryTextColor}" />
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalTextAlignment"
+                    Value="Start" />
+        </Style>
+
+        <Style x:Key="LeaderboardItemHeaderLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource SecondaryTextColor}" />
+            <Setter Property="BackgroundColor" 
+                    Value="{DynamicResource SecondaryBackgroundColor}" />
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalTextAlignment"
+                    Value="Start" />
+        </Style>
+
+        <Style x:Key="LeaderboardColumnHeaderGridStyle"
+               TargetType="Grid">
+            <Setter Property="BackgroundColor" 
+                    Value="{DynamicResource SecondaryBackgroundColor}" />
+        </Style>
+
+        <Style x:Key="LeaderboardItemLabelStyle"
+               TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{DynamicResource PrimaryTextColor}" />
+            <Setter Property="FontSize"
+                    Value="15" />
+            <Setter Property="FontAttributes"
+                    Value="Bold" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalTextAlignment"
+                    Value="Start" />
+        </Style>
+
+        <Style x:Key="HorizontalStackLayoutStyle"
+               TargetType="HorizontalStackLayout">
+            <Setter Property="Margin"
+                    Value="0,2,0,2" />
+            <Setter Property="Spacing"
+                    Value="4" />
+        </Style>
+
+        <Style x:Key="CheckBoxStyle"
+               TargetType="CheckBox">
+            <Setter Property="Color" 
+                    Value="{DynamicResource CheckColor}" />
+            <Setter Property="Margin"
+                    Value="0,0,4,0" />
+        </Style>
+
     </Application.Resources>
 </Application>

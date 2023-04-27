@@ -1,327 +1,189 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="rNascar23Multi.Views.LeaderboardView">
-    <VerticalStackLayout Margin="0,5,0,5">
-        <Border>
-            <Grid BackgroundColor ="LimeGreen">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+             x:Class="rNascar23Multi.Views.LeaderboardView"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-                <!-- LEFT -->
-                <Border>
-                    <VerticalStackLayout Grid.Column="0" BackgroundColor="Magenta">
-
-                        <!-- Column Headers -->
-                        <Grid BackgroundColor ="White">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <!--position-->
-                                <ColumnDefinition Width="35" />
-                                <!--car number-->
-                                <ColumnDefinition Width="35" />
-                                <!--driver-->
-                                <ColumnDefinition Width="150" />
-                                <!--manufacturer-->
-                                <ColumnDefinition Width="35" />
-                                <!--laps-->
-                                <ColumnDefinition Width="35" />
-                                <!--to leader-->
-                                <ColumnDefinition Width="75" />
-                                <!--to next-->
-                                <ColumnDefinition Width="65" />
-                                <!--last lap-->
-                                <ColumnDefinition Width="65" />
-                                <!--best lap-->
-                                <ColumnDefinition Width="65" />
-                                <!--on lap-->
-                                <ColumnDefinition Width="35" />
-                                <!--last pit-->
-                                <ColumnDefinition Width="35" />
-                                <!--status-->
-                                <ColumnDefinition Width="50" />
-                            </Grid.ColumnDefinitions>
-                            <Label Text=""  Grid.Column="0" TextColor="Black" Margin="1,0,0,0"/>
-                            <Label Text="#" Grid.Column="1" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="Driver" Grid.Column="2" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="" Grid.Column="3" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="Laps" Grid.Column="4" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="To Leader" Grid.Column="5" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="To Next" Grid.Column="6" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="Last Lap" Grid.Column="7" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="Best Lap" Grid.Column="8" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="On Lap" Grid.Column="9" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="Last Pit" Grid.Column="10" TextColor="Black" Margin="7,0,0,0"/>
-                            <Label Text="Status" Grid.Column="11" TextColor="Black" Margin="7,0,0,0"/>
-                        </Grid>
-
-                        <!-- Items -->
-                        <ScrollView>
-                            <ListView x:Name="LeftLeaderboardListView"
-                    ItemsSource="{Binding LeftModels}"
-                    BackgroundColor="Black">
-
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ViewCell>
-                                            <HorizontalStackLayout>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding Position}"
-                                                Margin="2,0,0,0"
-                                                TextColor="White"
-                                                WidthRequest="35"
-                                                HorizontalOptions="Start" />
-                                                </Border>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding CarNumber}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="35"
-                                                TextColor="White"
-                                                HorizontalOptions="CenterAndExpand" />
-                                                </Border>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding DriverName}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="150"
-                                                TextColor="White"
-                                                HorizontalOptions="End" />
-                                                </Border>
-
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding Manufacturer}"
-                                                Margin="2,0,0,0"
-                                                TextColor="White"
-                                                WidthRequest="35"
-                                                HorizontalOptions="Start" />
-                                                </Border>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding Laps}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="35"
-                                                TextColor="White"
-                                                HorizontalOptions="CenterAndExpand" />
-                                                </Border>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding ToLeader}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="75"
-                                                TextColor="White"
-                                                HorizontalOptions="End" />
-                                                </Border>
-
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding ToNext}"
-                                                Margin="2,0,0,0"
-                                                TextColor="White"
-                                                WidthRequest="65"
-                                                HorizontalOptions="Start" />
-                                                </Border>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding LastLap}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="65"
-                                                TextColor="White"
-                                                HorizontalOptions="CenterAndExpand" />
-                                                </Border>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding BestLap}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="65"
-                                                TextColor="White"
-                                                HorizontalOptions="End" />
-                                                </Border>
-
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding OnLap}"
-                                                Margin="2,0,0,0"
-                                                TextColor="White"
-                                                WidthRequest="35"
-                                                HorizontalOptions="Start" />
-                                                </Border>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding LastPit}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="35"
-                                                TextColor="White"
-                                                HorizontalOptions="CenterAndExpand" />
-                                                </Border>
-                                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                    <Label Text="{Binding Status}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="50"
-                                                TextColor="White"
-                                                HorizontalOptions="End" />
-                                                </Border>
-                                            </HorizontalStackLayout>
-                                        </ViewCell>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </ScrollView>
-                    </VerticalStackLayout>
-                </Border>
+        <!-- LEFT -->
+        <VerticalStackLayout Grid.Column="0">
+            
+            <!-- Column headers -->
+            <HorizontalStackLayout  Grid.Row="1"
+                Style="{StaticResource HorizontalStackLayoutStyle}">
                 
-                <!-- RIGHT -->
-                <VerticalStackLayout Grid.Column="1"  BackgroundColor="Cyan">
+                <Label Text="" WidthRequest="35"
+                    Margin="12,0,0,0"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="#" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Driver" WidthRequest="150"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Laps" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="To Leader" WidthRequest="75"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="To Next" WidthRequest="65"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Last Lap" WidthRequest="65"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Best Lap" WidthRequest="65"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="On Lap" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Last Pit" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Status" WidthRequest="50"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            </HorizontalStackLayout>
 
-                    <!-- Column Headers -->
-                    <Grid BackgroundColor ="White">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <!--position-->
-                            <ColumnDefinition Width="35" />
-                            <!--car number-->
-                            <ColumnDefinition Width="35" />
-                            <!--driver-->
-                            <ColumnDefinition Width="150" />
-                            <!--manufacturer-->
-                            <ColumnDefinition Width="35" />
-                            <!--laps-->
-                            <ColumnDefinition Width="35" />
-                            <!--to leader-->
-                            <ColumnDefinition Width="75" />
-                            <!--to next-->
-                            <ColumnDefinition Width="65" />
-                            <!--last lap-->
-                            <ColumnDefinition Width="65" />
-                            <!--best lap-->
-                            <ColumnDefinition Width="65" />
-                            <!--on lap-->
-                            <ColumnDefinition Width="35" />
-                            <!--last pit-->
-                            <ColumnDefinition Width="35" />
-                            <!--status-->
-                            <ColumnDefinition Width="50" />
-                        </Grid.ColumnDefinitions>
-                        <Label Text=""  Grid.Column="0" TextColor="Black" Margin="1,0,0,0"/>
-                        <Label Text="#" Grid.Column="1" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="Driver" Grid.Column="2" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="" Grid.Column="3" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="Laps" Grid.Column="4" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="To Leader" Grid.Column="5" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="To Next" Grid.Column="6" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="Last Lap" Grid.Column="7" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="Best Lap" Grid.Column="8" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="On Lap" Grid.Column="9" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="Last Pit" Grid.Column="10" TextColor="Black" Margin="7,0,0,0"/>
-                        <Label Text="Status" Grid.Column="11" TextColor="Black" Margin="7,0,0,0"/>
-                    </Grid>
+            <!-- Items -->
+            <ListView x:Name="LeftLeaderboardListView"
+                            ItemsSource="{Binding LeftModels}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <HorizontalStackLayout
+                                Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <Label Text="{Binding Position}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding CarNumber}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding DriverName}"
+                                            WidthRequest="150"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding Manufacturer}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding Laps}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding ToLeader}"
+                                            WidthRequest="75"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding ToNext}"
+                                            WidthRequest="65"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding LastLap}"
+                                            WidthRequest="65"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding BestLap}"
+                                            WidthRequest="65"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding OnLap}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding LastPit}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding Status}"
+                                            WidthRequest="50"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                            </HorizontalStackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+        </VerticalStackLayout>
 
-                    <!-- Items -->
-                    <ScrollView>
-                        <ListView x:Name="RightLeaderboardListView"
-                    ItemsSource="{Binding RightModels}"
-                    BackgroundColor="Black">
+        <!-- RIGHT -->
+        <VerticalStackLayout Grid.Column="1">
 
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <HorizontalStackLayout>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding Position}"
-                                                Margin="2,0,0,0"
-                                                TextColor="White"
-                                                WidthRequest="35"
-                                                HorizontalOptions="Start" />
-                                            </Border>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding CarNumber}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="35"
-                                                TextColor="White"
-                                                HorizontalOptions="CenterAndExpand" />
-                                            </Border>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding DriverName}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="150"
-                                                TextColor="White"
-                                                HorizontalOptions="End" />
-                                            </Border>
+            <!-- Column headers -->
+            <HorizontalStackLayout  Grid.Row="1"
+                Style="{StaticResource HorizontalStackLayoutStyle}">
+                
+                <Label Text="" WidthRequest="35"
+                    Margin="12,0,0,0"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="#" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Driver" WidthRequest="150"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Laps" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="To Leader" WidthRequest="75"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="To Next" WidthRequest="65"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Last Lap" WidthRequest="65"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Best Lap" WidthRequest="65"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="On Lap" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Last Pit" WidthRequest="35"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+                <Label Text="Status" WidthRequest="50"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            </HorizontalStackLayout>
 
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding Manufacturer}"
-                                                Margin="2,0,0,0"
-                                                TextColor="White"
-                                                WidthRequest="35"
-                                                HorizontalOptions="Start" />
-                                            </Border>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding Laps}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="35"
-                                                TextColor="White"
-                                                HorizontalOptions="CenterAndExpand" />
-                                            </Border>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding ToLeader}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="75"
-                                                TextColor="White"
-                                                HorizontalOptions="End" />
-                                            </Border>
+            <!-- Items -->
+            <ListView x:Name="RightLeaderboardListView"
+                ItemsSource="{Binding RightModels}">
+                
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <HorizontalStackLayout
+                                Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <Label Text="{Binding Position}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding CarNumber}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding DriverName}"
+                                            WidthRequest="150"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding Manufacturer}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding Laps}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding ToLeader}"
+                                            WidthRequest="75"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding ToNext}"
+                                            WidthRequest="65"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding LastLap}"
+                                            WidthRequest="65"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding BestLap}"
+                                            WidthRequest="65"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding OnLap}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding LastPit}"
+                                            WidthRequest="35"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Label Text="{Binding Status}"
+                                            WidthRequest="50"
+                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                            </HorizontalStackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+        </VerticalStackLayout>
 
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding ToNext}"
-                                                Margin="2,0,0,0"
-                                                TextColor="White"
-                                                WidthRequest="65"
-                                                HorizontalOptions="Start" />
-                                            </Border>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding LastLap}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="65"
-                                                TextColor="White"
-                                                HorizontalOptions="CenterAndExpand" />
-                                            </Border>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding BestLap}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="65"
-                                                TextColor="White"
-                                                HorizontalOptions="End" />
-                                            </Border>
-
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding OnLap}"
-                                                Margin="2,0,0,0"
-                                                TextColor="White"
-                                                WidthRequest="35"
-                                                HorizontalOptions="Start" />
-                                            </Border>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding LastPit}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="35"
-                                                TextColor="White"
-                                                HorizontalOptions="CenterAndExpand" />
-                                            </Border>
-                                            <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                                <Label Text="{Binding Status}"
-                                                Margin="2,0,0,0"
-                                                WidthRequest="50"
-                                                TextColor="White"
-                                                HorizontalOptions="End" />
-                                            </Border>
-                                        </HorizontalStackLayout>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </ScrollView>
-                </VerticalStackLayout>
-
-            </Grid>
-        </Border>
-    </VerticalStackLayout>
+    </Grid>
 </ContentView>

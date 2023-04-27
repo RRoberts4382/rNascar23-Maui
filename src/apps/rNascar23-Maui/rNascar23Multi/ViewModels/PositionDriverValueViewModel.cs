@@ -1,22 +1,27 @@
-﻿using rNascar23Multi.Models;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.PlatformUI;
-using System.Collections.ObjectModel;
-using Microsoft.Extensions.Logging;
-using rNascar23Multi.Logic;
-using rNascar23.Sdk.Points.Ports;
 using rNascar23.Sdk.Common;
+using rNascar23.Sdk.LiveFeeds.Models;
+using rNascar23.Sdk.Points.Ports;
+using rNascar23Multi.Logic;
+using rNascar23Multi.Models;
+using System.Collections.ObjectModel;
 
 namespace rNascar23Multi.ViewModels
 {
-    public partial class PositionDriverValueViewModel : ObservableObject
+    public partial class PositionDriverValueViewModel : ObservableObject, INotifyUpdateTarget, IDisposable
     {
-        ILogger<DriverValueViewModel> _logger;
-        IPointsRepository _pointsRepository;
+        #region fields
 
+        private ILogger<DriverValueViewModel> _logger;
+        private IPointsRepository _pointsRepository;
         private GridViewTypes _gridViewType;
 
-        private ObservableCollection<PositionDriverValueModel> _models = new ObservableCollection<PositionDriverValueModel>();
+        #endregion
 
+        #region properties
+
+        private ObservableCollection<PositionDriverValueModel> _models = new ObservableCollection<PositionDriverValueModel>();
         public ObservableCollection<PositionDriverValueModel> Models
         {
             get => _models;
@@ -44,6 +49,10 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _headerBackgroundColor, value);
         }
 
+        #endregion
+
+        #region ctor
+
         public PositionDriverValueViewModel(GridViewTypes gridViewType)
         {
             _gridViewType = gridViewType;
@@ -51,10 +60,6 @@ namespace rNascar23Multi.ViewModels
             _logger = App.serviceProvider.GetService<ILogger<DriverValueViewModel>>();
 
             _pointsRepository = App.serviceProvider.GetService<IPointsRepository>();
-
-            var updateHandler = App.serviceProvider.GetService<UpdateNotificationHandler>();
-
-            updateHandler.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
 
             switch (gridViewType)
             {
@@ -83,11 +88,20 @@ namespace rNascar23Multi.ViewModels
             }
         }
 
-        private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+        #endregion
+
+        #region public
+
+        public async Task UserSettingsUpdatedAsync()
+        {
+
+        }
+
+        public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
         {
             try
             {
-                _logger.LogInformation($"PositionDriverValueViewModel - UpdateTimer_UpdateTimerElapsed GridViewType:{_gridViewType}");
+                // _logger.LogInformation($"PositionDriverValueViewModel - UpdateTimer_UpdateTimerElapsed GridViewType:{_gridViewType}");
 
                 await LoadModelsAsync(e.SessionDetails);
             }
@@ -96,6 +110,10 @@ namespace rNascar23Multi.ViewModels
                 _logger.LogError(ex, "Error in PositionDriverValueViewModel:UpdateTimer_UpdateTimerElapsed");
             }
         }
+
+        #endregion
+
+        #region private
 
         private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
         {
@@ -146,11 +164,11 @@ namespace rNascar23Multi.ViewModels
 
         private async Task BuildDriverPointsDataAsync(int seriesId, int raceId)
         {
+            IList<PositionDriverValueModel> driverValues = new List<PositionDriverValueModel>();
+
             var driverPoints = await _pointsRepository.GetDriverPointsAsync((SeriesTypes)seriesId, raceId);
 
-            Models.Clear();
-
-            var models = driverPoints.
+            driverValues = driverPoints.
                 Select(p => new PositionDriverValueModel()
                 {
                     Position = p.PointsPosition,
@@ -158,22 +176,17 @@ namespace rNascar23Multi.ViewModels
                     Value = p.Points
                 }).OrderBy(p => p.Position).ToList();
 
-            foreach (var model in models)
-            {
-                Models.Add(model);
-            }
+            UpdateModels(driverValues);
         }
 
         private async Task BuildStagePointsDataAsync(int seriesId, int raceId)
         {
-            var stagePoints = await _pointsRepository.GetStagePointsAsync((SeriesTypes)seriesId, raceId);
+            IList<PositionDriverValueModel> driverValues = new List<PositionDriverValueModel>();
 
-            Models.Clear();
+            var stagePoints = await _pointsRepository.GetStagePointsAsync((SeriesTypes)seriesId, raceId);
 
             if (stagePoints == null || stagePoints.Count() == 0)
                 return;
-
-            //stagePoints = stagePoints.Where(s => s.RaceId == raceId).ToList();
 
             int i = 1;
             foreach (var driverStagePoints in stagePoints.
@@ -187,10 +200,67 @@ namespace rNascar23Multi.ViewModels
                     Value = driverStagePoints.Stage1Points + driverStagePoints.Stage2Points + driverStagePoints.Stage3Points
                 };
 
-                Models.Add(model);
+                driverValues.Add(model);
 
                 i++;
             }
+
+            UpdateModels(driverValues);
         }
+
+        private void UpdateModels(IList<PositionDriverValueModel> driverValues)
+        {
+            if (Models.Count > driverValues.Count)
+            {
+                for (int i = driverValues.Count - 1; i > Models.Count - 1; i--)
+                {
+                    Models.RemoveAt(i);
+                }
+            }
+
+            for (int i = 0; i < driverValues.Count; i++)
+            {
+                if (Models.Count <= i)
+                {
+                    Models.Add(driverValues[i]);
+                }
+                else
+                {
+                    Models[i].Position = driverValues[i].Position;
+                    Models[i].Driver = driverValues[i].Driver;
+                    Models[i].Value = driverValues[i].Value;
+                }
+            }
+        }
+
+        #endregion
+
+        #region IDisposed
+
+        private bool _disposed;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _logger = null;
+                _pointsRepository = null;
+            }
+            // free native resources if there are any.
+
+            _disposed = true;
+        }
+
+        #endregion
     }
 }
