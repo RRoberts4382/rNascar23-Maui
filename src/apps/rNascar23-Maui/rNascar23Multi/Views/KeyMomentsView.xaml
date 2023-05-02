@@ -2,66 +2,63 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:rNascar23Multi.Converters"
-             x:Class="rNascar23Multi.Views.KeyMomentsView">
+             x:Class="rNascar23Multi.Views.KeyMomentsView"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
     <ContentView.Resources>
         <converters:FlagColorConverter x:Key="flagColorConverter" />
         <converters:FlagTextColorConverter x:Key="flagTextColorConverter" />
     </ContentView.Resources>
-    
-    <VerticalStackLayout>
-        <!-- Grid Header -->
-        <Label 
-            Text="{Binding ListHeader}"
-            Margin="2,0,0,0"
-            FontAttributes="Bold"
-            TextColor ="Black"
-            BackgroundColor ="Magenta"/>
 
-        <!-- Column Headers -->
-        <Grid BackgroundColor ="Black">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="36" />
-                <ColumnDefinition Width="250" />
-            </Grid.ColumnDefinitions>
-            <Label Text="Lap"  Grid.Column="0" TextColor="White" Margin="1,0,0,0"/>
-            <Label Text="" Grid.Column="1" Margin="7,0,0,0"/>
-        </Grid>
+    <!-- Column Headers -->
+    <Grid WidthRequest="350">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Grid Header -->
+        <Label Text="{Binding ListHeader}"
+            TextColor ="Black"
+            BackgroundColor ="Magenta"
+            Style="{StaticResource GridHeaderLabelStyle}"/>
+
+        <!-- Column headers -->
+        <HorizontalStackLayout Grid.Row="1" 
+            Style="{StaticResource HorizontalStackLayoutStyle}">
+            <Label Text="Lap"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"
+                WidthRequest="25"
+                Margin="12,0,0,0"/>
+            <Label Text="Notes"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"
+                WidthRequest="300"/>
+        </HorizontalStackLayout>
 
         <!-- Items -->
-        <ScrollView>
-            <ListView x:Name="GenericListView"
-                ItemsSource="{Binding Models}"
-                BackgroundColor="Black">
+        <ListView x:Name="GenericListView"
+                Grid.Row="2"
+                ItemsSource="{Binding Models}">
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <HorizontalStackLayout>
-                                <Border StrokeThickness="0.5" Margin="0,1,0,0"
-                                        Stroke="DimGray"
-                                        BackgroundColor="{Binding FlagState, Converter={StaticResource flagColorConverter}}">
-                                    <Label Text="{Binding Lap}"
-                                        Margin="2,0,0,0"
-                                        TextColor="{Binding FlagState, Converter={StaticResource flagTextColorConverter}}"
-                                        WidthRequest="35"
-                                        HorizontalOptions="Start"
-                                        VerticalOptions="Center"/>
-                                </Border>
-                                <Border StrokeThickness="0.5" Margin="0,1,0,0" Stroke="DimGray">
-                                    <Label Text="{Binding Comments}"
-                                        Margin="2,0,0,0"
-                                        WidthRequest="300"
-                                        TextColor="White"
-                                        HorizontalOptions="CenterAndExpand" />
-                                </Border>
-                            </HorizontalStackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </ScrollView>
-    </VerticalStackLayout>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <HorizontalStackLayout
+                            Style="{StaticResource HorizontalStackLayoutStyle}">
+                            <Label Text="{Binding Lap}"
+                                    TextColor="{Binding FlagState, Converter={StaticResource flagTextColorConverter}}"
+                                    BackgroundColor="{Binding FlagState, Converter={StaticResource flagColorConverter}}" 
+                                    WidthRequest="25"/>
+                            <Label Text="{Binding Comments}"
+                                    WidthRequest="300"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                        </HorizontalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </ContentView>

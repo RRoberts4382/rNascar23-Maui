@@ -1,21 +1,26 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.PlatformUI;
+using rNascar23.Sdk.Flags.Ports;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
-using rNascar23.Sdk.Flags.Ports;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace rNascar23Multi.ViewModels
 {
-    public partial class FlagsViewModel : ObservableObject
+    public partial class FlagsViewModel : ObservableObject, INotifyUpdateTarget, IDisposable
     {
-        ILogger<FlagsViewModel> _logger;
+        #region fields
+
+        private ILogger<FlagsViewModel> _logger;
         private IFlagStateRepository _flagStateRepository;
 
-        private ObservableCollection<FlagsModel> _models = new ObservableCollection<FlagsModel>();
+        #endregion
 
+        #region properties
+
+        private ObservableCollection<FlagsModel> _models = new ObservableCollection<FlagsModel>();
         public ObservableCollection<FlagsModel> Models
         {
             get => _models;
@@ -29,19 +34,29 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _listHeader, value);
         }
 
+        #endregion
+
+        #region ctor
+
         public FlagsViewModel(
             ILogger<FlagsViewModel> logger,
-            IFlagStateRepository flagStateRepository,
-            UpdateNotificationHandler updateTimer)
+            IFlagStateRepository flagStateRepository)
         {
             _flagStateRepository = flagStateRepository ?? throw new ArgumentNullException(nameof(flagStateRepository));
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            updateTimer.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
         }
 
-        private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+        #endregion
+
+        #region public
+
+        public async Task UserSettingsUpdatedAsync()
+        {
+
+        }
+
+        public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
         {
             try
             {
@@ -57,6 +72,10 @@ namespace rNascar23Multi.ViewModels
                 _logger.LogError(ex, "Error in FlagsViewModel:UpdateTimer_UpdateTimerElapsed");
             }
         }
+
+        #endregion
+
+        #region private
 
         [RelayCommand]
         private async Task InitAsync()
@@ -78,9 +97,14 @@ namespace rNascar23Multi.ViewModels
             {
                 var flagStates = await _flagStateRepository.GetFlagStatesAsync();
 
+                if (Models.Count > flagStates.Count())
+                {
+                    Models.Clear();
+                }
+
                 foreach (var flagState in flagStates)
                 {
-                    var existing = Models.FirstOrDefault(m => m.Lap == flagState.LapNumber && m.FlagState == (int)flagState.State);
+                    var existing = Models.FirstOrDefault(m => m.Timestamp == flagState.TimeOfDayOs);
 
                     if (existing != null)
                     {
@@ -104,6 +128,35 @@ namespace rNascar23Multi.ViewModels
             {
                 _logger.LogError(ex, "Error in FlagsViewModel:LoadModelsAsync");
             }
+        }
+
+        #endregion
+
+        private bool _disposed;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _logger = null;
+                _flagStateRepository = null;
+            }
+            // free native resources if there are any.
+        }
+
+        ~FlagsViewModel()
+        {
+            Debug.WriteLine("********************************* FlagsViewModel Disposed");
         }
     }
 }

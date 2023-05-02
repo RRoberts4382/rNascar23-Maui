@@ -1,13 +1,13 @@
 using rNascar23Multi.Logic;
 using System.Diagnostics;
 
-namespace rNascar23Multi;
+namespace rNascar23Multi.Pages;
 
-public partial class rNascar23Main : ContentPage
+public partial class RacePage : BaseContentPage
 {
     IDispatcherTimer timer;
 
-    public rNascar23Main(UpdateNotificationHandler updateTimer)
+    public RacePage(UpdateNotificationHandler updateTimer)
     {
         InitializeComponent();
 

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:rNascar23Multi.Views"
+             xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="rNascar23Multi.Views.SettingsView">
+
+    <ContentView.Resources>
+        <converters:NullableIntToTextConverter x:Key="nullableIntToString"/>
+    </ContentView.Resources>
+
+    <ContentView.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Loaded"
+                                        Command="{Binding InitCommand}" />
+    </ContentView.Behaviors>
+
+    <VerticalStackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="350" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="350" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- grid selection -->
+            <Label Grid.Column="1" Grid.Row="0" Text="Race View Right" Margin="0,4,10,0"
+                Style="{StaticResource MediumLabelStyle}"/>
+            <ScrollView  Grid.Column="1" Grid.Row="1">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding RaceRightGrids}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"
+                                        Style="{DynamicResource CheckBoxStyle}"/>
+                                <Label Text="{Binding GridName}"
+                                        Style="{StaticResource SmallLabelStyle}"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <Label Grid.Column="1" Grid.Row="2" Text="Race View Bottom" Margin="0,4,10,0"
+                Style="{StaticResource MediumLabelStyle}"/>
+            <ScrollView  Grid.Column="1" Grid.Row="3">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding RaceBottomGrids}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"
+                                        Style="{DynamicResource CheckBoxStyle}"/>
+                                <Label Text="{Binding GridName}"
+                                        Style="{StaticResource SmallLabelStyle}"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <Label Grid.Column="2" Grid.Row="0" Text="Qualifying View Right" Margin="0,4,10,0"
+                Style="{StaticResource MediumLabelStyle}"/>
+            <ScrollView  Grid.Column="2" Grid.Row="1">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding QualifyingRightGrids}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"
+                                        Style="{DynamicResource CheckBoxStyle}"/>
+                                <Label Text="{Binding GridName}"
+                                        Style="{StaticResource SmallLabelStyle}"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <Label Grid.Column="2" Grid.Row="2" Text="Qualifying View Bottom" Margin="0,4,10,0"
+                Style="{StaticResource MediumLabelStyle}"/>
+            <ScrollView  Grid.Column="2" Grid.Row="3">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding QualifyingBottomGrids}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"
+                                        Style="{DynamicResource CheckBoxStyle}"/>
+                                <Label Text="{Binding GridName}"
+                                        Style="{StaticResource SmallLabelStyle}"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <Label Grid.Column="3" Grid.Row="0" Text="Practice View Right" Margin="0,4,10,0"
+                Style="{StaticResource MediumLabelStyle}"/>
+            <ScrollView  Grid.Column="3" Grid.Row="1">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding PracticeRightGrids}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"
+                                        Style="{DynamicResource CheckBoxStyle}"/>
+                                <Label Text="{Binding GridName}"
+                                        Style="{StaticResource SmallLabelStyle}"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <Label Grid.Column="3" Grid.Row="2" Text="Practice View Bottom" Margin="0,4,10,0"
+                Style="{StaticResource MediumLabelStyle}"/>
+            <ScrollView  Grid.Column="3" Grid.Row="3">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding PracticeBottomGrids}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"
+                                        Style="{DynamicResource CheckBoxStyle}"/>
+                                <Label Text="{Binding GridName}"
+                                        Style="{StaticResource SmallLabelStyle}"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- options -->
+            <Label Grid.Column="4" Grid.Row="0" Text="Options" Margin="0,4,10,0"
+                Style="{StaticResource MediumLabelStyle}"/>
+            <Grid Grid.Column="4" Grid.Row="1" Grid.RowSpan="3" Margin="0,0,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <HorizontalStackLayout 
+                    Grid.Row="0">
+                    <CheckBox IsChecked="{Binding Model.UseDarkTheme, Mode=TwoWay}"
+                        CheckedChanged="CheckBox_CheckedChanged"
+                        Style="{DynamicResource CheckBoxStyle}"/>
+                    <Label Text="Use Dark Theme"
+                        Style="{StaticResource SmallLabelStyle}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout 
+                    Grid.Row="1">
+                    <CheckBox IsChecked="{Binding Model.AutoUpdateEnabledOnStart, Mode=TwoWay}"
+                        Style="{DynamicResource CheckBoxStyle}"/>
+                    <Label Text="AutoUpdate Enabled On Start"
+                        Style="{StaticResource SmallLabelStyle}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout 
+                    Grid.Row="2">
+                    <CheckBox IsChecked="{Binding Model.UseMph, Mode=TwoWay}"
+                        Style="{DynamicResource CheckBoxStyle}"/>
+                    <Label Text="Use M.P.H."
+                        Style="{StaticResource SmallLabelStyle}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout 
+                    Grid.Row="3">
+                    <CheckBox IsChecked="{Binding Model.DisplayTimeDifference, Mode=TwoWay}"
+                        Style="{DynamicResource CheckBoxStyle}"/>
+                    <Label Text="Display Time Difference"
+                        Style="{StaticResource SmallLabelStyle}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout 
+                    Grid.Row="4">
+                    <Label Text="Data Delay In Seconds"
+                        WidthRequest="175"
+                        VerticalTextAlignment="Center"
+                        Style="{StaticResource SmallLabelStyle}"/>
+                    <Entry Text="{Binding Model.DataDelayInSeconds, 
+                        Mode=TwoWay, 
+                        Converter={StaticResource nullableIntToString}}"
+                        ClearButtonVisibility="WhileEditing"
+                        MaxLength="3"
+                        WidthRequest="75"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout 
+                    Grid.Row="5">
+                    <Label Text="Audio Delay In Seconds"
+                        WidthRequest="175"
+                        VerticalTextAlignment="Center"
+                        Style="{StaticResource SmallLabelStyle}"/>
+                    <Entry Text="{Binding Model.AudioDelayInSeconds, 
+                        Mode=TwoWay, 
+                        Converter={StaticResource nullableIntToString}}"
+                        ClearButtonVisibility="WhileEditing"
+                        MaxLength="3"
+                        WidthRequest="75"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- favorite drivers -->
+            <Label Grid.Column="5" Grid.Row="0" Text="Favorite Drivers" Margin="0,4,10,0"
+                Style="{StaticResource MediumLabelStyle}"/>
+            <Border Grid.Column="5" Grid.Row="1">
+                <ScrollView>
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding FavoriteDrivers}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}"
+                                        Style="{DynamicResource CheckBoxStyle}"/>
+                                    <Label Text="{Binding DriverName}"
+                                        Style="{StaticResource SmallLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>

@@ -1,14 +1,9 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using rNascar23.Sdk.Service.Flags;
-using rNascar23.Sdk.Service.LapTimes;
-using rNascar23.Sdk.Service.LiveFeeds;
-using rNascar23.Sdk.Service.LoopData;
-using rNascar23.Sdk.Service.Media;
-using rNascar23.Sdk.Service.PitStops;
-using rNascar23.Sdk.Service.Points;
-using rNascar23.Sdk.Service.Schedules;
+using rNascar23.Sdk;
 using rNascar23Multi.Logic;
+using rNascar23Multi.Pages;
+using rNascar23Multi.Settings;
 using rNascar23Multi.ViewModels;
 using rNascar23Multi.Views;
 using Serilog;
@@ -28,7 +23,6 @@ namespace rNascar23Multi
                .UseMauiApp<App>()
                .UseMauiCommunityToolkit()
                .RegisterViewModels()
-               .RegisterViews()
                .RegisterSdk()
                .ConfigureFonts(fonts =>
                {
@@ -36,10 +30,14 @@ namespace rNascar23Multi
                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                });
 
+            builder.Services.AddSettings();
+
+            //builder.Services.AddSingleton<ViewModelFactory>();
+
             builder.Services.AddSingleton<UpdateNotificationHandler>();
+
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            //builder.Logging.AddSerilog(dispose: true);
             builder.Services.AddLogging(logging => logging.AddSerilog(dispose: true));
 #if DEBUG
             builder.Logging.AddDebug();
@@ -64,31 +62,18 @@ namespace rNascar23Multi
 
         public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
         {
+            mauiAppBuilder.Services.AddTransient<GridSelectionViewModel>();
+            mauiAppBuilder.Services.AddTransient<SettingsViewModel>();
+
             mauiAppBuilder.Services.AddTransient<DriverValueViewModel>();
-            mauiAppBuilder.Services.AddTransient<FlagsViewModel>();
-            mauiAppBuilder.Services.AddTransient<HorizontalGridViewModel>();
-            mauiAppBuilder.Services.AddTransient<KeyMomentsViewModel>();
-            mauiAppBuilder.Services.AddTransient<LeaderboardViewModel>();
             mauiAppBuilder.Services.AddTransient<PositionDriverValueViewModel>();
+
+            mauiAppBuilder.Services.AddTransient<GridSetViewModel>();
+            mauiAppBuilder.Services.AddTransient<FlagsViewModel>();
+            mauiAppBuilder.Services.AddTransient<KeyMomentsViewModel>();
+
+            mauiAppBuilder.Services.AddTransient<LeaderboardViewModel>();
             mauiAppBuilder.Services.AddTransient<RpqHeaderViewModel>();
-            mauiAppBuilder.Services.AddTransient<VerticalGridViewModel>();
-
-            return mauiAppBuilder;
-        }
-
-        public static MauiAppBuilder RegisterViews(this MauiAppBuilder mauiAppBuilder)
-        {
-            mauiAppBuilder.Services.AddTransient<rNascar23Main>();
-
-            mauiAppBuilder.Services.AddTransient<DriverValueListView>();
-            mauiAppBuilder.Services.AddTransient<FlagsView>();
-            mauiAppBuilder.Services.AddTransient<HorizontalGridView>();
-            mauiAppBuilder.Services.AddTransient<KeyMomentsView>();
-            mauiAppBuilder.Services.AddTransient<LeaderboardView>();
-            mauiAppBuilder.Services.AddTransient<NavigationPanel>();
-            mauiAppBuilder.Services.AddTransient<PositionDriverValueListView>();
-            mauiAppBuilder.Services.AddTransient<RpqHeaderView>();
-            mauiAppBuilder.Services.AddTransient<VerticalGridView>();
 
             return mauiAppBuilder;
         }
@@ -96,14 +81,7 @@ namespace rNascar23Multi
         public static MauiAppBuilder RegisterSdk(this MauiAppBuilder mauiAppBuilder)
         {
             mauiAppBuilder.Services
-                .AddFlagState()
-                .AddSchedules()
-                .AddLiveFeed()
-                .AddLapTimes()
-                .AddMedia()
-                .AddPoints()
-                .AddLoopData()
-                .AddPitStops();
+                .AddrNascar23Sdk();
 
             return mauiAppBuilder;
         }

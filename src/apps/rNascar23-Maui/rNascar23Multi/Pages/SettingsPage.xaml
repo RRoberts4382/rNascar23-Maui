@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="rNascar23Multi.Pages.SettingsPage"
+             xmlns:views="clr-namespace:rNascar23Multi.Views"
+             Title="Settings"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+    
+    <Grid>
+        <views:SettingsView />
+    </Grid>
+</ContentPage>

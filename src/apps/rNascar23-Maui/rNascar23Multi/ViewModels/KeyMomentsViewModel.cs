@@ -1,14 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.PlatformUI;
-using rNascar23Multi.Logic;
-using rNascar23Multi.Models;
 using rNascar23.Sdk.Common;
 using rNascar23.Sdk.LiveFeeds.Ports;
+using rNascar23Multi.Logic;
+using rNascar23Multi.Models;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace rNascar23Multi.ViewModels
 {
-    public class KeyMomentsViewModel : ObservableObject
+    public class KeyMomentsViewModel : ObservableObject, INotifyUpdateTarget, IDisposable
     {
         ILogger<KeyMomentsViewModel> _logger;
         private IKeyMomentsRepository _keyMomentsRepository;
@@ -30,17 +31,21 @@ namespace rNascar23Multi.ViewModels
 
         public KeyMomentsViewModel(
             ILogger<KeyMomentsViewModel> logger, 
-            IKeyMomentsRepository keyMomentsRepository, 
-            UpdateNotificationHandler updateTimer)
+            IKeyMomentsRepository keyMomentsRepository)
         {
             _keyMomentsRepository = keyMomentsRepository ?? throw new ArgumentNullException(nameof(keyMomentsRepository));
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            updateTimer.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
         }
 
-        private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+        #region public
+
+        public async Task UserSettingsUpdatedAsync()
+        {
+
+        }
+
+        public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
         {
             try
             {
@@ -56,6 +61,8 @@ namespace rNascar23Multi.ViewModels
                 _logger.LogError(ex, "Error in KeyMomentsViewModel:UpdateTimer_UpdateTimerElapsed");
             }
         }
+
+        #endregion
 
         private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
         {
@@ -90,6 +97,34 @@ namespace rNascar23Multi.ViewModels
             {
                 _logger.LogError(ex, "Error in KeyMomentsViewModel:LoadModelsAsync");
             }
+        }
+
+        private bool _disposed;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _logger = null;
+                _keyMomentsRepository = null;
+            }
+            // free native resources if there are any.
+        }
+
+
+        ~KeyMomentsViewModel()
+        {
+            Debug.WriteLine("********************************* KeyMomentsViewModel Disposed");
         }
     }
 }
