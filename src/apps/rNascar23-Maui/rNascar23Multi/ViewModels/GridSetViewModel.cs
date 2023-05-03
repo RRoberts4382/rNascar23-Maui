@@ -125,13 +125,6 @@ namespace rNascar23Multi.ViewModels
                     });
                 }
 
-                //Models.Clear();
-
-                //foreach (GridViewModel gridView in gridViews)
-                //{
-                //    Models.Add(gridView);
-                //}
-
                 Models = new ObservableCollection<GridViewModel>(gridViews);
             }
             catch (Exception ex)

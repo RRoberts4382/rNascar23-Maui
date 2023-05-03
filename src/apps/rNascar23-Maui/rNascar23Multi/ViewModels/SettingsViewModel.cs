@@ -148,13 +148,11 @@ namespace rNascar23Multi.ViewModels
                 {
                     mergedDictionaries.Clear();
                     mergedDictionaries.Add(new DarkTheme());
-                    //Application.Current.UserAppTheme = AppTheme.Dark;
                 }
                 else
                 {
                     mergedDictionaries.Clear();
                     mergedDictionaries.Add(new LightTheme());
-                    //Application.Current.UserAppTheme = AppTheme.Light;
                 }
             }
         }

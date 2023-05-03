@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="rNascar23Multi.Views.EventResultsView"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="30,*" ColumnDefinitions="*">
+        <!--column headers-->
+        <HorizontalStackLayout Grid.Row="0" Style="{StaticResource HorizontalStackLayoutStyle}">
+            <Label Text=""
+                WidthRequest="20"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"
+                   Margin="12,0,0,0"/>
+            <Label Text="#"
+                WidthRequest="20"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            <Label Text="Driver"
+                WidthRequest="125"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+
+            <Label Text="Hometown"
+                WidthRequest="125"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            <Label Text="Vehicle"
+                WidthRequest="75"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            <Label Text="Start"
+                WidthRequest="30"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+
+            <Label Text="Laps"
+                WidthRequest="30"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            <Label Text="Status"
+                WidthRequest="75"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            <Label Text="Led"
+                WidthRequest="40"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+
+            <Label Text="Pts"
+                WidthRequest="20"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            <Label Text="Playoff"
+                WidthRequest="45"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            <Label Text="Sponsor"
+                WidthRequest="150"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+
+            <Label Text="Owner"
+                WidthRequest="160"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+            <Label Text="Crew Chief"
+                WidthRequest="150"
+                Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+
+        </HorizontalStackLayout>
+        
+        <!--data rows-->
+        <ListView Grid.Row="1" ItemsSource="{Binding Models}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                            <Label Text="{Binding FinishingPosition}"
+                                WidthRequest="20"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding CarNumber}"
+                                WidthRequest="20"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding Driver}"
+                                WidthRequest="125"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+
+                            <Label Text="{Binding Hometown}"
+                                WidthRequest="125"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding Vehicle}"
+                                WidthRequest="75"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding StartingPosition}"
+                                WidthRequest="30"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+
+                            <Label Text="{Binding LapsCompleted}"
+                                WidthRequest="30"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding FinishingStatus}"
+                                WidthRequest="75"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding LapsLed}"
+                                WidthRequest="40"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+
+                            <Label Text="{Binding PointsEarned}"
+                                WidthRequest="20"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding PlayoffPointsEarned}"
+                                WidthRequest="45"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding Sponsor}"
+                                WidthRequest="150"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+
+                            <Label Text="{Binding Owner}"
+                                WidthRequest="160"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding CrewChief}"
+                                WidthRequest="150"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                        </HorizontalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentView>

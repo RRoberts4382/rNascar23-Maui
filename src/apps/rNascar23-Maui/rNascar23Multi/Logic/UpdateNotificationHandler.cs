@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using rNascar23.Sdk.LiveFeeds.Ports;
 using rNascar23Multi.Models;
 using rNascar23Multi.Settings.Models;
 
@@ -10,6 +11,7 @@ namespace rNascar23Multi.Logic
 
         private readonly ILogger<UpdateNotificationHandler> _logger;
         private RaceSessionDetails _sessionDetails;
+        private ILiveFeedRepository _liveFeedRepository;
 
         #endregion
 
@@ -20,8 +22,6 @@ namespace rNascar23Multi.Logic
         {
             try
             {
-                //_logger.LogInformation("UpdateNotificationHandler - OnUpdateTimerElapsed");
-
                 var e = new UpdateNotificationEventArgs()
                 {
                     SessionDetails = _sessionDetails
@@ -40,8 +40,6 @@ namespace rNascar23Multi.Logic
         {
             try
             {
-                //_logger.LogInformation("OnUserSettingsUpdated");
-
                 UserSettingsUpdated?.Invoke(this, settings);
             }
             catch (Exception ex)
@@ -54,43 +52,59 @@ namespace rNascar23Multi.Logic
 
         #region ctor
 
-        public UpdateNotificationHandler(ILogger<UpdateNotificationHandler> logger)
+        public UpdateNotificationHandler(
+            ILogger<UpdateNotificationHandler> logger,
+            ILiveFeedRepository liveFeedRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            //_logger.LogInformation("UpdateNotificationHandler - ctor");
+            _liveFeedRepository = liveFeedRepository ?? throw new ArgumentNullException(nameof(liveFeedRepository));
+
+            BroadcastTimerFired();
         }
 
         #endregion
 
         #region public
 
-        public void BroadcastTimerFired()
+        public async void BroadcastTimerFired()
         {
-            //_logger.LogInformation("UpdateNotificationHandler - BroadcastTimerFired");
+            if (_sessionDetails == null)
+            {
+                _sessionDetails = await GetRaceSessionDetailsAsync();
+            }
 
             OnUpdateTimerElapsed();
         }
 
         public void UpdateSessionDetails(RaceSessionDetails sessionDetails)
         {
-            //if (sessionDetails != null)
-            //{
-            //    _logger.LogInformation($"UpdateNotificationHandler - Session details updated: Series {sessionDetails.SeriesId}; Race {sessionDetails.RaceId}");
-            //}
-            //else
-            //{
-            //    _logger.LogInformation("UpdateNotificationHandler - Session details update called with null details");
-            //}
-
             _sessionDetails = sessionDetails ?? throw new ArgumentNullException(nameof(sessionDetails));
         }
 
         public void UpdateUserSettings(SettingsModel settings)
         {
-            //_logger.LogInformation("UpdateNotificationHandler - UpdateUserSettings");
-
             OnUserSettingsUpdated(settings);
+        }
+        #endregion
+
+        #region private
+
+        private async Task<RaceSessionDetails> GetRaceSessionDetailsAsync()
+        {
+            var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
+
+            if (liveFeed != null)
+            {
+                return new RaceSessionDetails()
+                {
+                    RaceId = liveFeed.RaceId,
+                    SeriesId = (int)liveFeed.SeriesId,
+                    Year = DateTime.Now.Year
+                };
+            }
+
+            return null;
         }
 
         #endregion

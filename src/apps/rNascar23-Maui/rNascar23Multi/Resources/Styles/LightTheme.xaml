@@ -7,10 +7,14 @@
     <Color x:Key="PrimaryColor">WhiteSmoke</Color>
     <Color x:Key="SecondaryColor">Black</Color>
     <Color x:Key="PrimaryBackgroundColor">White</Color>
-    <Color x:Key="SecondaryBackgroundColor">Gainsboro</Color>
+    <Color x:Key="SecondaryBackgroundColor">WhiteSmoke</Color>
     <Color x:Key="CheckColor">#005A9E</Color>
+    <Color x:Key="SelectedItemBorderColor">#005A9E</Color>
+    <Color x:Key="NotSelectedItemBorderColor">WhiteSmoke</Color>
     <Color x:Key="PrimaryTextColor">Black</Color>
     <Color x:Key="SecondaryTextColor">#005A9E</Color>
     <Color x:Key="TertiaryTextColor">Gray</Color>
     <Color x:Key="TransparentColor">Transparent</Color>
+    <Color x:Key="GreenHeaderBackColor">LimeGreen</Color>
+    <Color x:Key="GreenHeaderTextColor">Black</Color>
 </ResourceDictionary>

@@ -4,10 +4,6 @@ namespace rNascar23Multi.Converters
 {
     public class FlagTextColorConverter : IValueConverter
     {
-        public FlagTextColorConverter()
-        {
-        }
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((int)value == 1)

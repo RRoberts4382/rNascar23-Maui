@@ -135,6 +135,8 @@ public partial class VerticalGridView : ContentView, IDisposable
 
     #endregion
 
+    #region IDisposable
+
     private bool _disposed;
     public void Dispose()
     {
@@ -160,4 +162,6 @@ public partial class VerticalGridView : ContentView, IDisposable
         }
         // free native resources if there are any.
     }
+
+    #endregion
 }

@@ -49,13 +49,13 @@
 	  <Compile Remove="Pages\PracticePage.xaml.cs" />
 	  <Compile Remove="Pages\QualifyingPage.xaml.cs" />
 	  <Compile Remove="Pages\RacePage.xaml.cs" />
-	  <Compile Remove="Pages\StartupPage.xaml.cs" />
 	  <Compile Remove="ViewModels\HorizontalGridViewModel.cs" />
 	  <Compile Remove="ViewModels\IViewModel.cs" />
 	  <Compile Remove="ViewModels\VerticalGridViewModel.cs" />
 	  <Compile Remove="Views\PracticeView.xaml.cs" />
 	  <Compile Remove="Views\QualifyingView.xaml.cs" />
 	  <Compile Remove="Views\RaceView.xaml.cs" />
+	  <Compile Remove="Views\SeriesEventView.xaml.cs" />
 	  <Compile Remove="Views\TestView.xaml.cs" />
 	</ItemGroup>
 
@@ -63,11 +63,33 @@
 	  <MauiXaml Remove="Pages\PracticePage.xaml" />
 	  <MauiXaml Remove="Pages\QualifyingPage.xaml" />
 	  <MauiXaml Remove="Pages\RacePage.xaml" />
-	  <MauiXaml Remove="Pages\StartupPage.xaml" />
 	  <MauiXaml Remove="Views\PracticeView.xaml" />
 	  <MauiXaml Remove="Views\QualifyingView.xaml" />
 	  <MauiXaml Remove="Views\RaceView.xaml" />
+	  <MauiXaml Remove="Views\SeriesEventView.xaml" />
 	  <MauiXaml Remove="Views\TestView.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\cnbc.png" />
+	  <None Remove="Resources\Images\CTS_Small.png" />
+	  <None Remove="Resources\Images\four_tires.png" />
+	  <None Remove="Resources\Images\fox.png" />
+	  <None Remove="Resources\Images\fs1.png" />
+	  <None Remove="Resources\Images\fs2.png" />
+	  <None Remove="Resources\Images\ims.png" />
+	  <None Remove="Resources\Images\left_tires.png" />
+	  <None Remove="Resources\Images\mrn.png" />
+	  <None Remove="Resources\Images\nbc.png" />
+	  <None Remove="Resources\Images\nbcsn.png" />
+	  <None Remove="Resources\Images\NCS_Small.png" />
+	  <None Remove="Resources\Images\prn_radio.png" />
+	  <None Remove="Resources\Images\right_tires.png" />
+	  <None Remove="Resources\Images\rnascar_logo_small.png" />
+	  <None Remove="Resources\Images\sirius.png" />
+	  <None Remove="Resources\Images\transparent_pixel.png" />
+	  <None Remove="Resources\Images\usa.png" />
+	  <None Remove="Resources\Images\Xfinity_Small.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -77,7 +99,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.5.33428.366" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="rNascar23.Sdk" Version="1.0.10" />
+		<PackageReference Include="rNascar23.Sdk" Version="1.0.14" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
@@ -98,6 +120,9 @@
 	  <Compile Update="Views\DriverValueListView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\EventDetailsView.xaml.cs">
+	    <DependentUpon>EventDetailsView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\FlagsView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
@@ -115,6 +140,9 @@
 	  </Compile>
 	  <Compile Update="Views\PositionDriverValueListView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\EventResultsView.xaml.cs">
+	    <DependentUpon>EventResultsView.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\RpqHeaderView.xaml.cs">
 	    <DependentUpon>RpqHeaderView.xaml</DependentUpon>
@@ -134,6 +162,9 @@
 	  <MauiXaml Update="Pages\LeaderboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\StartupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\DarkTheme.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -141,6 +172,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\DriverValueListView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EventActivitiesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EventDetailsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\FlagsView.xaml">
@@ -161,7 +198,13 @@
 	  <MauiXaml Update="Views\NavigationPanel.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\PitStopsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\PositionDriverValueListView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EventResultsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RpqHeaderView.xaml">
@@ -170,7 +213,13 @@
 	  <MauiXaml Update="Pages\SettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\SchedulesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\SettingsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\TabView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\VerticalGridView.xaml">

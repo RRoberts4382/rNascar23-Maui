@@ -129,26 +129,7 @@ namespace rNascar23Multi.ViewModels
 
         private async Task<SeriesEvent> GetCurrentSeriesEventAsync(int seriesId, int raceId)
         {
-            var schedules = await _schedulesRepository.GetRaceListAsync();
-
-            SeriesEvent seriesEvent = null;
-
-            switch (seriesId)
-            {
-                case 1:
-                    seriesEvent = schedules.CupSeries.FirstOrDefault(s => s.RaceId == raceId);
-                    break;
-                case 2:
-                    seriesEvent = schedules.XfinitySeries.FirstOrDefault(s => s.RaceId == raceId);
-                    break;
-                case 3:
-                    seriesEvent = schedules.TruckSeries.FirstOrDefault(s => s.RaceId == raceId);
-                    break;
-                default:
-                    break;
-            }
-
-            return seriesEvent;
+            return await _schedulesRepository.GetEventAsync(raceId);
         }
 
         private string GetSeriesName(int seriesId)
