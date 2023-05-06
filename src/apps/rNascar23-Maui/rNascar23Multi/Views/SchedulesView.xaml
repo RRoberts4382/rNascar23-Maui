@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             x:Class="rNascar23Multi.Views.SchedulesView"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <ContentView.Resources>
+        <converters:SelectedEventBorderConverter x:Key="selectedBorderConverter" />
+        <converters:SelectedScheduleTypeBorderConverter x:Key="selectedScheduleBorderConverter" />
+        <converters:SeriesLogoConverter x:Key="seriesLogoConverter" />
+        <converters:TvLogoConverter x:Key="tvLogoConverter" />
+        <converters:RadioLogoConverter x:Key="radioLogoConverter" />
+        <converters:SatelliteRadioLogoConverter x:Key="satelliteRadioLogoConverter" />
+        <converters:SelectedActivitiesResultsBorderConverter x:Key="selectedActivitiesResultsBorderConverter" />
+    </ContentView.Resources>
+
+    <ContentView.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Loaded"
+            Command="{Binding InitCommand}" />
+    </ContentView.Behaviors>
+
+    <Grid ColumnSpacing="10">
+        <Grid.RowDefinitions>
+            <!--schedule type buttons-->
+            <RowDefinition Height="40" />
+            <!--schedule type title-->
+            <RowDefinition Height="Auto" />
+            <!--series events & results/activities/details-->
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <!--series events-->
+            <ColumnDefinition Width="800"/>
+            <!-- results/activities/details-->
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+
+        <!--schedule type buttons-->
+        <HorizontalStackLayout x:Name="scheduleTypeButtons"
+            Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+
+            <Border Stroke="{Binding ScheduleType, 
+                Converter={StaticResource selectedScheduleBorderConverter},
+                ConverterParameter=7}"
+                Style="{StaticResource ScheduleTypeBorderStyle}">
+                <Button Text="Today" Clicked="OnTodayButtonClicked"/>
+            </Border>
+
+            <Border Stroke="{Binding ScheduleType, 
+                Converter={StaticResource selectedScheduleBorderConverter},
+                ConverterParameter=5}"
+                Style="{StaticResource ScheduleTypeBorderStyle}">
+                <Button Text="This Week" Clicked="OnThisWeekButtonClicked"/>
+            </Border>
+
+            <Border Stroke="{Binding ScheduleType, 
+                Converter={StaticResource selectedScheduleBorderConverter},
+                ConverterParameter=6}"
+                Style="{StaticResource ScheduleTypeBorderStyle}">
+                <Button Text="Next Week" Clicked="OnNextWeekButtonClicked"/>
+            </Border>
+            <Border Stroke="{Binding ScheduleType, 
+                Converter={StaticResource selectedScheduleBorderConverter},
+                ConverterParameter=1}"
+                Style="{StaticResource ScheduleTypeBorderStyle}">
+                <Button Text="Cup" Clicked="OnCupButtonClicked"/>
+            </Border>
+            <Border Stroke="{Binding ScheduleType, 
+                Converter={StaticResource selectedScheduleBorderConverter},
+                ConverterParameter=2}"
+                Style="{StaticResource ScheduleTypeBorderStyle}">
+                <Button Text="Xfinity" Clicked="OnXfinityButtonClicked"/>
+            </Border>
+            <Border Stroke="{Binding ScheduleType, 
+                Converter={StaticResource selectedScheduleBorderConverter},
+                ConverterParameter=3}"
+                Style="{StaticResource ScheduleTypeBorderStyle}">
+                <Button Text="Trucks" Clicked="OnTrucksButtonClicked"/>
+            </Border>
+            <Border Stroke="{Binding ScheduleType, 
+                Converter={StaticResource selectedScheduleBorderConverter},
+                ConverterParameter=4}"
+                Style="{StaticResource ScheduleTypeBorderStyle}">
+                <Button Text="All" Clicked="OnAllButtonClicked"/>
+            </Border>
+        </HorizontalStackLayout>
+
+        <!--schedule type title-->
+        <Label Grid.Row="1" Grid.Column="0"
+            Text="{Binding ScheduleTitle}"
+            Style="{StaticResource MediumLabelStyle}"
+            Margin="10,10,0,10"/>
+
+        <!--series events-->
+        <ListView ItemsSource="{Binding Models}" SelectedItem="{Binding Selected, Mode=TwoWay}" 
+              Grid.Row="2" Grid.Column="0"
+              ItemSelected="ListView_ItemSelected">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Border Stroke="{Binding IsSelected, Converter={StaticResource selectedBorderConverter}}" 
+                                Style="{StaticResource SeriesEventBorderStyle}"
+                                Margin="0,0,20,0">
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition  Width="*"/>
+                                        <ColumnDefinition  Width="150"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <VerticalStackLayout Grid.Row="0" Grid.Column="0"
+                                        Style="{StaticResource VerticalStackLayoutStyle}"
+                                        Margin="0,10,0,0">
+
+                                        <Image
+                                            Source="{Binding SeriesId, Converter={StaticResource seriesLogoConverter}}"
+                                            HeightRequest="25"/>
+
+                                        <Label Text="{Binding Date}"
+                                            Style="{StaticResource SeriesEventSmallLabelStyle}"/>
+
+                                        <Label Text="{Binding Time}"
+                                            Style="{StaticResource SeriesEventSmallLabelStyle}"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Row="0" Grid.Column="1"
+                                        Style="{StaticResource VerticalStackLayoutStyle}"
+                                        Margin="0,4,0,0">
+
+                                        <Label Text="{Binding EventName}"
+                                            Style="{StaticResource SeriesEventNameLabelStyle}"/>
+
+                                        <Label Text="{Binding Track}"
+                                            Style="{StaticResource SeriesEventTrackLabelStyle}"/>
+
+                                        <Label Text="{Binding Distance}"
+                                            Style="{StaticResource SeriesEventSmallLabelStyle}"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Row="0" Grid.Column="2"
+                                        Style="{StaticResource VerticalStackLayoutStyle}"
+                                        Margin="0,4,0,0">
+
+                                        <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                            <Label Text="TV:"
+                                                Style="{StaticResource SeriesEventTrsLabelStyle}"/>
+                                            <Image
+                                                Source="{Binding Tv, Converter={StaticResource tvLogoConverter}}"
+                                                Style="{StaticResource SeriesEventTrsImageStyle}"/>
+                                        </HorizontalStackLayout>
+
+                                        <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                            <Label Text="Radio:"
+                                                Style="{StaticResource SeriesEventTrsLabelStyle}"/>
+                                            <Image
+                                                Source="{Binding Radio, Converter={StaticResource radioLogoConverter}}"
+                                                    Style="{StaticResource SeriesEventTrsImageStyle}"/>
+                                        </HorizontalStackLayout>
+
+                                        <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                            <Label Text="Satellite:"
+                                                Style="{StaticResource SeriesEventTrsLabelStyle}"/>
+                                            <Image
+                                                Source="{Binding SatelliteRadio, Converter={StaticResource satelliteRadioLogoConverter}}"
+                                                Style="{StaticResource SeriesEventTrsImageStyle}"/>
+                                        </HorizontalStackLayout>
+
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!--results/activities/details-->
+        <Grid Grid.Row="2"  Grid.Column="1"
+              ColumnDefinitions="*"
+              RowDefinitions="30,500,Auto">
+
+            <!--results/activities buttons-->
+            <HorizontalStackLayout x:Name="activitiesResultsButtons">
+                <Border Stroke="{Binding ActivitiesResultsType, 
+                    Converter={StaticResource selectedActivitiesResultsBorderConverter},
+                    ConverterParameter=0}"
+                    Style="{StaticResource ActivitiesResultsTypeBorderStyle}">
+                    <Button Text="Event Schedule" Clicked="OnEventActivitiesButtonClicked"/>
+                </Border>
+
+                <Border Stroke="{Binding ActivitiesResultsType, 
+                    Converter={StaticResource selectedActivitiesResultsBorderConverter},
+                    ConverterParameter=1}"
+                    Style="{StaticResource ActivitiesResultsTypeBorderStyle}">
+                    <Button Text="Results" Clicked="OnEventResultsButtonClicked" x:Name="eventResultsButton"/>
+                </Border>
+            </HorizontalStackLayout>
+
+            <!--results/activities view-->
+            <Grid Grid.Row="1" Grid.Column="0" x:Name="activitiesResultsGrid"/>
+
+            <!--details view-->
+            <Grid Grid.Row="2" Grid.Column="0" x:Name="eventDetailsGrid"/>
+
+        </Grid>
+    </Grid>
+</ContentView>

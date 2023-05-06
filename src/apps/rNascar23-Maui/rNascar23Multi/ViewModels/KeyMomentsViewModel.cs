@@ -5,17 +5,21 @@ using rNascar23.Sdk.LiveFeeds.Ports;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace rNascar23Multi.ViewModels
 {
     public class KeyMomentsViewModel : ObservableObject, INotifyUpdateTarget, IDisposable
     {
+        #region fields
+
         ILogger<KeyMomentsViewModel> _logger;
         private IKeyMomentsRepository _keyMomentsRepository;
 
-        private ObservableCollection<KeyMomentsModel> _models = new ObservableCollection<KeyMomentsModel>();
+        #endregion
 
+        #region properties
+
+        private ObservableCollection<KeyMomentsModel> _models = new ObservableCollection<KeyMomentsModel>();
         public ObservableCollection<KeyMomentsModel> Models
         {
             get => _models;
@@ -29,6 +33,10 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _listHeader, value);
         }
 
+        #endregion
+
+        #region ctor
+
         public KeyMomentsViewModel(
             ILogger<KeyMomentsViewModel> logger, 
             IKeyMomentsRepository keyMomentsRepository)
@@ -37,6 +45,8 @@ namespace rNascar23Multi.ViewModels
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
+        #endregion
 
         #region public
 
@@ -49,8 +59,6 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
-                _logger.LogInformation($"KeyMomentsViewModel - UpdateTimer_UpdateTimerElapsed");
-
                 if (e.SessionDetails != null)
                 {
                     await LoadModelsAsync(e.SessionDetails);
@@ -63,6 +71,8 @@ namespace rNascar23Multi.ViewModels
         }
 
         #endregion
+
+        #region private
 
         private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
         {
@@ -99,6 +109,10 @@ namespace rNascar23Multi.ViewModels
             }
         }
 
+        #endregion
+
+        #region IDisposable
+
         private bool _disposed;
         public void Dispose()
         {
@@ -121,10 +135,6 @@ namespace rNascar23Multi.ViewModels
             // free native resources if there are any.
         }
 
-
-        ~KeyMomentsViewModel()
-        {
-            Debug.WriteLine("********************************* KeyMomentsViewModel Disposed");
-        }
+#endregion
     }
 }

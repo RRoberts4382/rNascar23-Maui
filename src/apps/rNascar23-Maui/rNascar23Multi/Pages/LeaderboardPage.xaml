@@ -2,13 +2,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:rNascar23Multi.Views"
+             xmlns:converters="clr-namespace:rNascar23Multi.Converters"
              x:Class="rNascar23Multi.Pages.LeaderboardPage"
              Title="Leaderboard"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
+    <ContentPage.Resources>
+        <converters:SelectedLeaderboardViewTypeBorderConverter x:Key="selectedBorderConverter" />
+    </ContentPage.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="75" />
             <RowDefinition Height="*" />
             <RowDefinition Height="225" />
@@ -18,11 +23,27 @@
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
 
-        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Models}"
+        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding this}"
             Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
-            <Button Text="Race" Clicked="OnRaceButtonClicked"/>
-            <Button Text="Qualifying" Clicked="OnQualifyingButtonClicked"/>
-            <Button Text="Practice" Clicked="OnPracticeButtonClicked"/>
+
+            <Border Stroke="{Binding EventViewType, 
+                Converter={StaticResource selectedBorderConverter},
+                ConverterParameter=1}"
+                Style="{StaticResource LeaderboardTypeBorderStyle}">
+                <Button Text="Race" Clicked="OnRaceButtonClicked"/>
+            </Border>
+            <Border Stroke="{Binding EventViewType, 
+                Converter={StaticResource selectedBorderConverter},
+                ConverterParameter=2}"
+                Style="{StaticResource LeaderboardTypeBorderStyle}">
+                <Button Text="Qualifying" Clicked="OnQualifyingButtonClicked"/>
+            </Border>
+            <Border Stroke="{Binding EventViewType, 
+                Converter={StaticResource selectedBorderConverter},
+                ConverterParameter=3}"
+                Style="{StaticResource LeaderboardTypeBorderStyle}">
+                <Button Text="Practice" Clicked="OnPracticeButtonClicked"/>
+            </Border>
         </HorizontalStackLayout>
 
         <Grid x:Name="headerViewHolder"

@@ -32,8 +32,6 @@ namespace rNascar23Multi
 
             builder.Services.AddSettings();
 
-            //builder.Services.AddSingleton<ViewModelFactory>();
-
             builder.Services.AddSingleton<UpdateNotificationHandler>();
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -62,16 +60,18 @@ namespace rNascar23Multi
 
         public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
         {
+            mauiAppBuilder.Services.AddTransient<PitStopsViewModel>();
+            mauiAppBuilder.Services.AddTransient<EventDetailsViewModel>();
+            mauiAppBuilder.Services.AddTransient<EventResultsViewModel>();
+            mauiAppBuilder.Services.AddTransient<EventActivitiesViewModel>();
             mauiAppBuilder.Services.AddTransient<GridSelectionViewModel>();
             mauiAppBuilder.Services.AddTransient<SettingsViewModel>();
-
+            mauiAppBuilder.Services.AddTransient<SeriesEventViewModel>();
             mauiAppBuilder.Services.AddTransient<DriverValueViewModel>();
             mauiAppBuilder.Services.AddTransient<PositionDriverValueViewModel>();
-
             mauiAppBuilder.Services.AddTransient<GridSetViewModel>();
             mauiAppBuilder.Services.AddTransient<FlagsViewModel>();
             mauiAppBuilder.Services.AddTransient<KeyMomentsViewModel>();
-
             mauiAppBuilder.Services.AddTransient<LeaderboardViewModel>();
             mauiAppBuilder.Services.AddTransient<RpqHeaderViewModel>();
 

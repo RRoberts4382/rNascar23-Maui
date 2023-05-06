@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="rNascar23Multi.Views.TabView">
+    <HorizontalStackLayout RadioButtonGroup.GroupName="MenuCategories">
+        <BindableLayout.ItemTemplate>
+            <DataTemplate>
+                <RadioButton Content="{Binding .}" Margin="4,0">
+                    <RadioButton.ControlTemplate>
+                        <ControlTemplate>
+                            <Grid RowDefinitions="30,4">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroupList>
+                                        <VisualStateGroup x:Name="CheckedStates">
+                                            <VisualState x:Name="Checked">
+                                                <VisualState.Setters>
+                                                    <Setter
+                                                        TargetName="TextLabel"
+                                                        Property="Label.TextColor"
+                                                        Value="{StaticResource SecondaryTextColor}"/>
+                                                    <Setter
+                                                        TargetName="Indicator"
+                                                        Property="BoxView.Color"
+                                                        Value="{StaticResource SecondaryTextColor}"/>
+                                                </VisualState.Setters>
+                                            </VisualState>
+
+                                            <VisualState x:Name="Unchecked">
+                                                <VisualState.Setters>
+                                                    <Setter
+                                                        TargetName="TextLabel"
+                                                        Property="Label.TextColor"
+                                                        Value="{StaticResource PrimaryTextColor}"/>
+                                                    <Setter
+                                                        TargetName="Indicator"
+                                                        Property="BoxView.Color"
+                                                        Value="{StaticResource PrimaryTextColor}"/>
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateGroupList>
+                                </VisualStateManager.VisualStateGroups>
+                                <Label Text="{TemplateBinding Content}" x:Name="TextLabel"
+                                       HorizontalTextAlignment="Center"/>
+                                <BoxView x:Name="Indicator" Grid.Row="1" Color="Transparent"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </RadioButton.ControlTemplate>
+                </RadioButton>
+            </DataTemplate>
+        </BindableLayout.ItemTemplate>
+        <BindableLayout.ItemsSource>
+            <x:Array Type="{x:Type x:String}">
+                <x:String>Hot Dishes</x:String>
+                <x:String>Cold Dishes</x:String>
+                <x:String>Soups</x:String>
+                <x:String>Appetizers</x:String>
+                <x:String>Desserts</x:String>
+            </x:Array>
+        </BindableLayout.ItemsSource>
+    </HorizontalStackLayout>
+</ContentView>

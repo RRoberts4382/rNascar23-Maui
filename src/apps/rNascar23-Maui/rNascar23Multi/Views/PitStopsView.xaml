@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             x:Class="rNascar23Multi.Views.PitStopsView"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <ContentView.Resources>
+        <converters:GainLossColorConverter x:Key="gainLossColorConverter" />
+        <converters:PitStopTiresConverter x:Key="pitStopTiresConverter" />
+        <converters:FlagColorConverter x:Key="flagColorConverter" />
+        <converters:SelectedEventBorderConverter x:Key="selectedBorderConverter" />
+    </ContentView.Resources>
+
+    <Grid ColumnSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="565" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- range selection -->
+        <HorizontalStackLayout Grid.Row="0" Grid.ColumnSpan="2"
+            Style="{StaticResource HorizontalStackLayoutStyle}"
+            BackgroundColor="{DynamicResource SecondaryBackgroundColor}"
+            Padding="10,4,10,4">
+
+            <!-- range by laps -->
+            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}"
+                Margin="10,0,20,0">
+
+                <Label Text="Start Lap:"
+                    Style="{StaticResource PitStopRangeLabelStyle}"
+                    WidthRequest="75"/>
+
+                <Picker x:Name="startLapPicker"
+                    WidthRequest="75"
+                    ItemsSource="{Binding StartLaps}"
+                    SelectedItem="{Binding StartLap, Mode=TwoWay}"
+                    VerticalOptions="Center">
+                </Picker>
+
+                <Label Text="End Lap:"
+                    Style="{StaticResource PitStopRangeLabelStyle}"
+                    WidthRequest="75"/>
+
+                <Picker x:Name="endLapPicker"
+                    WidthRequest="75"
+                    ItemsSource="{Binding EndLaps}"
+                    SelectedItem="{Binding EndLap, Mode=TwoWay}"
+                    VerticalOptions="Center">
+                </Picker>
+
+                <Button Text="Update"
+                    Clicked="UpdateByLaps_Clicked"/>
+            </HorizontalStackLayout>
+
+            <!-- range by caution -->
+            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}"
+                Margin="10,0,20,0">
+
+                <Label Text="Caution:"
+                    Style="{StaticResource PitStopRangeLabelStyle}"
+                    WidthRequest="75"/>
+
+                <Picker x:Name="cautionPicker"
+                    ItemsSource="{Binding CautionsList}"
+                    ItemDisplayBinding="{Binding Title}"
+                    SelectedItem="{Binding SelectedCaution}"
+                    VerticalOptions="Center"
+                    WidthRequest="175">
+                </Picker>
+
+                <Button Text="Update"
+                    Clicked="UpdateByCaution_Clicked"/>
+            </HorizontalStackLayout>
+
+            <!-- range by driver -->
+            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}"
+                Margin="10,0,20,0">
+
+                <Label Text="Driver:"
+                    Style="{StaticResource PitStopRangeLabelStyle}"
+                    WidthRequest="75"/>
+
+                <Picker x:Name="driverPicker"
+                    ItemsSource="{Binding DriverList}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedDriver}"
+                    VerticalOptions="Center"
+                    WidthRequest="175">
+                </Picker>
+
+                <Button Text="Update"
+                    Clicked="UpdateByDriver_Clicked"/>
+            </HorizontalStackLayout>
+
+            <!-- range by driver -->
+            <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}"
+                Margin="10,0,20,0">
+
+                <Button Text="All Pit Stops"
+                    Clicked="AllPitStops_Clicked"/>
+
+            </HorizontalStackLayout>
+        </HorizontalStackLayout>
+
+        <!-- all driver stops headers -->
+        <Label Text="{Binding AllDriverPitStopsHeader}"
+            Grid.Row="1" Grid.Column="0"
+            Style="{StaticResource PitStopsDriverStatsHeaderStyle}"
+            Margin="5,0,0,0"
+            WidthRequest="565"/>
+
+        <!-- all drivers stops -->
+        <Grid Grid.Row="2" Grid.Column="0" Margin="0,0,0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="565" />
+            </Grid.ColumnDefinitions>
+
+            <!-- all drivers column headers -->
+            <!-- Padding is to account for selected row indicator width (14) -->
+            <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Padding="12,0,0,0"
+                Style="{StaticResource HorizontalStackLayoutStyle}">
+                <Label Text=""
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="32"/>
+                <Label Text="Driver"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="150"/>
+                <Label Text="Flag"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="30"/>
+                <Label Text="Tires"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="35"/>
+                <Label Text="Lap"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="50"/>
+                <Label Text="Time"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="75"/>
+                <Label Text="In"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="50"/>
+                <Label Text="Out"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="50"/>
+                <!-- Width is less to account for selected row indicator width (12) -->
+                <Label Text="+/-"
+                    Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    WidthRequest="48"/>
+            </HorizontalStackLayout>
+
+            <!-- all drivers data rows -->
+            <ListView x:Name="allDriversList" Grid.Row="1" Grid.Column="0" 
+                ItemsSource="{Binding AllDriversPitStops}"
+                ItemSelected="ListView_ItemSelected"
+                SelectedItem="{Binding Selected, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Border Stroke="{Binding IsSelected, Converter={StaticResource selectedBorderConverter}}" 
+                                Style="{StaticResource SeriesEventBorderStyle}">
+
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Position}"
+                                        WidthRequest="25"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding Driver}"
+                                        WidthRequest="150"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label BackgroundColor="{Binding Flag, 
+                                        Converter={StaticResource flagColorConverter}}"
+                                        WidthRequest="30"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Border Stroke="Gray"
+                                        StrokeThickness="0.5"
+                                        Padding="1"
+                                        StrokeShape="Rectangle"
+                                        HorizontalOptions="Center"
+                                        HeightRequest="22"
+                                        WidthRequest="35">
+                                        <Image Source="{Binding Tires, 
+                                            Converter={StaticResource pitStopTiresConverter}}"/>
+                                    </Border>
+
+                                    <Label Text="{Binding Lap}"
+                                        WidthRequest="50"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding PitTime, StringFormat='{}{0:N2}'}"
+                                        WidthRequest="75"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding PositionIn}"
+                                        WidthRequest="50"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding PositionOut}"
+                                        WidthRequest="50"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding PositionDelta}"
+                                        WidthRequest="50"
+                                        TextColor="{Binding PositionDelta, Converter={StaticResource gainLossColorConverter}}"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <!-- driver stops / stats headers -->
+        <HorizontalStackLayout Grid.Row="1" Grid.Column="1" 
+            Style="{StaticResource HorizontalStackLayoutStyle}">
+            <Label Text="{Binding DriverPitStopsName}"
+                Style="{StaticResource PitStopsDriverStatsHeaderStyle}"
+                WidthRequest="500"
+                Margin="0,0,5,0"/>
+            <Label Text="Statistics"
+                Style="{StaticResource PitStopsDriverStatsHeaderStyle}"
+                WidthRequest="500"/>
+        </HorizontalStackLayout>
+
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="375" />
+                <RowDefinition Height="560" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" ColumnSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="300" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="500" />
+                    <ColumnDefinition Width="500" />
+                </Grid.ColumnDefinitions>
+
+                <!-- driver pit stops column headers -->
+                <!-- Padding is 12 to account for selected row indicator width -->
+                <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Padding="12,0,0,0"
+                    Style="{StaticResource HorizontalStackLayoutStyle}">
+                    <Label Text="Lap"
+                        Style="{StaticResource GridColumnHeaderLabelStyle}"
+                        WidthRequest="30"/>
+                    <Label Text="Flag"
+                        Style="{StaticResource GridColumnHeaderLabelStyle}"
+                        WidthRequest="30"/>
+                    <Label Text="Tires"
+                        Style="{StaticResource GridColumnHeaderLabelStyle}"
+                        WidthRequest="35"/>
+                    <Label Text="Total Duration"
+                        Style="{StaticResource GridColumnHeaderLabelStyle}"
+                        WidthRequest="95"/>
+                    <Label Text="Pit Duration"
+                        Style="{StaticResource GridColumnHeaderLabelStyle}"
+                        WidthRequest="95"/>
+                    <Label Text="Pit In"
+                        Style="{StaticResource GridColumnHeaderLabelStyle}"
+                        WidthRequest="50"/>
+                    <Label Text="Pit Out"
+                        Style="{StaticResource GridColumnHeaderLabelStyle}"
+                        WidthRequest="50"/>
+                    <!-- Width is 12 less to account for selected row indicator width -->
+                    <Label Text="Delta"
+                        Style="{StaticResource GridColumnHeaderLabelStyle}"
+                        WidthRequest="38"/>
+                </HorizontalStackLayout>
+
+                <!-- driver pit stops data rows -->
+                <ListView  Grid.Row="1" Grid.Column="0" ItemsSource="{Binding DriverPitStops}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Lap}"
+                                        WidthRequest="30"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label BackgroundColor="{Binding Flag, 
+                                        Converter={StaticResource flagColorConverter}}"
+                                        WidthRequest="30"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Border Stroke="Gray"
+                                        StrokeThickness="0.5"
+                                        Padding="1"
+                                        StrokeShape="Rectangle"
+                                        HorizontalOptions="Center"
+                                        HeightRequest="22"
+                                        WidthRequest="35">
+                                        <Image Source="{Binding Tires, 
+                                            Converter={StaticResource pitStopTiresConverter}}"/>
+                                    </Border>
+
+                                    <!--<Image Source="{Binding Tires, 
+                                        Converter={StaticResource pitStopTiresConverter}}"
+                                        HeightRequest="20"
+                                        WidthRequest="35"/>-->
+
+                                    <Label Text="{Binding TotalTime, StringFormat='{}{0:N2}'}"
+                                        WidthRequest="95"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding PitTime, StringFormat='{}{0:N2}'}"
+                                        WidthRequest="95"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding PositionIn}"
+                                        WidthRequest="50"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding PositionOut}"
+                                        WidthRequest="50"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+
+                                    <Label Text="{Binding PositionDelta}"
+                                        WidthRequest="50"
+                                        TextColor="{Binding PositionDelta, Converter={StaticResource gainLossColorConverter}}"
+                                        Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- statistics -->
+                <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="55" />
+                        <ColumnDefinition Width="50" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- left columns -->
+                    <Label Text="Number of Stops:"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.NumberOfStops}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+                    <Label Text="Average Total Time:"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.AverageTotalTime, StringFormat='{}{0:N2}'}"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+                    <Label Text="Average Pit Time:"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.AveragePitTime, StringFormat='{}{0:N2}'}"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+                    <Label Text="Average In/Out Time:"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.AverageInOutTime, StringFormat='{}{0:N2}'}"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+                    <Label Text="Average Gain/Loss:"
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.AverageGainLoss, StringFormat='{}{0:N2}'}"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+                    <!-- right columns -->
+                    <Label Text="Rank:"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.AverageTotalTimeRank}"
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+                    <Label Text="Rank:"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.AveragePitTimeRank}"
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+                    <Label Text="Rank:"
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.AverageInOutTimeRank}"
+                        Grid.Row="3"
+                        Grid.Column="3"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+                    <Label Text="Rank:"
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+                    <Label Text="{Binding DriverStatistics.AverageGainLossRank}"
+                        Grid.Row="4"
+                        Grid.Column="3"
+                        Style="{StaticResource EventDetailsValueLabelStyle}"/>
+                </Grid>
+
+            </Grid>
+
+            <!-- bottom grids -->
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ColumnSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="270" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="220" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="300" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Total Gain/Loss" Grid.Row="0" Grid.Column="0"
+                    Style="{StaticResource PitStopsGridHeaderStyle}"/>
+                <!-- Items -->
+                <ListView ItemsSource="{Binding TotalGainLoss}" Grid.Row="1" Grid.Column="0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Position}"
+                                    WidthRequest="20"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Driver}"
+                                    WidthRequest="150"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Value}"
+                                    WidthRequest="50"
+                                    TextColor="{Binding Value, Converter={StaticResource gainLossColorConverter}}"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Label Grid.Column="1" Text="Average Pit Time (Pit Crew)"
+                    Style="{StaticResource PitStopsGridHeaderStyle}"/>
+                <!-- Items -->
+                <ListView ItemsSource="{Binding AveragePitTime}" Grid.Row="1" Grid.Column="1">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Position}"
+                                    WidthRequest="20"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Driver}"
+                                    WidthRequest="150"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Value, StringFormat='{}{0:N3}'}"
+                                    WidthRequest="50"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Label Grid.Column="2" Text="Average In/Out Time (Driver)"
+                    Style="{StaticResource PitStopsGridHeaderStyle}"/>
+                <!-- Items -->
+                <ListView ItemsSource="{Binding AverageInOutTime}" Grid.Row="1" Grid.Column="2">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Position}"
+                                    WidthRequest="20"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Driver}"
+                                    WidthRequest="150"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Value, StringFormat='{}{0:N3}'}"
+                                    WidthRequest="50"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Label Grid.Column="3" Text="Average Total Time (Driver + Crew)"
+                    Style="{StaticResource PitStopsGridHeaderStyle}"/>
+                <!-- Items -->
+                <ListView ItemsSource="{Binding AverageTotalTime}" Grid.Row="1" Grid.Column="3">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Position}"
+                                    WidthRequest="20"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Driver}"
+                                    WidthRequest="150"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Value, StringFormat='{}{0:N3}'}"
+                                    WidthRequest="50"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Label Grid.Row="2" Grid.Column="1" Text="Avg. Green Flag Pit Time (Pit Crew)"
+                    Style="{StaticResource PitStopsGreenGridHeaderStyle}"/>
+                <!-- Items -->
+                <ListView ItemsSource="{Binding GreenPitTime}" Grid.Row="3" Grid.Column="1">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Position}"
+                                    WidthRequest="20"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Driver}"
+                                    WidthRequest="150"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Value, StringFormat='{}{0:N3}'}"
+                                    WidthRequest="50"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Label Grid.Row="2" Grid.Column="2" Text="Avg. Green Flag  In/Out Time (Driver)"
+                    Style="{StaticResource PitStopsGreenGridHeaderStyle}"/>
+                <!-- Items -->
+                <ListView ItemsSource="{Binding GreenInOutTime}" Grid.Row="3" Grid.Column="2">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Position}"
+                                    WidthRequest="20"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Driver}"
+                                    WidthRequest="150"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Value, StringFormat='{}{0:N3}'}"
+                                    WidthRequest="50"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Label  Grid.Row="2" Grid.Column="3" Text="Avg. Green Flag Total (Driver + Crew)"
+                    Style="{StaticResource PitStopsGreenGridHeaderStyle}"/>
+                <!-- Items -->
+                <ListView ItemsSource="{Binding GreenTotalTime}" Grid.Row="3" Grid.Column="3">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                    <Label Text="{Binding Position}"
+                                    WidthRequest="20"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Driver}"
+                                    WidthRequest="150"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                    <Label Text="{Binding Value, StringFormat='{}{0:N3}'}"
+                                    WidthRequest="50"
+                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentView>

@@ -1,4 +1,6 @@
-﻿namespace rNascar23Multi
+﻿using rNascar23Multi.Pages;
+
+namespace rNascar23Multi
 {
     public partial class App : Application
     {

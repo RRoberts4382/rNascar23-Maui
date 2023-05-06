@@ -4,13 +4,8 @@
              x:Class="rNascar23Multi.Pages.SchedulesPage"
              Title="Schedules"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
-    
-    <VerticalStackLayout>
-        <Label 
-            Text="Schedules"
-            Margin="0,100,0,0"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center"
-            Style="{StaticResource MediumLabelStyle}"/>
-    </VerticalStackLayout>
+
+    <Grid>
+        <Grid x:Name="schedulesViewHolder" />
+    </Grid>
 </ContentPage>

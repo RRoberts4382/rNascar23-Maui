@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="rNascar23Multi.Views.EventActivitiesView">
+
+    <Grid>
+        <ListView x:Name="activitiesListView" 
+            ItemsSource="{Binding Models}"
+            IsGroupingEnabled="True">
+
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Label Text="{Binding GroupName}" 
+                            Style="{StaticResource ListViewGroupHeaderStyle}"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                            <Label Text="{Binding Timestamp, StringFormat='{}{0:h\\:mm tt}'}"
+                                WidthRequest="60"
+                                Margin="4,0"
+                                HorizontalTextAlignment="End"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding ActivityName}"
+                                WidthRequest="500"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding Notes}"
+                                WidthRequest="300"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                            <Label Text="{Binding OnTrack}"
+                                WidthRequest="100"
+                                Style="{StaticResource GridNameLabelStyle}"/>
+                        </HorizontalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentView>

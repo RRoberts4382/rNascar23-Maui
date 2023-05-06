@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="rNascar23Multi.Views.EventDetailsView"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,200" ColumnDefinitions="125,200,125,200,*">
+        <Label Text="Event Details"
+               Grid.Row="0"
+               Grid.ColumnSpan="5"
+               Margin="0,10"
+               Style="{StaticResource GridColumnHeaderLabelStyle}"/>
+
+        <!-- left columns -->
+        <Label Text="Winner:"
+               Grid.Row="1"
+               Grid.Column="0"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding Winner}"
+               Grid.Row="1"
+               Grid.Column="1"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Leaders:"
+               Grid.Row="2"
+               Grid.Column="0"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding Leaders}"
+               Grid.Row="2"
+               Grid.Column="1"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Cautions:"
+               Grid.Row="3"
+               Grid.Column="0"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding Cautions}"
+               Grid.Row="3"
+               Grid.Column="1"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Pole Winner:"
+               Grid.Row="4"
+               Grid.Column="0"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding PoleWinner}"
+               Grid.Row="4"
+               Grid.Column="1"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Average Speed:"
+               Grid.Row="5"
+               Grid.Column="0"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding AverageSpeed}"
+               Grid.Row="5"
+               Grid.Column="1"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Race Time:"
+               Grid.Row="6"
+               Grid.Column="0"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding RaceTime}"
+               Grid.Row="6"
+               Grid.Column="1"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <!-- right columns -->
+        <Label Text="Lead Changes:"
+               Grid.Row="2"
+               Grid.Column="2"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding LeadChanges}"
+               Grid.Row="2"
+               Grid.Column="3"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Caution Laps:"
+               Grid.Row="3"
+               Grid.Column="2"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding CautionLaps}"
+               Grid.Row="3"
+               Grid.Column="3"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Pole Speed:"
+               Grid.Row="4"
+               Grid.Column="2"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding PoleSpeed}"
+               Grid.Row="4"
+               Grid.Column="3"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Margin of Victory:"
+               Grid.Row="5"
+               Grid.Column="2"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding MarginOfVictory}"
+               Grid.Row="5"
+               Grid.Column="3"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <Label Text="Cars in Field:"
+               Grid.Row="6"
+               Grid.Column="2"
+               Style="{StaticResource EventDetailsFieldLabelStyle}"/>
+        <Label Text="{Binding CarsInField}"
+               Grid.Row="6"
+               Grid.Column="3"
+               Style="{StaticResource EventDetailsValueLabelStyle}"/>
+
+        <!-- summary -->
+        <Label Text="{Binding Summary}"
+               Grid.Row="7"
+               Grid.ColumnSpan="4"
+               Style="{StaticResource EventDetailsSummaryLabelStyle}"/>
+    </Grid>
+</ContentView>

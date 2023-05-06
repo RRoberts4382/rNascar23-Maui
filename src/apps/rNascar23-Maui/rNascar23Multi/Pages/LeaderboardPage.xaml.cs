@@ -5,10 +5,11 @@ using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
 using rNascar23Multi.Views;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace rNascar23Multi.Pages;
 
-public partial class LeaderboardPage : ContentPage
+public partial class LeaderboardPage : ContentPage, INotifyPropertyChanged
 {
     ILogger<LeaderboardPage> _logger;
     private ILiveFeedRepository _liveFeedRepository;
@@ -18,9 +19,22 @@ public partial class LeaderboardPage : ContentPage
     HorizontalGridView _horizontalGridView;
     VerticalGridView _verticalGridView;
 
+    private EventViewType _viewType;
+    public EventViewType EventViewType
+    {
+        get => _viewType;
+        set
+        {
+            _viewType = value;
+            OnPropertyChanged(nameof(EventViewType));
+        }
+    }
+
     public LeaderboardPage()
     {
         InitializeComponent();
+
+        EventViewType = EventViewType.Race;
 
         _liveFeedRepository = App.serviceProvider.GetService<ILiveFeedRepository>();
 
@@ -30,7 +44,16 @@ public partial class LeaderboardPage : ContentPage
 
         _updateHandler.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
 
+        _updateHandler.UserSettingsUpdated += _updateHandler_UserSettingsUpdated;
+
         this.Loaded += LeaderboardPage_Loaded;
+
+        BindingContext = this;
+    }
+
+    private void _updateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
+    {
+        OnPropertyChanged(nameof(EventViewType));
     }
 
 #pragma warning disable VSTHRD100 // Avoid async void methods
@@ -45,10 +68,10 @@ public partial class LeaderboardPage : ContentPage
         _leaderboardView = new LeaderboardView();
         leaderboardViewHolder.Children.Add(_leaderboardView);
 
-        _horizontalGridView = new HorizontalGridView(EventViewType.Race);
+        _horizontalGridView = new HorizontalGridView(EventViewType);
         horizontalGridViewHolder.Children.Add(_horizontalGridView);
 
-        _verticalGridView = new VerticalGridView(EventViewType.Race);
+        _verticalGridView = new VerticalGridView(EventViewType);
         verticalGridViewHolder.Children.Add(_verticalGridView);
 
         await LoadModelsAsync();
@@ -153,9 +176,10 @@ public partial class LeaderboardPage : ContentPage
 
     private void SetViewType(EventViewType viewType)
     {
-        //_logger.LogInformation($"LeaderboardPage - SetViewType {viewType}");
-        _horizontalGridView.ViewType = viewType;
-        _verticalGridView.ViewType = viewType;
+        EventViewType = viewType;
+
+        _horizontalGridView.ViewType = EventViewType;
+        _verticalGridView.ViewType = EventViewType;
     }
 
     protected override void OnAppearing()
