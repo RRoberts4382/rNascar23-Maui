@@ -60,8 +60,6 @@ public partial class LeaderboardPage : ContentPage, INotifyPropertyChanged
     private async void LeaderboardPage_Loaded(object sender, EventArgs e)
 #pragma warning restore VSTHRD100 // Avoid async void methods
     {
-        //_logger.LogInformation("LeaderboardPage - Loading");
-
         _headerView = new RpqHeaderView();
         headerViewHolder.Children.Add(_headerView);
 

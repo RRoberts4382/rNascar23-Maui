@@ -155,8 +155,6 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
-                _logger.LogInformation($"DriverValueViewModel - UpdateTimer_UpdateTimerElapsed {_gridViewType}");
-
                 if (e.SessionDetails != null)
                 {
                     await LoadModelsAsync(e.SessionDetails);

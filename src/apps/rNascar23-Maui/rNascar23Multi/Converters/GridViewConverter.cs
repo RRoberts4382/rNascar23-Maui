@@ -75,8 +75,6 @@ namespace rNascar23Multi.Converters
         {
             GridViewTypes gridViewType = (GridViewTypes)value;
 
-            _logger.LogInformation($"Converting a {gridViewType} view");
-
             switch (gridViewType)
             {
                 case GridViewTypes.FastestLaps:

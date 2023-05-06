@@ -101,8 +101,6 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
-                // _logger.LogInformation($"PositionDriverValueViewModel - UpdateTimer_UpdateTimerElapsed GridViewType:{_gridViewType}");
-
                 await LoadModelsAsync(e.SessionDetails);
             }
             catch (Exception ex)

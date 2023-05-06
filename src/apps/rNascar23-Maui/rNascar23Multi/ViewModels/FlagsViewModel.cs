@@ -60,8 +60,6 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
-                _logger.LogInformation($"FlagsViewModel - UpdateTimer_UpdateTimerElapsed");
-
                 if (e.SessionDetails != null)
                 {
                     await LoadModelsAsync();

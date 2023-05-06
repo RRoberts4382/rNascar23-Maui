@@ -64,8 +64,6 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
-                //_logger.LogInformation($"RpqHeaderViewModel - UpdateTimer_UpdateTimerElapsed");
-
                 if (e.SessionDetails != null)
                 {
                     await LoadModelsAsync(e.SessionDetails);
