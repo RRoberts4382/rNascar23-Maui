@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:rNascar23Multi"
     xmlns:pages="clr-namespace:rNascar23Multi.Pages">
 
-    <ShellContent Title="Leaderboard" Route="Leaderboard" ContentTemplate="{DataTemplate pages:LeaderboardPage}" />
+    <ShellContent Title="Leaderboard" Route="Leaderboard" ContentTemplate="{DataTemplate pages:MainPage}" />
     <ShellContent Title="Pit Stops" Route="PitStops" ContentTemplate="{DataTemplate pages:PitStopsPage}" />
     <ShellContent Title="Schedules" Route="Schedules" ContentTemplate="{DataTemplate pages:SchedulesPage}" />
     <ShellContent Title="Settings" Route="Settings" ContentTemplate="{DataTemplate pages:SettingsPage}" />

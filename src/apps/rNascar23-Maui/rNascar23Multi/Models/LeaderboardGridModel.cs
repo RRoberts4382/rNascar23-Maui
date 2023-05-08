@@ -2,7 +2,7 @@
 
 namespace rNascar23Multi.Models
 {
-    public class LeaderboardModel : NotifyModel
+    public class LeaderboardGridModel : NotifyModel
     {
         private int _position;
         public int Position

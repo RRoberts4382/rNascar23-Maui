@@ -1,22 +1,31 @@
 using rNascar23Multi.Logic;
-using rNascar23Multi.Models;
 using rNascar23Multi.Settings.Models;
 using rNascar23Multi.ViewModels;
 
 namespace rNascar23Multi.Views;
 
-public partial class DriverValueView : ContentView, INotifyUpdateTarget, INotifySettingsChanged, IDisposable
+public partial class LeaderboardGridView : ContentView, INotifyUpdateTarget, INotifySettingsChanged, IDisposable
 {
-    private DriverValueViewModel _viewModel;
+    #region fields
 
-    public DriverValueView(GridViewTypes gridViewType)
+    private LeaderboardGridViewModel _viewModel;
+
+    #endregion
+
+    #region ctor
+
+    public LeaderboardGridView()
     {
         InitializeComponent();
 
-        _viewModel = new DriverValueViewModel(gridViewType);
+        _viewModel = App.serviceProvider.GetService<LeaderboardGridViewModel>();
 
         BindingContext = _viewModel;
     }
+
+    #endregion
+
+    #region public
 
     public void UserSettingsUpdated(SettingsModel settings)
     {
@@ -27,6 +36,8 @@ public partial class DriverValueView : ContentView, INotifyUpdateTarget, INotify
     {
         await _viewModel.UpdateTimerElapsedAsync(e);
     }
+
+    #endregion
 
     #region IDisposable
 

@@ -140,7 +140,7 @@ namespace rNascar23Multi.ViewModels
                 case GridViewTypes.DriverRatings:
                     {
                         ListHeader = "Driver Ratings";
-                        HeaderBackgroundColor = Colors.White;
+                        HeaderBackgroundColor = Colors.Gainsboro;
                         HeaderTextColor = Colors.SteelBlue;
                         break;
                     }

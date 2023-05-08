@@ -126,8 +126,8 @@
 	  <Compile Update="Pages\PitStopsPage.xaml.cs">
 	    <DependentUpon>PitStopsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\LeaderboardPage.xaml.cs">
-	    <DependentUpon>LeaderboardPage.xaml</DependentUpon>
+	  <Compile Update="Pages\MainPage.xaml.cs">
+	    <DependentUpon>MainPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\DriverValueView.xaml.cs">
 	    <DependentUpon>DriverValueView.xaml</DependentUpon>
@@ -144,8 +144,8 @@
 	  <Compile Update="Views\KeyMomentsView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\LeaderboardView.xaml.cs">
-	    <DependentUpon>%(Filename)</DependentUpon>
+	  <Compile Update="Views\LeaderboardGridView.xaml.cs">
+	    <DependentUpon>LeaderboardGridView.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\NavigationPanel.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
@@ -168,7 +168,7 @@
 	  <MauiXaml Update="Pages\SchedulesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\LeaderboardPage.xaml">
+	  <MauiXaml Update="Pages\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\StartupPage.xaml">
@@ -201,7 +201,10 @@
 	  <MauiXaml Update="Views\KeyMomentsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\LeaderboardView.xaml">
+	  <MauiXaml Update="Views\LeaderboardGridView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MainView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\NavigationPanel.xaml">

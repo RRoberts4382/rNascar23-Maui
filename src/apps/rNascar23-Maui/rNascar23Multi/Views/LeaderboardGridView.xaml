@@ -2,7 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:rNascar23Multi.Converters"
-             x:Class="rNascar23Multi.Views.LeaderboardView"
+             x:Class="rNascar23Multi.Views.LeaderboardGridView"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
     <ContentView.Resources>
@@ -100,9 +100,6 @@
                                 <Label Text="{Binding LastPit}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <!--<Label Text="{Binding Status}"
-                                    WidthRequest="50"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>-->
                                 <Image Source="{Binding Status, 
                                     Converter={StaticResource vehicleStatusImageConverter}}"
                                     WidthRequest="35"
@@ -151,7 +148,7 @@
             <!-- Items -->
             <ListView x:Name="RightLeaderboardListView"
                 ItemsSource="{Binding RightModels}">
-                
+
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -191,9 +188,6 @@
                                 <Label Text="{Binding LastPit}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <!--<Label Text="{Binding Status}"
-                                    WidthRequest="50"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>-->
                                 <Image Source="{Binding Status, 
                                     Converter={StaticResource vehicleStatusImageConverter}}"
                                     WidthRequest="35"
@@ -202,7 +196,7 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>            
+            </ListView>
         </VerticalStackLayout>
 
     </Grid>

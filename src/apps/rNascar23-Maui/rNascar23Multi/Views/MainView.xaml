@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:rNascar23Multi.Views"
              xmlns:converters="clr-namespace:rNascar23Multi.Converters"
-             x:Class="rNascar23Multi.Pages.LeaderboardPage"
-             Title="Leaderboard"
+             x:Class="rNascar23Multi.Views.MainView"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <ContentPage.Resources>
+    <ContentView.Resources>
         <converters:SelectedLeaderboardViewTypeBorderConverter x:Key="selectedBorderConverter" />
-    </ContentPage.Resources>
+    </ContentView.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -62,4 +61,4 @@
              Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
         </Grid>
     </Grid>
-</ContentPage>
+</ContentView>

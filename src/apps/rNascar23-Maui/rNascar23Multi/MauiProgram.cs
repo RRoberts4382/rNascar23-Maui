@@ -74,7 +74,7 @@ namespace rNascar23Multi
             mauiAppBuilder.Services.AddTransient<GridSetViewModel>();
             mauiAppBuilder.Services.AddTransient<FlagsViewModel>();
             mauiAppBuilder.Services.AddTransient<KeyMomentsViewModel>();
-            mauiAppBuilder.Services.AddTransient<LeaderboardViewModel>();
+            mauiAppBuilder.Services.AddTransient<LeaderboardGridViewModel>();
             mauiAppBuilder.Services.AddTransient<RpqHeaderViewModel>();
 
             return mauiAppBuilder;
