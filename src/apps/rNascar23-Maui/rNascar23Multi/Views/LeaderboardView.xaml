@@ -8,6 +8,8 @@
     <ContentView.Resources>
         <converters:AlternatingRowBackColorConverter 
             x:Key="alternatingRowBackColorConverter" />
+        <converters:ManufacturerLogoConverter 
+            x:Key="manufacturerLogoConverter" />
     </ContentView.Resources>
     
     <Grid>
@@ -55,7 +57,8 @@
 
             <!-- Items -->
             <ListView x:Name="LeftLeaderboardListView"
-                            ItemsSource="{Binding LeftModels}">
+                ItemsSource="{Binding LeftModels}">
+                
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -63,47 +66,46 @@
                                 BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
                                 Style="{StaticResource HorizontalStackLayoutStyle}">
                                 <Label Text="{Binding Position}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding CarNumber}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding DriverName}"
-                                            WidthRequest="150"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding Manufacturer}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="150"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Image Source="{Binding Manufacturer, 
+                                    Converter={StaticResource manufacturerLogoConverter}}"
+                                    WidthRequest="35"/>
                                 <Label Text="{Binding Laps}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding ToLeader}"
-                                            WidthRequest="75"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="75"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding ToNext}"
-                                            WidthRequest="65"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="65"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding LastLap}"
-                                            WidthRequest="65"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="65"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding BestLap}"
-                                            WidthRequest="65"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="65"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding OnLap}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding LastPit}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding Status}"
-                                            WidthRequest="50"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="50"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                             </HorizontalStackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
-            
+            </ListView>            
         </VerticalStackLayout>
 
         <!-- RIGHT -->
@@ -151,47 +153,46 @@
                                 BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
                                 Style="{StaticResource HorizontalStackLayoutStyle}">
                                 <Label Text="{Binding Position}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding CarNumber}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding DriverName}"
-                                            WidthRequest="150"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding Manufacturer}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="150"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Image Source="{Binding Manufacturer, 
+                                    Converter={StaticResource manufacturerLogoConverter}}"
+                                    WidthRequest="35"/>
                                 <Label Text="{Binding Laps}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding ToLeader}"
-                                            WidthRequest="75"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="75"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding ToNext}"
-                                            WidthRequest="65"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="65"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding LastLap}"
-                                            WidthRequest="65"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="65"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding BestLap}"
-                                            WidthRequest="65"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="65"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding OnLap}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding LastPit}"
-                                            WidthRequest="35"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="35"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding Status}"
-                                            WidthRequest="50"
-                                            Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    WidthRequest="50"
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
                             </HorizontalStackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
-            
+            </ListView>            
         </VerticalStackLayout>
 
     </Grid>

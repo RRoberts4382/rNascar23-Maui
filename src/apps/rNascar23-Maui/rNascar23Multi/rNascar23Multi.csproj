@@ -75,8 +75,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\chevrolet.png" />
 	  <None Remove="Resources\Images\cnbc.png" />
 	  <None Remove="Resources\Images\CTS_Small.png" />
+	  <None Remove="Resources\Images\ford.png" />
 	  <None Remove="Resources\Images\four_tires.png" />
 	  <None Remove="Resources\Images\fox.png" />
 	  <None Remove="Resources\Images\fs1.png" />
@@ -91,6 +93,7 @@
 	  <None Remove="Resources\Images\right_tires.png" />
 	  <None Remove="Resources\Images\rnascar_logo_small.png" />
 	  <None Remove="Resources\Images\sirius.png" />
+	  <None Remove="Resources\Images\toyota.png" />
 	  <None Remove="Resources\Images\transparent_pixel.png" />
 	  <None Remove="Resources\Images\usa.png" />
 	  <None Remove="Resources\Images\Xfinity_Small.png" />
