@@ -2,11 +2,11 @@
 {
     public class PitStopsAllDriversModel : NotifyModel
     {
-        private int _position;
-        public int Position
+        private int _index;
+        public int Index
         {
-            get { return _position; }
-            set { _position = value; OnPropertyChanged(nameof(Position)); }
+            get { return _index; }
+            set { _index = value; OnPropertyChanged(nameof(Index)); }
         }
 
         private string _driver;

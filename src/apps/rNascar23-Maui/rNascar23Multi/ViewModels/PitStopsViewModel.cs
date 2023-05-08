@@ -7,15 +7,19 @@ using rNascar23.Sdk.PitStops.Models;
 using rNascar23.Sdk.PitStops.Ports;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
+using rNascar23Multi.Settings.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace rNascar23Multi.ViewModels
 {
-    public partial class PitStopsViewModel : ObservableObject, INotifyUpdateTarget, IDisposable
+    public partial class PitStopsViewModel : ObservableObject, INotifyUpdateTarget, INotifySettingsChanged, IDisposable
     {
         #region consts
 
-        private const string DefaultAllDriversHeader = "Pit Stops";
+        private const string AllDriversPitStopsHeader = "Pit Stops";
+        private const string DriverPitStopsHeader = "Driver Pit Stops";
+        private const string DriverPitStopsStatisticsHeader = "Driver Pit Stop Statistics";
 
         #endregion
 
@@ -55,18 +59,25 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _driverPitStops, value);
         }
 
-        private string _allDriverPitStopsHeader = $"All {DefaultAllDriversHeader}";
+        private string _allDriverPitStopsHeader = $"All {AllDriversPitStopsHeader}";
         public string AllDriverPitStopsHeader
         {
             get => _allDriverPitStopsHeader;
             set => SetProperty(ref _allDriverPitStopsHeader, value);
         }
 
-        private string _driverPitStopsName = "Driver Pit Stops";
+        private string _driverPitStopsName = DriverPitStopsHeader;
         public string DriverPitStopsName
         {
             get => _driverPitStopsName;
             set => SetProperty(ref _driverPitStopsName, value);
+        }
+
+        private string _driverPitStopStatisticsName = DriverPitStopsStatisticsHeader;
+        public string DriverPitStopStatisticsName
+        {
+            get => _driverPitStopStatisticsName;
+            set => SetProperty(ref _driverPitStopStatisticsName, value);
         }
 
         private DriverPitStopStatisticsModel _driverStatistics = new DriverPitStopStatisticsModel();
@@ -76,50 +87,50 @@ namespace rNascar23Multi.ViewModels
             set => SetProperty(ref _driverStatistics, value);
         }
 
-        private ObservableCollection<PositionDriverValueModel> _totalGainLoss = new ObservableCollection<PositionDriverValueModel>();
-        public ObservableCollection<PositionDriverValueModel> TotalGainLoss
+        private ObservableCollection<DriverValueModel> _totalGainLoss = new ObservableCollection<DriverValueModel>();
+        public ObservableCollection<DriverValueModel> TotalGainLoss
         {
             get => _totalGainLoss;
             set => SetProperty(ref _totalGainLoss, value);
         }
 
-        private ObservableCollection<PositionDriverValueModel> _averagePitTime = new ObservableCollection<PositionDriverValueModel>();
-        public ObservableCollection<PositionDriverValueModel> AveragePitTime
+        private ObservableCollection<DriverValueModel> _averagePitTime = new ObservableCollection<DriverValueModel>();
+        public ObservableCollection<DriverValueModel> AveragePitTime
         {
             get => _averagePitTime;
             set => SetProperty(ref _averagePitTime, value);
         }
 
-        private ObservableCollection<PositionDriverValueModel> _averageInOutTime = new ObservableCollection<PositionDriverValueModel>();
-        public ObservableCollection<PositionDriverValueModel> AverageInOutTime
+        private ObservableCollection<DriverValueModel> _averageInOutTime = new ObservableCollection<DriverValueModel>();
+        public ObservableCollection<DriverValueModel> AverageInOutTime
         {
             get => _averageInOutTime;
             set => SetProperty(ref _averageInOutTime, value);
         }
 
-        private ObservableCollection<PositionDriverValueModel> _averageTotalTime = new ObservableCollection<PositionDriverValueModel>();
-        public ObservableCollection<PositionDriverValueModel> AverageTotalTime
+        private ObservableCollection<DriverValueModel> _averageTotalTime = new ObservableCollection<DriverValueModel>();
+        public ObservableCollection<DriverValueModel> AverageTotalTime
         {
             get => _averageTotalTime;
             set => SetProperty(ref _averageTotalTime, value);
         }
 
-        private ObservableCollection<PositionDriverValueModel> _greenPitTime = new ObservableCollection<PositionDriverValueModel>();
-        public ObservableCollection<PositionDriverValueModel> GreenPitTime
+        private ObservableCollection<DriverValueModel> _greenPitTime = new ObservableCollection<DriverValueModel>();
+        public ObservableCollection<DriverValueModel> GreenPitTime
         {
             get => _greenPitTime;
             set => SetProperty(ref _greenPitTime, value);
         }
 
-        private ObservableCollection<PositionDriverValueModel> _greenInOutTime = new ObservableCollection<PositionDriverValueModel>();
-        public ObservableCollection<PositionDriverValueModel> GreenInOutTime
+        private ObservableCollection<DriverValueModel> _greenInOutTime = new ObservableCollection<DriverValueModel>();
+        public ObservableCollection<DriverValueModel> GreenInOutTime
         {
             get => _greenInOutTime;
             set => SetProperty(ref _greenInOutTime, value);
         }
 
-        private ObservableCollection<PositionDriverValueModel> _greenTotalTime = new ObservableCollection<PositionDriverValueModel>();
-        public ObservableCollection<PositionDriverValueModel> GreenTotalTime
+        private ObservableCollection<DriverValueModel> _greenTotalTime = new ObservableCollection<DriverValueModel>();
+        public ObservableCollection<DriverValueModel> GreenTotalTime
         {
             get => _greenTotalTime;
             set => SetProperty(ref _greenTotalTime, value);
@@ -201,31 +212,17 @@ namespace rNascar23Multi.ViewModels
             _flagStateRepository = flagStateRepository ?? throw new ArgumentNullException(nameof(flagStateRepository));
         }
 
-        public PitStopsViewModel()
-        {
-            _logger = App.serviceProvider.GetRequiredService<ILogger<PitStopsViewModel>>();
-
-            _pitStopsRepository = App.serviceProvider.GetRequiredService<IPitStopsRepository>();
-
-            _flagStateRepository = App.serviceProvider.GetRequiredService<IFlagStateRepository>();
-        }
-
         #endregion
 
         #region public
 
-        public async Task UserSettingsUpdatedAsync()
+        public void UserSettingsUpdated(SettingsModel settings)
         {
             try
             {
-                await LoadAllDriversPitStopsAsync(SeriesId, RaceId);
+                ReloadAllDriversPitStops();
 
-                await UpdateAveragesAsync();
-
-                if (Selected != null)
-                {
-                    await UpdateSelectedDriverAsync(Selected);
-                }
+                DisplayPitStopAverages(_averages);
             }
             catch (Exception ex)
             {
@@ -241,19 +238,18 @@ namespace rNascar23Multi.ViewModels
                 {
                     if (SeriesId != (SeriesTypes)e.SessionDetails.SeriesId || RaceId != e.SessionDetails.RaceId)
                     {
+                        // new race event
                         SeriesId = (SeriesTypes)e.SessionDetails.SeriesId;
                         RaceId = e.SessionDetails.RaceId;
 
-                        await LoadAllDriversPitStopsAsync(SeriesId, RaceId);
+                        await UpdateRangeSelectionListsAsync();
+
+                        if (SelectedCaution != null)
+                            await FilterByCautionAsync();
+                        else
+                            await AllPitStopsAsync();
 
                         await UpdateAveragesAsync();
-
-                        if (Selected != null)
-                        {
-                            await UpdateSelectedDriverAsync(Selected);
-                        }
-
-                        await UpdateRangeSelectionListsAsync();
                     }
                 }
             }
@@ -267,7 +263,11 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
-                await LoadDriverPitStopsAsync(SeriesId, RaceId, selectedDriver?.CarNumber, selectedDriver?.Driver);
+                if (selectedDriver == null)
+                    ClearDriverPitStops();
+                else
+                    await LoadDriverPitStopsAsync(SeriesId, RaceId, selectedDriver.CarNumber, selectedDriver.Driver);
+
             }
             catch (Exception ex)
             {
@@ -275,17 +275,17 @@ namespace rNascar23Multi.ViewModels
             }
         }
 
-        public async Task UpdateByLapsAsync()
+        public async Task FilterByLapsAsync()
         {
             try
             {
                 SelectedCaution = null;
                 SelectedDriver = null;
 
-                var start = StartLap.HasValue ? StartLap.Value : 1;
-                var end = EndLap.HasValue ? EndLap.Value : EndLaps.Max();
+                var start = StartLap ?? 1;
+                var end = EndLap ?? EndLaps.Max();
 
-                AllDriverPitStopsHeader = $"{DefaultAllDriversHeader} - Laps {start} to {end}";
+                AllDriverPitStopsHeader = $"{AllDriversPitStopsHeader} - Laps {start} to {end}";
 
                 await LoadAllDriversPitStopsAsync(SeriesId, RaceId, StartLap, EndLap);
             }
@@ -295,7 +295,7 @@ namespace rNascar23Multi.ViewModels
             }
         }
 
-        public async Task UpdateByCautionAsync()
+        public async Task FilterByCautionAsync()
         {
             try
             {
@@ -305,7 +305,7 @@ namespace rNascar23Multi.ViewModels
                     EndLap = null;
                     SelectedDriver = null;
 
-                    AllDriverPitStopsHeader = $"{DefaultAllDriversHeader} - Caution {SelectedCaution.Title}";
+                    AllDriverPitStopsHeader = $"{AllDriversPitStopsHeader} - Caution {SelectedCaution.Title}";
 
                     await LoadAllDriversPitStopsAsync(SeriesId, RaceId, SelectedCaution.StartLap, SelectedCaution.EndLap);
                 }
@@ -316,7 +316,7 @@ namespace rNascar23Multi.ViewModels
             }
         }
 
-        public async Task UpdateByDriverAsync()
+        public async Task FilterByDriverAsync()
         {
             try
             {
@@ -326,7 +326,7 @@ namespace rNascar23Multi.ViewModels
                     EndLap = null;
                     SelectedCaution = null;
 
-                    AllDriverPitStopsHeader = $"{DefaultAllDriversHeader} - {SelectedDriver.Name}";
+                    AllDriverPitStopsHeader = $"{AllDriversPitStopsHeader} - {SelectedDriver.Name}";
 
                     await LoadAllDriversPitStopsAsync(SeriesId, RaceId, null, null, SelectedDriver.CarNumber);
                 }
@@ -346,7 +346,7 @@ namespace rNascar23Multi.ViewModels
                 SelectedCaution = null;
                 SelectedDriver = null;
 
-                AllDriverPitStopsHeader = $"All {DefaultAllDriversHeader}";
+                AllDriverPitStopsHeader = $"All {AllDriversPitStopsHeader}";
 
                 await LoadAllDriversPitStopsAsync(SeriesId, RaceId);
             }
@@ -360,6 +360,17 @@ namespace rNascar23Multi.ViewModels
 
         #region private
 
+        private void ReloadAllDriversPitStops()
+        {
+            var existing = AllDriversPitStops.ToList();
+
+            AllDriversPitStops.Clear();
+
+            Selected = null;
+
+            UpdateModels(AllDriversPitStops, existing);
+        }
+
         private async Task LoadAllDriversPitStopsAsync(
             SeriesTypes seriesId,
             int raceId,
@@ -369,10 +380,6 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
-                AllDriversPitStops.Clear();
-
-                IList<PitStopsAllDriversModel> allDriversPitStops = new List<PitStopsAllDriversModel>();
-
                 var driverPitStops = await _pitStopsRepository.GetPitStopsInRangeAsync(
                     seriesId,
                     raceId,
@@ -380,27 +387,23 @@ namespace rNascar23Multi.ViewModels
                     endLap,
                     carNumber);
 
-                foreach (var pitStop in driverPitStops)
-                {
-                    var allDriversPitStop = new PitStopsAllDriversModel()
-                    {
-                        Position = pitStop.PitOutRank,
-                        CarNumber = pitStop.VehicleNumber,
-                        Driver = pitStop.DriverName,
-                        Lap = pitStop.LapCount,
-                        Flag = pitStop.PitInFlagStatus,
-                        Tires = pitStop.PitStopType,
-                        TotalTime = pitStop.TotalDuration,
-                        PitTime = pitStop.PitStopDuration,
-                        PositionIn = pitStop.PitInRank,
-                        PositionOut = pitStop.PitOutRank,
-                        PositionDelta = pitStop.PositionsGainedLost
-                    };
+                var allDriversPitStopModels = driverPitStops.OrderBy(p => p.LapCount).
+                      Select((p, i) => new PitStopsAllDriversModel()
+                      {
+                          Index = i,
+                          CarNumber = p.VehicleNumber,
+                          Driver = p.DriverName,
+                          Lap = p.LapCount,
+                          Flag = p.PitInFlagStatus,
+                          Tires = p.PitStopType,
+                          TotalTime = p.TotalDuration,
+                          PitTime = p.PitStopDuration,
+                          PositionIn = p.PitInRank,
+                          PositionOut = p.PitOutRank,
+                          PositionDelta = p.PositionsGainedLost
+                      }).ToList();
 
-                    allDriversPitStops.Add(allDriversPitStop);
-                }
-
-                AllDriversPitStops = new ObservableCollection<PitStopsAllDriversModel>(allDriversPitStops.OrderBy(p => p.Position).ToList());
+                PitStopsViewModel.UpdateModels(AllDriversPitStops, allDriversPitStopModels);
 
                 if (AllDriversPitStops.Count > 0)
                 {
@@ -410,6 +413,8 @@ namespace rNascar23Multi.ViewModels
 
                     Selected = selectedDriver;
                 }
+                else
+                    ClearDriverPitStops();
             }
             catch (Exception ex)
             {
@@ -465,7 +470,7 @@ namespace rNascar23Multi.ViewModels
             {
                 var flagStates = await _flagStateRepository.GetFlagStatesAsync();
 
-                if (flagStates.Count() == 0)
+                if (!flagStates.Any())
                     return;
 
                 var orderedFlagStates = flagStates.
@@ -539,14 +544,12 @@ namespace rNascar23Multi.ViewModels
             CautionsList.Clear();
 
             foreach (var item in cautionModels.OrderBy(c => c.CautionNumber))
-            {
                 CautionsList.Add(item);
-            }
 
             if (previouslySelectedCaution != null)
-            {
                 SelectedCaution = cautionModels.FirstOrDefault(c => c.CautionNumber == previouslySelectedCaution.CautionNumber);
-            }
+            else
+                SelectedCaution = cautionModels.FirstOrDefault();
         }
 
         private async Task UpdateAveragesAsync()
@@ -555,15 +558,9 @@ namespace rNascar23Multi.ViewModels
             {
                 var pitStops = await _pitStopsRepository.GetPitStopsAsync(SeriesId, RaceId);
 
-                _averages = GetPitStopAverages(pitStops);
+                _averages = PitStopsViewModel.GetPitStopAverages(pitStops);
 
-                LoadTotalGainLoss(_averages);
-                LoadAveragePitTime(_averages);
-                LoadAverageInOutTime(_averages);
-                LoadAverageTotalTime(_averages);
-                LoadGreenPitTime(_averages);
-                LoadGreenInOutTime(_averages);
-                LoadGreenTotalTime(_averages);
+                DisplayPitStopAverages(_averages);
             }
             catch (Exception ex)
             {
@@ -571,40 +568,54 @@ namespace rNascar23Multi.ViewModels
             }
         }
 
+        private void DisplayPitStopAverages(IList<PitStopAverages> averages)
+        {
+            LoadTotalGainLoss(averages);
+            LoadAveragePitTime(averages);
+            LoadAverageInOutTime(averages);
+            LoadAverageTotalTime(averages);
+            LoadGreenPitTime(averages);
+            LoadGreenInOutTime(averages);
+            LoadGreenTotalTime(averages);
+        }
+
+        private void ClearDriverPitStops()
+        {
+            DriverPitStopsName = DriverPitStopsHeader;
+
+            DriverPitStopStatisticsName = DriverPitStopsStatisticsHeader;
+
+            DriverPitStops.Clear();
+
+            DriverStatistics = new DriverPitStopStatisticsModel();
+        }
+
         private async Task LoadDriverPitStopsAsync(SeriesTypes seriesId, int raceId, string carNumber, string driverName)
         {
             try
             {
-                DriverPitStops.Clear();
-
-                IList<PitStopsAllDriversModel> allDriversPitStops = new List<PitStopsAllDriversModel>();
-
                 var driverPitStops = await _pitStopsRepository.GetPitStopsInRangeAsync(seriesId, raceId, null, null, carNumber);
 
-                foreach (var pitStop in driverPitStops)
-                {
-                    var allDriversPitStop = new PitStopsAllDriversModel()
-                    {
-                        Lap = pitStop.LapCount,
-                        Tires = pitStop.PitStopType,
-                        TotalTime = pitStop.TotalDuration,
-                        PitTime = pitStop.PitStopDuration,
-                        Flag = pitStop.PitInFlagStatus,
-                        PositionIn = pitStop.PitInRank,
-                        PositionOut = pitStop.PitOutRank,
-                        PositionDelta = pitStop.PositionsGainedLost
-                    };
+                var driverPitStopModels = driverPitStops.OrderBy(p => p.LapCount).
+                       Select((p, i) => new PitStopsAllDriversModel()
+                       {
+                           Index = i,
+                           Lap = p.LapCount,
+                           Tires = p.PitStopType,
+                           TotalTime = p.TotalDuration,
+                           PitTime = p.PitStopDuration,
+                           Flag = p.PitInFlagStatus,
+                           PositionIn = p.PitInRank,
+                           PositionOut = p.PitOutRank,
+                           PositionDelta = p.PositionsGainedLost
+                       }).ToList();
 
-                    allDriversPitStops.Add(allDriversPitStop);
-                }
+                UpdateDriverPitStopsModels(driverPitStopModels);
 
-                DriverPitStops = new ObservableCollection<PitStopsAllDriversModel>(allDriversPitStops.ToList());
+                if (DriverStatistics == null || !driverPitStops.Any())
+                    DriverStatistics = new DriverPitStopStatisticsModel();
 
-                DriverPitStopsName = $"Driver Pit Stops - {carNumber} {driverName}";
-
-                DriverStatistics = new DriverPitStopStatisticsModel();
-
-                if (driverPitStops.Count() > 0)
+                if (driverPitStops.Any())
                 {
                     DriverStatistics.NumberOfStops = driverPitStops.Count();
                     DriverStatistics.AverageGainLoss = driverPitStops.Average(p => p.PositionsGainedLost);
@@ -612,16 +623,27 @@ namespace rNascar23Multi.ViewModels
                     DriverStatistics.AverageTotalTime = driverPitStops.Average(p => p.TotalDuration);
                     DriverStatistics.AverageInOutTime = driverPitStops.Average(p => (p.InTravelDuration + p.OutTravelDuration));
 
-                    if (_averages != null && _averages.Count > 0)
-                    {
-                        var carAverages = _averages.FirstOrDefault(a => a.CarNumber == carNumber);
+                    var carAverages = _averages?.FirstOrDefault(a => a.CarNumber == carNumber);
 
+                    if (carAverages != null)
+                    {
                         DriverStatistics.AverageGainLossRank = _averages.OrderByDescending(a => a.TotalGainLoss).ToList().IndexOf(carAverages) + 1;
                         DriverStatistics.AveragePitTimeRank = _averages.OrderBy(a => a.AveragePitTime).ToList().IndexOf(carAverages) + 1;
                         DriverStatistics.AverageTotalTimeRank = _averages.OrderBy(a => a.AverageTotalTime).ToList().IndexOf(carAverages) + 1;
                         DriverStatistics.AverageInOutTimeRank = _averages.OrderBy(a => a.AverageInOutTime).ToList().IndexOf(carAverages) + 1;
                     }
+                    else
+                    {
+                        DriverStatistics.AverageGainLossRank = null;
+                        DriverStatistics.AveragePitTimeRank = null;
+                        DriverStatistics.AverageTotalTimeRank = null;
+                        DriverStatistics.AverageInOutTimeRank = null;
+                    }
                 }
+
+                DriverPitStopsName = $"{DriverPitStopsHeader} - [{carNumber}] {driverName}";
+
+                DriverPitStopStatisticsName = $"{DriverPitStopsStatisticsHeader} -  [{carNumber}] {driverName}";
             }
             catch (Exception ex)
             {
@@ -633,12 +655,12 @@ namespace rNascar23Multi.ViewModels
         {
             TotalGainLoss.Clear();
 
-            IList<PositionDriverValueModel> pitStopStats = new List<PositionDriverValueModel>();
+            IList<DriverValueModel> pitStopStats = new List<DriverValueModel>();
 
             int i = 1;
             foreach (var item in averages.OrderByDescending(a => a.TotalGainLoss))
             {
-                pitStopStats.Add(new PositionDriverValueModel()
+                pitStopStats.Add(new DriverValueModel()
                 {
                     Position = i,
                     Driver = item.Driver,
@@ -648,19 +670,19 @@ namespace rNascar23Multi.ViewModels
                 i++;
             }
 
-            TotalGainLoss = new ObservableCollection<PositionDriverValueModel>(pitStopStats.ToList());
+            TotalGainLoss = new ObservableCollection<DriverValueModel>(pitStopStats.ToList());
         }
 
         private void LoadAveragePitTime(IList<PitStopAverages> averages)
         {
             AveragePitTime.Clear();
 
-            IList<PositionDriverValueModel> pitStopStats = new List<PositionDriverValueModel>();
+            IList<DriverValueModel> pitStopStats = new List<DriverValueModel>();
 
             int i = 1;
             foreach (var item in averages.Where(a => a.AveragePitTime != 0).OrderBy(a => a.AveragePitTime))
             {
-                pitStopStats.Add(new PositionDriverValueModel()
+                pitStopStats.Add(new DriverValueModel()
                 {
                     Position = i,
                     Driver = item.Driver,
@@ -670,19 +692,19 @@ namespace rNascar23Multi.ViewModels
                 i++;
             }
 
-            AveragePitTime = new ObservableCollection<PositionDriverValueModel>(pitStopStats.ToList());
+            AveragePitTime = new ObservableCollection<DriverValueModel>(pitStopStats.ToList());
         }
 
         private void LoadAverageInOutTime(IList<PitStopAverages> averages)
         {
             AverageInOutTime.Clear();
 
-            IList<PositionDriverValueModel> pitStopStats = new List<PositionDriverValueModel>();
+            IList<DriverValueModel> pitStopStats = new List<DriverValueModel>();
 
             int i = 1;
             foreach (var item in averages.Where(a => a.AverageInOutTime != 0).OrderBy(a => a.AverageInOutTime))
             {
-                pitStopStats.Add(new PositionDriverValueModel()
+                pitStopStats.Add(new DriverValueModel()
                 {
                     Position = i,
                     Driver = item.Driver,
@@ -692,19 +714,19 @@ namespace rNascar23Multi.ViewModels
                 i++;
             }
 
-            AverageInOutTime = new ObservableCollection<PositionDriverValueModel>(pitStopStats.ToList());
+            AverageInOutTime = new ObservableCollection<DriverValueModel>(pitStopStats.ToList());
         }
 
         private void LoadAverageTotalTime(IList<PitStopAverages> averages)
         {
             AverageTotalTime.Clear();
 
-            IList<PositionDriverValueModel> pitStopStats = new List<PositionDriverValueModel>();
+            IList<DriverValueModel> pitStopStats = new List<DriverValueModel>();
 
             int i = 1;
             foreach (var item in averages.Where(a => a.AverageTotalTime != 0).OrderBy(a => a.AverageTotalTime))
             {
-                pitStopStats.Add(new PositionDriverValueModel()
+                pitStopStats.Add(new DriverValueModel()
                 {
                     Position = i,
                     Driver = item.Driver,
@@ -714,19 +736,19 @@ namespace rNascar23Multi.ViewModels
                 i++;
             }
 
-            AverageTotalTime = new ObservableCollection<PositionDriverValueModel>(pitStopStats.ToList());
+            AverageTotalTime = new ObservableCollection<DriverValueModel>(pitStopStats.ToList());
         }
 
         private void LoadGreenPitTime(IList<PitStopAverages> averages)
         {
             GreenPitTime.Clear();
 
-            IList<PositionDriverValueModel> pitStopStats = new List<PositionDriverValueModel>();
+            IList<DriverValueModel> pitStopStats = new List<DriverValueModel>();
 
             int i = 1;
             foreach (var item in averages.Where(a => a.AverageGreenPitTime != 0).OrderBy(a => a.AverageGreenPitTime))
             {
-                pitStopStats.Add(new PositionDriverValueModel()
+                pitStopStats.Add(new DriverValueModel()
                 {
                     Position = i,
                     Driver = item.Driver,
@@ -736,19 +758,19 @@ namespace rNascar23Multi.ViewModels
                 i++;
             }
 
-            GreenPitTime = new ObservableCollection<PositionDriverValueModel>(pitStopStats.ToList());
+            GreenPitTime = new ObservableCollection<DriverValueModel>(pitStopStats.ToList());
         }
 
         private void LoadGreenInOutTime(IList<PitStopAverages> averages)
         {
             GreenInOutTime.Clear();
 
-            IList<PositionDriverValueModel> pitStopStats = new List<PositionDriverValueModel>();
+            IList<DriverValueModel> pitStopStats = new List<DriverValueModel>();
 
             int i = 1;
             foreach (var item in averages.Where(a => a.AverageGreenInOutTime != 0).OrderBy(a => a.AverageGreenInOutTime))
             {
-                pitStopStats.Add(new PositionDriverValueModel()
+                pitStopStats.Add(new DriverValueModel()
                 {
                     Position = i,
                     Driver = item.Driver,
@@ -758,19 +780,19 @@ namespace rNascar23Multi.ViewModels
                 i++;
             }
 
-            GreenInOutTime = new ObservableCollection<PositionDriverValueModel>(pitStopStats.ToList());
+            GreenInOutTime = new ObservableCollection<DriverValueModel>(pitStopStats.ToList());
         }
 
         private void LoadGreenTotalTime(IList<PitStopAverages> averages)
         {
             GreenTotalTime.Clear();
 
-            IList<PositionDriverValueModel> pitStopStats = new List<PositionDriverValueModel>();
+            IList<DriverValueModel> pitStopStats = new List<DriverValueModel>();
 
             int i = 1;
             foreach (var item in averages.Where(a => a.AverageGreenTotalTime != 0).OrderBy(a => a.AverageGreenTotalTime))
             {
-                pitStopStats.Add(new PositionDriverValueModel()
+                pitStopStats.Add(new DriverValueModel()
                 {
                     Position = i,
                     Driver = item.Driver,
@@ -780,16 +802,16 @@ namespace rNascar23Multi.ViewModels
                 i++;
             }
 
-            GreenTotalTime = new ObservableCollection<PositionDriverValueModel>(pitStopStats.ToList());
+            GreenTotalTime = new ObservableCollection<DriverValueModel>(pitStopStats.ToList());
         }
 
-        private IList<PitStopAverages> GetPitStopAverages(IEnumerable<PitStop> pitStops)
+        private static IList<PitStopAverages> GetPitStopAverages(IEnumerable<PitStop> pitStops)
         {
             var averages = new List<PitStopAverages>();
 
             foreach (var driverPitStops in pitStops.GroupBy(p => p.VehicleNumber))
             {
-                if (driverPitStops != null && driverPitStops.Count() > 0)
+                if (driverPitStops != null && driverPitStops.Any())
                 {
                     var driverPitStopSet = new PitStopAverages
                     {
@@ -803,7 +825,7 @@ namespace rNascar23Multi.ViewModels
 
                     var greenFlagStops = driverPitStops.Where(p => p.PitInFlagStatus == 1);
 
-                    if (greenFlagStops != null && greenFlagStops.Count() > 0)
+                    if (greenFlagStops != null && greenFlagStops.Any())
                     {
                         driverPitStopSet.AverageGreenPitTime = greenFlagStops.Average(p => p.PitStopDuration);
                         driverPitStopSet.AverageGreenTotalTime = greenFlagStops.Average(p => p.TotalDuration);
@@ -815,6 +837,52 @@ namespace rNascar23Multi.ViewModels
             }
 
             return averages;
+        }
+
+        private void UpdateDriverPitStopsModels(IList<PitStopsAllDriversModel> allDriversPitStops)
+        {
+            if (DriverPitStops.Count > allDriversPitStops.Count)
+            {
+                for (int i = DriverPitStops.Count - 1; i > allDriversPitStops.Count - 1; i--)
+                {
+                    DriverPitStops.RemoveAt(i);
+                }
+            }
+
+            for (int i = 0; i < allDriversPitStops.Count; i++)
+            {
+                if (DriverPitStops.Count <= i)
+                {
+                    DriverPitStops.Add(allDriversPitStops[i]);
+                }
+                else
+                {
+                    DriverPitStops[i] = allDriversPitStops[i];
+                }
+            }
+        }
+
+        private static void UpdateModels<T>(ObservableCollection<T> models, IList<T> values)
+        {
+            if (models.Count > values.Count)
+            {
+                for (int i = models.Count - 1; i > values.Count - 1; i--)
+                {
+                    models.RemoveAt(i);
+                }
+            }
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (models.Count <= i)
+                {
+                    models.Add(values[i]);
+                }
+                else
+                {
+                    models[i] = values[i];
+                }
+            }
         }
 
         #endregion
@@ -892,7 +960,8 @@ namespace rNascar23Multi.ViewModels
                 _pitStopsRepository = null;
                 _flagStateRepository = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
 
         #endregion

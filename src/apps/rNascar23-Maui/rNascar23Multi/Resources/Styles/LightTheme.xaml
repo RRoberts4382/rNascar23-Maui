@@ -17,4 +17,6 @@
     <Color x:Key="TransparentColor">Transparent</Color>
     <Color x:Key="GreenHeaderBackColor">LimeGreen</Color>
     <Color x:Key="GreenHeaderTextColor">Black</Color>
+    <Color x:Key="PrimaryRowBackgroundColor">White</Color>
+    <Color x:Key="AlternatingRowBackgroundColor">Gainsboro</Color>
 </ResourceDictionary>

@@ -253,7 +253,8 @@ namespace rNascar23Multi.ViewModels
                 _logger = null;
                 _schedulesRepository = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
 
         #endregion

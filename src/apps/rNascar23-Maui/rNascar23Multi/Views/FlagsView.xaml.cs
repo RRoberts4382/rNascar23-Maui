@@ -21,15 +21,12 @@ public partial class FlagsView : ContentView, INotifyUpdateTarget, IDisposable
         BindingContext = _viewModel;
     }
 
-    public async Task UserSettingsUpdatedAsync()
-    {
-        await _viewModel.UserSettingsUpdatedAsync();
-    }
-
     public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
     {
         await _viewModel.UpdateTimerElapsedAsync(e);
     }
+
+    #region IDisposable
 
     private bool _disposed;
     public void Dispose()
@@ -47,18 +44,13 @@ public partial class FlagsView : ContentView, INotifyUpdateTarget, IDisposable
 
         if (disposing)
         {
-            if (_viewModel != null)
-                _viewModel.Dispose();
+            _viewModel?.Dispose();
 
             _logger = null;
         }
-        // free native resources if there are any.
 
         _disposed = true;
     }
 
-    ~FlagsView()
-    {
-        Debug.WriteLine("********************************* FlagsView Disposed");
-    }
+    #endregion
 }

@@ -15,36 +15,21 @@ public partial class PitStopsView : ContentView
 
         _updateHandler = App.serviceProvider.GetRequiredService<UpdateNotificationHandler>();
 
-        _updateHandler.UpdateTimerElapsed += _updateHandler_UpdateTimerElapsed;
+        _updateHandler.UpdateTimerElapsed += UpdateHandler_UpdateTimerElapsed;
+
+        _updateHandler.UserSettingsUpdated += UpdateHandler_UserSettingsUpdated;
 
         _viewModel = App.serviceProvider.GetRequiredService<PitStopsViewModel>();
 
         BindingContext = _viewModel;
     }
 
-    public PitStopsView(
-        PitStopsViewModel viewModel,
-        UpdateNotificationHandler updateHandler)
+    private void UpdateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
     {
-        InitializeComponent();
-
-        _updateHandler = updateHandler;
-
-        _updateHandler.UpdateTimerElapsed += _updateHandler_UpdateTimerElapsed;
-
-        _updateHandler.UserSettingsUpdated += _updateHandler_UserSettingsUpdated;
-
-        _viewModel = viewModel;
-
-        BindingContext = _viewModel;
+        _viewModel.UserSettingsUpdated(e);
     }
 
-    private async void _updateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
-    {
-        await _viewModel.UserSettingsUpdatedAsync();
-    }
-
-    private async void _updateHandler_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+    private async void UpdateHandler_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
     {
         await _viewModel.UpdateTimerElapsedAsync(e);
     }
@@ -68,20 +53,21 @@ public partial class PitStopsView : ContentView
 
     private async void UpdateByLaps_Clicked(object sender, EventArgs e)
     {
-        await _viewModel.UpdateByLapsAsync();
+        await _viewModel.FilterByLapsAsync();
     }
+
     private async void UpdateByCaution_Clicked(object sender, EventArgs e)
     {
-        await _viewModel.UpdateByCautionAsync();
+        await _viewModel.FilterByCautionAsync();
     }
+
     private async void UpdateByDriver_Clicked(object sender, EventArgs e)
     {
-        await _viewModel.UpdateByDriverAsync();
+        await _viewModel.FilterByDriverAsync();
     }
+
     private async void AllPitStops_Clicked(object sender, EventArgs e)
     {
         await _viewModel.AllPitStopsAsync();
     }
-
-    
 }

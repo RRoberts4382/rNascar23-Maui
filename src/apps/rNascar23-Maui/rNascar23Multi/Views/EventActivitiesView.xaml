@@ -21,7 +21,7 @@
                     <ViewCell>
                         <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
                             <Label Text="{Binding Timestamp, StringFormat='{}{0:h\\:mm tt}'}"
-                                WidthRequest="60"
+                                WidthRequest="70"
                                 Margin="4,0"
                                 HorizontalTextAlignment="End"
                                 Style="{StaticResource GridNameLabelStyle}"/>

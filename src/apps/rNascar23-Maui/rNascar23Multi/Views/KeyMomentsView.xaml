@@ -2,11 +2,17 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             xmlns:models="clr-namespace:rNascar23Multi.Models"
+             xmlns:viewModels="clr-namespace:rNascar23Multi.ViewModels"
              x:Class="rNascar23Multi.Views.KeyMomentsView"
+             x:DataType="viewModels:KeyMomentsViewModel"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
+
     <ContentView.Resources>
         <converters:FlagColorConverter x:Key="flagColorConverter" />
         <converters:FlagTextColorConverter x:Key="flagTextColorConverter" />
+        <converters:AlternatingRowBackColorConverter 
+            x:Key="alternatingRowBackColorConverter" />
     </ContentView.Resources>
 
     <!-- Column Headers -->
@@ -39,14 +45,14 @@
         </HorizontalStackLayout>
 
         <!-- Items -->
-        <ListView x:Name="GenericListView"
-                Grid.Row="2"
-                ItemsSource="{Binding Models}">
+        <ListView Grid.Row="2"
+                ItemsSource="{Binding Models}" >
 
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:KeyMomentsModel">
                     <ViewCell>
                         <HorizontalStackLayout
+                            BackgroundColor="{Binding Index, Converter={StaticResource alternatingRowBackColorConverter}}"
                             Style="{StaticResource HorizontalStackLayoutStyle}">
                             <Label Text="{Binding Lap}"
                                     TextColor="{Binding FlagState, Converter={StaticResource flagTextColorConverter}}"

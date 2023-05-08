@@ -55,10 +55,6 @@ namespace rNascar23Multi.ViewModels
         {
             await LoadModelsAsync(e.SessionDetails);
         }
-        public async Task UserSettingsUpdatedAsync()
-        {
-
-        }
 
         public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
         {
@@ -140,6 +136,8 @@ namespace rNascar23Multi.ViewModels
                 "Unknown";
         }
 
+        #region IDisposable
+
         private bool _disposed;
         public void Dispose()
         {
@@ -160,7 +158,10 @@ namespace rNascar23Multi.ViewModels
                 _liveFeedRepository = null;
                 _schedulesRepository = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
+
+        #endregion
     }
 }

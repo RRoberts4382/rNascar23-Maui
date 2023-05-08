@@ -10,6 +10,8 @@
         <converters:PitStopTiresConverter x:Key="pitStopTiresConverter" />
         <converters:FlagColorConverter x:Key="flagColorConverter" />
         <converters:SelectedEventBorderConverter x:Key="selectedBorderConverter" />
+        <converters:AlternatingRowBackColorConverter 
+            x:Key="alternatingRowBackColorConverter" />
     </ContentView.Resources>
 
     <Grid ColumnSpacing="10">
@@ -70,9 +72,9 @@
                 <Picker x:Name="cautionPicker"
                     ItemsSource="{Binding CautionsList}"
                     ItemDisplayBinding="{Binding Title}"
-                    SelectedItem="{Binding SelectedCaution}"
+                    SelectedItem="{Binding SelectedCaution, Mode=TwoWay}"
                     VerticalOptions="Center"
-                    WidthRequest="175">
+                    WidthRequest="300">
                 </Picker>
 
                 <Button Text="Update"
@@ -90,7 +92,7 @@
                 <Picker x:Name="driverPicker"
                     ItemsSource="{Binding DriverList}"
                     ItemDisplayBinding="{Binding Name}"
-                    SelectedItem="{Binding SelectedDriver}"
+                    SelectedItem="{Binding SelectedDriver, Mode=TwoWay}"
                     VerticalOptions="Center"
                     WidthRequest="175">
                 </Picker>
@@ -130,12 +132,9 @@
             <!-- Padding is to account for selected row indicator width (14) -->
             <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Padding="12,0,0,0"
                 Style="{StaticResource HorizontalStackLayoutStyle}">
-                <Label Text=""
-                    Style="{StaticResource GridColumnHeaderLabelStyle}"
-                    WidthRequest="32"/>
                 <Label Text="Driver"
                     Style="{StaticResource GridColumnHeaderLabelStyle}"
-                    WidthRequest="150"/>
+                    WidthRequest="187"/>
                 <Label Text="Flag"
                     Style="{StaticResource GridColumnHeaderLabelStyle}"
                     WidthRequest="30"/>
@@ -157,6 +156,7 @@
                 <!-- Width is less to account for selected row indicator width (12) -->
                 <Label Text="+/-"
                     Style="{StaticResource GridColumnHeaderLabelStyle}"
+                    HorizontalTextAlignment="Center"
                     WidthRequest="48"/>
             </HorizontalStackLayout>
 
@@ -168,16 +168,15 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Border Stroke="{Binding IsSelected, Converter={StaticResource selectedBorderConverter}}" 
+                            <Border Stroke="{Binding IsSelected, Converter={StaticResource selectedBorderConverter}}"
+                                BackgroundColor="{Binding Index, Converter={StaticResource alternatingRowBackColorConverter}}"
                                 Style="{StaticResource SeriesEventBorderStyle}">
 
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
-                                    <Label Text="{Binding Position}"
-                                        WidthRequest="25"
-                                        Style="{StaticResource GridNameLabelStyle}"/>
+                                <HorizontalStackLayout
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
 
                                     <Label Text="{Binding Driver}"
-                                        WidthRequest="150"
+                                        WidthRequest="182"
                                         Style="{StaticResource GridNameLabelStyle}"/>
 
                                     <Label BackgroundColor="{Binding Flag, 
@@ -214,6 +213,7 @@
 
                                     <Label Text="{Binding PositionDelta}"
                                         WidthRequest="50"
+                                        HorizontalTextAlignment="Center"
                                         TextColor="{Binding PositionDelta, Converter={StaticResource gainLossColorConverter}}"
                                         Style="{StaticResource GridNameLabelStyle}"/>
                                 </HorizontalStackLayout>
@@ -231,7 +231,7 @@
                 Style="{StaticResource PitStopsDriverStatsHeaderStyle}"
                 WidthRequest="500"
                 Margin="0,0,5,0"/>
-            <Label Text="Statistics"
+            <Label Text="{Binding DriverPitStopStatisticsName}"
                 Style="{StaticResource PitStopsDriverStatsHeaderStyle}"
                 WidthRequest="500"/>
         </HorizontalStackLayout>
@@ -291,7 +291,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <HorizontalStackLayout
+                                    BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
                                     <Label Text="{Binding Lap}"
                                         WidthRequest="30"
                                         Style="{StaticResource GridNameLabelStyle}"/>
@@ -311,11 +313,6 @@
                                         <Image Source="{Binding Tires, 
                                             Converter={StaticResource pitStopTiresConverter}}"/>
                                     </Border>
-
-                                    <!--<Image Source="{Binding Tires, 
-                                        Converter={StaticResource pitStopTiresConverter}}"
-                                        HeightRequest="20"
-                                        WidthRequest="35"/>-->
 
                                     <Label Text="{Binding TotalTime, StringFormat='{}{0:N2}'}"
                                         WidthRequest="95"
@@ -467,7 +464,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <HorizontalStackLayout                                    
+                                    BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
                                     <Label Text="{Binding Position}"
                                     WidthRequest="20"
                                     Style="{StaticResource GridNameLabelStyle}"/>
@@ -476,6 +475,7 @@
                                     Style="{StaticResource GridNameLabelStyle}"/>
                                     <Label Text="{Binding Value}"
                                     WidthRequest="50"
+                                    HorizontalTextAlignment="End"
                                     TextColor="{Binding Value, Converter={StaticResource gainLossColorConverter}}"
                                     Style="{StaticResource GridNameLabelStyle}"/>
                                 </HorizontalStackLayout>
@@ -491,7 +491,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <HorizontalStackLayout                                    
+                                    BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
                                     <Label Text="{Binding Position}"
                                     WidthRequest="20"
                                     Style="{StaticResource GridNameLabelStyle}"/>
@@ -514,7 +516,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <HorizontalStackLayout                                    
+                                    BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
                                     <Label Text="{Binding Position}"
                                     WidthRequest="20"
                                     Style="{StaticResource GridNameLabelStyle}"/>
@@ -537,7 +541,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <HorizontalStackLayout                                    
+                                    BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
                                     <Label Text="{Binding Position}"
                                     WidthRequest="20"
                                     Style="{StaticResource GridNameLabelStyle}"/>
@@ -560,7 +566,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <HorizontalStackLayout                                    
+                                    BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
                                     <Label Text="{Binding Position}"
                                     WidthRequest="20"
                                     Style="{StaticResource GridNameLabelStyle}"/>
@@ -583,7 +591,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <HorizontalStackLayout                                    
+                                    BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
                                     <Label Text="{Binding Position}"
                                     WidthRequest="20"
                                     Style="{StaticResource GridNameLabelStyle}"/>
@@ -606,7 +616,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                                <HorizontalStackLayout                                    
+                                    BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                                    Style="{StaticResource HorizontalStackLayoutStyle}">
                                     <Label Text="{Binding Position}"
                                     WidthRequest="20"
                                     Style="{StaticResource GridNameLabelStyle}"/>

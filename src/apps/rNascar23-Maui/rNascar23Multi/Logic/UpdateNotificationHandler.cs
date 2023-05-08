@@ -11,7 +11,7 @@ namespace rNascar23Multi.Logic
 
         private readonly ILogger<UpdateNotificationHandler> _logger;
         private RaceSessionDetails _sessionDetails;
-        private ILiveFeedRepository _liveFeedRepository;
+        private readonly ILiveFeedRepository _liveFeedRepository;
 
         #endregion
 
@@ -86,6 +86,7 @@ namespace rNascar23Multi.Logic
         {
             OnUserSettingsUpdated(settings);
         }
+
         #endregion
 
         #region private

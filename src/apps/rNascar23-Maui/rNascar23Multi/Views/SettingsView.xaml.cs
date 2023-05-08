@@ -15,15 +15,6 @@ public partial class SettingsView : ContentView
         BindingContext = _viewModel;
     }
 
-    public SettingsView(SettingsViewModel viewModel)
-    {
-        InitializeComponent();
-
-        _viewModel = viewModel;
-
-        BindingContext = _viewModel;
-    }
-
     private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         _viewModel.UpdateTheme();

@@ -62,6 +62,8 @@
                     Value="Start" />
             <Setter Property="HorizontalOptions"
                     Value="Fill" />
+            <Setter Property="Padding"
+                    Value="4,0,0,0" />
         </Style>
 
         <Style x:Key="GridColumnHeaderLabelStyle"
@@ -76,6 +78,8 @@
                     Value="Center" />
             <Setter Property="HorizontalTextAlignment"
                     Value="Start" />
+            <Setter Property="Padding"
+                    Value="2,0,0,0" />
         </Style>
 
         <Style x:Key="GridNameLabelStyle"
@@ -88,6 +92,8 @@
                     Value="Center" />
             <Setter Property="HorizontalTextAlignment"
                     Value="Start" />
+            <Setter Property="Padding"
+                    Value="2,0,0,0" />
         </Style>
 
         <Style x:Key="GridValueLabelStyle"
@@ -100,6 +106,8 @@
                     Value="Center" />
             <Setter Property="HorizontalTextAlignment"
                     Value="Start" />
+            <Setter Property="Padding"
+                    Value="2,0,0,0" />
         </Style>
 
         <Style x:Key="LeaderboardItemHeaderLabelStyle"

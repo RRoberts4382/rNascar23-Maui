@@ -2,13 +2,14 @@
 using Microsoft.VisualStudio.PlatformUI;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
+using rNascar23Multi.Settings.Models;
 using rNascar23Multi.Settings.Ports;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace rNascar23Multi.ViewModels
 {
-    internal class GridSetViewModel : ObservableObject, INotifyUpdateTarget, IDisposable
+    internal class GridSetViewModel : ObservableObject, INotifySettingsChanged, IDisposable
     {
         #region fields
 
@@ -61,27 +62,15 @@ namespace rNascar23Multi.ViewModels
 
         #region public
 
-        public async Task UserSettingsUpdatedAsync()
+        public void UserSettingsUpdated(SettingsModel settings)
         {
             try
             {
-                LoadFromSource();
+                LoadFromSource(settings);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in GridSetViewModel:UserSettingsUpdatedAsync");
-            }
-        }
-
-        public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in GridSetViewModel:UpdateTimer_UpdateTimerElapsed");
             }
         }
 
@@ -91,13 +80,18 @@ namespace rNascar23Multi.ViewModels
 
         protected virtual void LoadFromSource()
         {
+            if (_settingsRepository == null)
+                return;
+
+            var settings = _settingsRepository.GetSettings();
+
+            LoadFromSource(settings);
+        }
+
+        protected virtual void LoadFromSource(SettingsModel settings)
+        {
             try
             {
-                if (_settingsRepository == null)
-                    return;
-
-                var settings = _settingsRepository.GetSettings();
-
                 IList<int> viewIdList = null;
 
                 if (GridOrientation == GridOrientationType.Horizontal)
@@ -125,7 +119,29 @@ namespace rNascar23Multi.ViewModels
                     });
                 }
 
-                Models = new ObservableCollection<GridViewModel>(gridViews);
+                IList<int> indexesToRemove = new List<int>();
+                for (int i = 0; i < Models.Count; i++)
+                {
+                    GridViewModel existing = Models[i];
+
+                    if (!gridViews.Any(g => g.ViewType == existing.ViewType))
+                    {
+                        indexesToRemove.Add(i);
+                    }
+                }
+
+                for (int i = indexesToRemove.Count - 1; i >= 0; i--)
+                {
+                    Models.RemoveAt(indexesToRemove[i]);
+                }
+
+                foreach (GridViewModel gridView in gridViews)
+                {
+                    if (!Models.Any(g => g.ViewType == gridView.ViewType))
+                    {
+                        Models.Add(gridView);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -156,7 +172,8 @@ namespace rNascar23Multi.ViewModels
                 _logger = null;
                 _settingsRepository = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
 
         #endregion

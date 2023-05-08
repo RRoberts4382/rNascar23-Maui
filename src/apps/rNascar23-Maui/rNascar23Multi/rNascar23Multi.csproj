@@ -51,7 +51,9 @@
 	  <Compile Remove="Pages\RacePage.xaml.cs" />
 	  <Compile Remove="ViewModels\HorizontalGridViewModel.cs" />
 	  <Compile Remove="ViewModels\IViewModel.cs" />
+	  <Compile Remove="ViewModels\PositionDriverValueViewModel.cs" />
 	  <Compile Remove="ViewModels\VerticalGridViewModel.cs" />
+	  <Compile Remove="Views\PositionDriverValueListView.xaml.cs" />
 	  <Compile Remove="Views\PracticeView.xaml.cs" />
 	  <Compile Remove="Views\QualifyingView.xaml.cs" />
 	  <Compile Remove="Views\RaceView.xaml.cs" />
@@ -63,6 +65,7 @@
 	  <MauiXaml Remove="Pages\PracticePage.xaml" />
 	  <MauiXaml Remove="Pages\QualifyingPage.xaml" />
 	  <MauiXaml Remove="Pages\RacePage.xaml" />
+	  <MauiXaml Remove="Views\PositionDriverValueListView.xaml" />
 	  <MauiXaml Remove="Views\PracticeView.xaml" />
 	  <MauiXaml Remove="Views\QualifyingView.xaml" />
 	  <MauiXaml Remove="Views\RaceView.xaml" />
@@ -138,9 +141,6 @@
 	  <Compile Update="Views\NavigationPanel.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\PositionDriverValueListView.xaml.cs">
-	    <DependentUpon>%(Filename)</DependentUpon>
-	  </Compile>
 	  <Compile Update="Views\EventResultsView.xaml.cs">
 	    <DependentUpon>EventResultsView.xaml</DependentUpon>
 	  </Compile>
@@ -199,9 +199,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\PitStopsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\PositionDriverValueListView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EventResultsView.xaml">

@@ -51,20 +51,20 @@ public partial class HorizontalGridView : ContentView, IDisposable
         _viewModel.GridOrientation = GridOrientationType.Horizontal;
         _viewModel.ViewType = _viewType;
 
-        _viewModel.PropertyChanged += _viewModel_PropertyChanged;
+        _viewModel.PropertyChanged += ViewModel_PropertyChanged;
         _viewModel.Models.CollectionChanged += Models_CollectionChanged;
 
         UpdateGrids();
 
-        _updateHandler.UpdateTimerElapsed += _updateHandler_UpdateTimerElapsed;
-        _updateHandler.UserSettingsUpdated += _updateHandler_UserSettingsUpdated;
+        _updateHandler.UpdateTimerElapsed += UpdateHandler_UpdateTimerElapsed;
+        _updateHandler.UserSettingsUpdated += UpdateHandler_UserSettingsUpdated;
     }
 
     #endregion
 
     #region private
 
-    private async void _updateHandler_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+    private async void UpdateHandler_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
     {
         try
         {
@@ -79,16 +79,17 @@ public partial class HorizontalGridView : ContentView, IDisposable
         }
     }
 
-    protected virtual async void _updateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
+    protected virtual void UpdateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
     {
         try
         {
-            foreach (var childGrid in gridLayout.Children.OfType<INotifyUpdateTarget>())
+            _viewModel.UserSettingsUpdated(e);
+
+            foreach (var childGrid in gridLayout.Children.OfType<INotifySettingsChanged>())
             {
-                await childGrid.UserSettingsUpdatedAsync();
+                childGrid.UserSettingsUpdated(e);
             }
 
-            await _viewModel.UserSettingsUpdatedAsync();
         }
         catch (Exception ex)
         {
@@ -96,7 +97,7 @@ public partial class HorizontalGridView : ContentView, IDisposable
         }
     }
 
-    private void _viewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         UpdateGrids();
     }
@@ -150,13 +151,13 @@ public partial class HorizontalGridView : ContentView, IDisposable
 
         if (disposing)
         {
-            if (_viewModel != null)
-                _viewModel.Dispose();
+            _viewModel?.Dispose();
 
             _viewModel = null;
             _logger = null;
             _updateHandler = null;
         }
-        // free native resources if there are any.
+
+        _disposed = true;
     }
 }

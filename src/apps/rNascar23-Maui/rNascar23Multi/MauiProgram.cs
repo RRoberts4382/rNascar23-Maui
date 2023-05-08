@@ -60,6 +60,7 @@ namespace rNascar23Multi
 
         public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
         {
+            mauiAppBuilder.Services.AddTransient<SchedulesViewModel>();
             mauiAppBuilder.Services.AddTransient<PitStopsViewModel>();
             mauiAppBuilder.Services.AddTransient<EventDetailsViewModel>();
             mauiAppBuilder.Services.AddTransient<EventResultsViewModel>();
@@ -68,7 +69,6 @@ namespace rNascar23Multi
             mauiAppBuilder.Services.AddTransient<SettingsViewModel>();
             mauiAppBuilder.Services.AddTransient<SeriesEventViewModel>();
             mauiAppBuilder.Services.AddTransient<DriverValueViewModel>();
-            mauiAppBuilder.Services.AddTransient<PositionDriverValueViewModel>();
             mauiAppBuilder.Services.AddTransient<GridSetViewModel>();
             mauiAppBuilder.Services.AddTransient<FlagsViewModel>();
             mauiAppBuilder.Services.AddTransient<KeyMomentsViewModel>();

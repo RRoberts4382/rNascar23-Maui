@@ -2,6 +2,20 @@
 {
     public class KeyMomentsModel : NotifyModel
     {
+        private int _index;
+        public int Index
+        {
+            get
+            {
+                return _index;
+            }
+            set
+            {
+                _index = value;
+                OnPropertyChanged(nameof(Index));
+            }
+        }
+
         private int _noteId;
         public int NoteId
         {

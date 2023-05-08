@@ -38,7 +38,7 @@ namespace rNascar23Multi.ViewModels
         #region ctor
 
         public KeyMomentsViewModel(
-            ILogger<KeyMomentsViewModel> logger, 
+            ILogger<KeyMomentsViewModel> logger,
             IKeyMomentsRepository keyMomentsRepository)
         {
             _keyMomentsRepository = keyMomentsRepository ?? throw new ArgumentNullException(nameof(keyMomentsRepository));
@@ -49,11 +49,6 @@ namespace rNascar23Multi.ViewModels
         #endregion
 
         #region public
-
-        public async Task UserSettingsUpdatedAsync()
-        {
-
-        }
 
         public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
         {
@@ -83,7 +78,8 @@ namespace rNascar23Multi.ViewModels
                     sessionDetails.RaceId,
                     sessionDetails.Year);
 
-                foreach (var keyMoment in keyMoments)
+                int i = 0;
+                foreach (var keyMoment in keyMoments.OrderBy(k => k.NoteId))
                 {
                     var existing = Models.FirstOrDefault(m => m.NoteId == keyMoment.NoteId);
 
@@ -95,6 +91,7 @@ namespace rNascar23Multi.ViewModels
                     {
                         Models.Add(new KeyMomentsModel()
                         {
+                            Index = i++,
                             NoteId = keyMoment.NoteId,
                             FlagState = (int)keyMoment.FlagState,
                             Lap = keyMoment.LapNumber,
@@ -132,9 +129,10 @@ namespace rNascar23Multi.ViewModels
                 _logger = null;
                 _keyMomentsRepository = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
 
-#endregion
+        #endregion
     }
 }

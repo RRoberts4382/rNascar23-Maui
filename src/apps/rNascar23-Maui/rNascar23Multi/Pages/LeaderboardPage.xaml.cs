@@ -11,13 +11,13 @@ namespace rNascar23Multi.Pages;
 
 public partial class LeaderboardPage : ContentPage, INotifyPropertyChanged
 {
-    ILogger<LeaderboardPage> _logger;
-    private ILiveFeedRepository _liveFeedRepository;
-    private UpdateNotificationHandler _updateHandler;
-    RpqHeaderView _headerView;
-    LeaderboardView _leaderboardView;
-    HorizontalGridView _horizontalGridView;
-    VerticalGridView _verticalGridView;
+    private readonly ILogger<LeaderboardPage> _logger;
+    private readonly ILiveFeedRepository _liveFeedRepository;
+    private readonly UpdateNotificationHandler _updateHandler;
+    private RpqHeaderView _headerView;
+    private LeaderboardView _leaderboardView;
+    private HorizontalGridView _horizontalGridView;
+    private VerticalGridView _verticalGridView;
 
     private EventViewType _viewType;
     public EventViewType EventViewType
@@ -44,21 +44,19 @@ public partial class LeaderboardPage : ContentPage, INotifyPropertyChanged
 
         _updateHandler.UpdateTimerElapsed += UpdateTimer_UpdateTimerElapsed;
 
-        _updateHandler.UserSettingsUpdated += _updateHandler_UserSettingsUpdated;
+        _updateHandler.UserSettingsUpdated += UpdateHandler_UserSettingsUpdated;
 
         this.Loaded += LeaderboardPage_Loaded;
 
         BindingContext = this;
     }
 
-    private void _updateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
+    private void UpdateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
     {
         OnPropertyChanged(nameof(EventViewType));
     }
 
-#pragma warning disable VSTHRD100 // Avoid async void methods
     private async void LeaderboardPage_Loaded(object sender, EventArgs e)
-#pragma warning restore VSTHRD100 // Avoid async void methods
     {
         _headerView = new RpqHeaderView();
         headerViewHolder.Children.Add(_headerView);
@@ -75,9 +73,7 @@ public partial class LeaderboardPage : ContentPage, INotifyPropertyChanged
         await LoadModelsAsync();
     }
 
-#pragma warning disable VSTHRD100 // Avoid async void methods
     private async void UpdateTimer_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
-#pragma warning restore VSTHRD100 // Avoid async void methods
     {
         try
         {
@@ -113,9 +109,9 @@ public partial class LeaderboardPage : ContentPage, INotifyPropertyChanged
                 }
             }
 
-            UpdateModels(_leaderboardView.ViewModel.LeftModels, liveFeed.Vehicles.OrderBy(v => v.RunningPosition).Take(20));
+            LeaderboardPage.UpdateModels(_leaderboardView.ViewModel.LeftModels, liveFeed.Vehicles.OrderBy(v => v.RunningPosition).Take(20));
 
-            UpdateModels(_leaderboardView.ViewModel.RightModels, liveFeed.Vehicles.OrderBy(v => v.RunningPosition).Skip(20));
+            LeaderboardPage.UpdateModels(_leaderboardView.ViewModel.RightModels, liveFeed.Vehicles.OrderBy(v => v.RunningPosition).Skip(20));
         }
         catch (Exception ex)
         {
@@ -123,7 +119,7 @@ public partial class LeaderboardPage : ContentPage, INotifyPropertyChanged
         }
     }
 
-    private void UpdateModels(ObservableCollection<LeaderboardModel> models, IEnumerable<Vehicle> vehicles)
+    private static void UpdateModels(ObservableCollection<LeaderboardModel> models, IEnumerable<Vehicle> vehicles)
     {
         var orderedVehicles = vehicles.OrderBy(v => v.RunningPosition).ToArray();
 

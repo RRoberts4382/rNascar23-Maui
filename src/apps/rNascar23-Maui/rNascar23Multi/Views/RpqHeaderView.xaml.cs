@@ -26,15 +26,12 @@ public partial class RpqHeaderView : ContentView, INotifyUpdateTarget, IDisposab
         BindingContext = _viewModel.Model;
     }
 
-    public async Task UserSettingsUpdatedAsync()
-    {
-        await _viewModel.UserSettingsUpdatedAsync();
-    }
-
     public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
     {
         await _viewModel.UpdateTimerElapsedAsync(e);
     }
+
+    #region IDisposable
 
     private bool _disposed;
     public void Dispose()
@@ -52,18 +49,11 @@ public partial class RpqHeaderView : ContentView, INotifyUpdateTarget, IDisposab
 
         if (disposing)
         {
-            if (_viewModel != null)
-                _viewModel.Dispose();
-
-            //_logger = null;
+            _viewModel?.Dispose();
         }
-        // free native resources if there are any.
 
         _disposed = true;
     }
 
-    ~RpqHeaderView()
-    {
-        Debug.WriteLine("********************************* RpqHeaderView Disposed");
-    }
+#endregion
 }

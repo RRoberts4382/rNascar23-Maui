@@ -10,9 +10,9 @@ public partial class SchedulesView : ContentView
 {
     #region fields
 
-    private ILogger<SchedulesView> _logger;
-    private SchedulesViewModel _viewModel = new SchedulesViewModel();
-    private UpdateNotificationHandler _updateHandler;
+    private readonly ILogger<SchedulesView> _logger;
+    private readonly SchedulesViewModel _viewModel;
+    private readonly UpdateNotificationHandler _updateHandler;
 
     #endregion
 
@@ -51,25 +51,27 @@ public partial class SchedulesView : ContentView
 
         _logger = App.serviceProvider.GetService<ILogger<SchedulesView>>();
 
-        _viewModel.PropertyChanged += _viewModel_PropertyChanged;
+        _viewModel = App.serviceProvider.GetService<SchedulesViewModel>();
+
+        _viewModel.PropertyChanged += ViewModel_PropertyChanged;
 
         BindingContext = _viewModel;
 
         _updateHandler = App.serviceProvider.GetService<UpdateNotificationHandler>();
 
-        _updateHandler.UserSettingsUpdated += _updateHandler_UserSettingsUpdated;
+        _updateHandler.UserSettingsUpdated += UpdateHandler_UserSettingsUpdated;
     }
 
     #endregion
 
     #region private - event handlers
 
-    private void _updateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
+    private void UpdateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
     {
         OnPropertyChanged(nameof(ScheduleType));
     }
 
-    private async void _viewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private async void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(ScheduleType))
         {

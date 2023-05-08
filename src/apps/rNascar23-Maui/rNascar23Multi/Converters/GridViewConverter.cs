@@ -33,17 +33,10 @@ namespace rNascar23Multi.Converters
                 case GridViewTypes.Last5Laps:
                 case GridViewTypes.Last10Laps:
                 case GridViewTypes.Last15Laps:
-                    {
-                        var view = new DriverValueListView(gridViewType);
-                        view.MinimumHeightRequest = 150;
-                        view.Margin = new Thickness(2);
-                        return view;
-                    }
-
                 case GridViewTypes.Points:
                 case GridViewTypes.StagePoints:
                     {
-                        var view = new PositionDriverValueListView(gridViewType);
+                        var view = new DriverValueListView(gridViewType);
                         view.MinimumHeightRequest = 150;
                         view.Margin = new Thickness(2);
                         return view;
@@ -57,8 +50,9 @@ namespace rNascar23Multi.Converters
                     }
                 case GridViewTypes.KeyMoments:
                     {
-                        var viewModel = App.serviceProvider.GetService<KeyMomentsViewModel>();
-                        var view = new KeyMomentsView(viewModel);
+                        //var viewModel = App.serviceProvider.GetService<KeyMomentsViewModel>();
+                        //var view = new KeyMomentsView(viewModel);
+                        var view = new KeyMomentsView();
                         view.Margin = new Thickness(2);
                         return view;
                     }
@@ -87,27 +81,34 @@ namespace rNascar23Multi.Converters
                 case GridViewTypes.Last5Laps:
                 case GridViewTypes.Last10Laps:
                 case GridViewTypes.Last15Laps:
-                    {
-                        return new DriverValueListView(gridViewType);
-                    }
-
                 case GridViewTypes.Points:
                 case GridViewTypes.StagePoints:
                     {
-                        return new PositionDriverValueListView(gridViewType);
+                        var view = new DriverValueListView(gridViewType);
+                        view.MinimumHeightRequest = 150;
+                        view.Margin = new Thickness(2);
+                        return view;
                     }
                 case GridViewTypes.Flags:
                     {
                         var viewModel = App.serviceProvider.GetService<FlagsViewModel>();
-                        return new FlagsView(viewModel);
+                        var view = new FlagsView(viewModel);
+                        view.Margin = new Thickness(2);
+                        return view;
                     }
                 case GridViewTypes.KeyMoments:
                     {
-                        return App.serviceProvider.GetService<KeyMomentsView>();
+                        //var viewModel = App.serviceProvider.GetService<KeyMomentsViewModel>();
+                        //var view = new KeyMomentsView(viewModel);
+                        var view = new KeyMomentsView();
+                        view.Margin = new Thickness(2);
+                        return view;
                     }
                 default:
                     {
-                        return new DriverValueViewModel(gridViewType);
+                        var view = new DriverValueListView(gridViewType);
+                        view.Margin = new Thickness(2);
+                        return view;
                     }
             }
         }

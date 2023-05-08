@@ -6,7 +6,6 @@ namespace rNascar23Multi.Pages;
 public partial class SchedulesPage : ContentPage
 {
     private readonly SchedulesView _schedulesView;
-    private readonly UpdateNotificationHandler _updateHandler;
 
     public SchedulesPage()
     {

@@ -79,8 +79,6 @@ namespace rNascar23Multi.ViewModels
             _logger = App.serviceProvider.GetService<ILogger<SettingsViewModel>>();
             _settingsRepository = App.serviceProvider.GetService<ISettingsRepository>();
             _updateHandler = App.serviceProvider.GetService<UpdateNotificationHandler>();
-
-            LoadModelAsync();
         }
 
         public SettingsViewModel(

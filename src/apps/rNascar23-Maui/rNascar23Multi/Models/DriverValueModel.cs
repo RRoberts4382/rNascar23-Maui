@@ -2,6 +2,20 @@
 {
     public class DriverValueModel : NotifyModel
     {
+        private int _position;
+        public int Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                OnPropertyChanged(nameof(Position));
+            }
+        }
+
         private string _driver;
         public string Driver
         {

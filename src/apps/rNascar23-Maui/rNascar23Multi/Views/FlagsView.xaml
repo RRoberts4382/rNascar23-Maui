@@ -3,12 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             xmlns:models="clr-namespace:rNascar23Multi.Models"
              x:Class="rNascar23Multi.Views.FlagsView"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
     <ContentView.Resources>
         <converters:FlagColorConverter x:Key="flagColorConverter" />
         <converters:FlagTextColorConverter x:Key="flagTextColorConverter" />
+        <converters:AlternatingRowBackColorConverter 
+            x:Key="alternatingRowBackColorConverter" />
     </ContentView.Resources>
 
     <ContentView.Behaviors>
@@ -50,9 +53,10 @@
         <!-- Items -->
         <ListView ItemsSource="{Binding Models}" Grid.Row="2">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:FlagsModel">
                     <ViewCell>
                         <HorizontalStackLayout
+                            BackgroundColor="{Binding Index, Converter={StaticResource alternatingRowBackColorConverter}}"
                             Style="{StaticResource HorizontalStackLayoutStyle}">
                             <Label Text="{Binding Lap}"
                                         TextColor="{Binding FlagState, Converter={StaticResource flagTextColorConverter}}"

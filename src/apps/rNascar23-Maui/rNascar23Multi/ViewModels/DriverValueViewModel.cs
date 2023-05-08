@@ -4,8 +4,11 @@ using rNascar23.Sdk.Common;
 using rNascar23.Sdk.LapTimes.Models;
 using rNascar23.Sdk.LapTimes.Ports;
 using rNascar23.Sdk.LiveFeeds.Ports;
+using rNascar23.Sdk.Points.Models;
+using rNascar23.Sdk.Points.Ports;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
+using rNascar23Multi.Settings.Models;
 using rNascar23Multi.Settings.Ports;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -13,7 +16,7 @@ using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace rNascar23Multi.ViewModels
 {
-    public partial class DriverValueViewModel : ObservableObject, INotifyUpdateTarget, IDisposable
+    public partial class DriverValueViewModel : ObservableObject, INotifyUpdateTarget, INotifySettingsChanged, IDisposable
     {
         #region fields
 
@@ -22,6 +25,7 @@ namespace rNascar23Multi.ViewModels
         private IMoversFallersService _moversFallersService;
         private ILapTimesRepository _lapTimeRepository;
         private ISettingsRepository _settingsRepository;
+        private IPointsRepository _pointsRepository;
         private GridViewTypes _gridViewType;
 
         #endregion
@@ -74,6 +78,8 @@ namespace rNascar23Multi.ViewModels
 
             _settingsRepository = App.serviceProvider.GetService<ISettingsRepository>();
 
+            _pointsRepository = App.serviceProvider.GetService<IPointsRepository>();
+
             var userSettings = _settingsRepository.GetSettings();
 
             switch (_gridViewType)
@@ -106,13 +112,6 @@ namespace rNascar23Multi.ViewModels
                         HeaderTextColor = Colors.White;
                         break;
                     }
-                case GridViewTypes.StagePoints:
-                    {
-                        ListHeader = "Stage Points";
-                        HeaderBackgroundColor = Colors.Blue;
-                        HeaderTextColor = Colors.White;
-                        break;
-                    }
                 case GridViewTypes.Best5Laps:
                 case GridViewTypes.Best10Laps:
                 case GridViewTypes.Best15Laps:
@@ -131,6 +130,20 @@ namespace rNascar23Multi.ViewModels
                         HeaderTextColor = Colors.White;
                         break;
                     }
+                case GridViewTypes.Points:
+                    {
+                        ListHeader = "Driver Points";
+                        HeaderBackgroundColor = Colors.Orange;
+                        HeaderTextColor = Colors.White;
+                        break;
+                    }
+                case GridViewTypes.StagePoints:
+                    {
+                        ListHeader = "Stage Points";
+                        HeaderBackgroundColor = Colors.Teal;
+                        HeaderTextColor = Colors.White;
+                        break;
+                    }
                 case GridViewTypes.None:
                 default:
                     {
@@ -146,9 +159,16 @@ namespace rNascar23Multi.ViewModels
 
         #region public
 
-        public async Task UserSettingsUpdatedAsync()
+        public void UserSettingsUpdated(SettingsModel settings)
         {
-
+            try
+            {
+                ReloadModels();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in DriverValueViewModel:UserSettingsUpdated");
+            }
         }
 
         public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
@@ -162,13 +182,22 @@ namespace rNascar23Multi.ViewModels
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error in DriverValueViewModel:UpdateTimer_UpdateTimerElapsed");
+                _logger.LogError(ex, "Error in DriverValueViewModel:UpdateTimerElapsedAsync");
             }
         }
 
         #endregion
 
         #region private
+
+        private void ReloadModels()
+        {
+            var existing = Models.ToList();
+
+            Models.Clear();
+
+            UpdateModels(existing);
+        }
 
         private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
         {
@@ -208,7 +237,28 @@ namespace rNascar23Multi.ViewModels
 
                             break;
                         }
+                    case GridViewTypes.Points:
+                        {
+                            if (sessionDetails != null)
+                            {
+                                await BuildDriverPointsDataAsync(
+                                    sessionDetails.SeriesId,
+                                    sessionDetails.RaceId);
+                            }
+
+                            break;
+                        }
                     case GridViewTypes.StagePoints:
+                        {
+                            if (sessionDetails != null)
+                            {
+                                await BuildStagePointsDataAsync(
+                                    sessionDetails.SeriesId,
+                                    sessionDetails.RaceId);
+                            }
+
+                            break;
+                        }
                     case GridViewTypes.Best5Laps:
                     case GridViewTypes.Best10Laps:
                     case GridViewTypes.Best15Laps:
@@ -232,19 +282,17 @@ namespace rNascar23Multi.ViewModels
 
             var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
 
-            foreach (var lapLedLeader in liveFeed.Vehicles.
+            driverValues = liveFeed.Vehicles.
                 Where(v => v.LapsLed.Count > 0).
                 OrderByDescending(v => v.LapsLed.Sum(l => l.EndLap - l.StartLap)).
-                Take(5))
-            {
-                var lapLeader = new DriverValueModel()
+                Take(5).
+                Select((v, i) => new DriverValueModel()
                 {
-                    Driver = lapLedLeader.Driver.FullName,
-                    Value = lapLedLeader.LapsLed.Sum(l => l.EndLap - l.StartLap)
-                };
-
-                driverValues.Add(lapLeader);
-            }
+                    Position = i,
+                    Driver = v.Driver.FullName,
+                    Value = v.LapsLed.Sum(l => l.EndLap - l.StartLap)
+                }).
+                ToList();
 
             UpdateModels(driverValues);
         }
@@ -263,8 +311,9 @@ namespace rNascar23Multi.ViewModels
                     Where(v => v.BestLapSpeed > 0).
                     OrderByDescending(v => v.BestLapSpeed).
                     Take(5).
-                    Select(v => new DriverValueModel()
+                    Select((v, i) => new DriverValueModel()
                     {
+                        Position = i,
                         Driver = v.Driver.FullName,
                         Value = (float)Math.Round(v.BestLapSpeed, 3)
                     }).
@@ -276,8 +325,9 @@ namespace rNascar23Multi.ViewModels
                     Where(v => v.BestLapTime > 0).
                     OrderBy(v => v.BestLapTime).
                     Take(10).
-                    Select(v => new DriverValueModel()
+                    Select((v, i) => new DriverValueModel()
                     {
+                        Position = i,
                         Driver = v.Driver.FullName,
                         Value = (float)Math.Round(v.BestLapTime, 3)
                     }).ToList();
@@ -295,8 +345,9 @@ namespace rNascar23Multi.ViewModels
             var driverValues = changes.
                 OrderByDescending(c => c.ChangeSinceFlagChange).
                 Where(c => c.ChangeSinceFlagChange > 0).
-                Select(c => new DriverValueModel()
+                Select((c, i) => new DriverValueModel()
                 {
+                    Position = i,
                     Driver = c.Driver,
                     Value = c.ChangeSinceFlagChange
                 }).
@@ -315,10 +366,47 @@ namespace rNascar23Multi.ViewModels
             var driverValues = changes.
                 OrderBy(c => c.ChangeSinceFlagChange).
                 Where(c => c.ChangeSinceFlagChange < 0).
-                Select(c => new DriverValueModel()
+                Select((c, i) => new DriverValueModel()
                 {
+                    Position = i,
                     Driver = c.Driver,
                     Value = c.ChangeSinceFlagChange
+                }).
+                ToList();
+
+            UpdateModels(driverValues);
+        }
+
+        private async Task BuildDriverPointsDataAsync(int seriesId, int raceId)
+        {
+            var driverPoints = await _pointsRepository.GetDriverPointsAsync((SeriesTypes)seriesId, raceId);
+
+            var driverValues = driverPoints.
+                Select(p => new DriverValueModel()
+                {
+                    Position = p.PointsPosition,
+                    Driver = p.Driver,
+                    Value = p.Points
+                }).OrderBy(p => p.Position).ToList();
+
+            UpdateModels(driverValues);
+        }
+
+        private async Task BuildStagePointsDataAsync(int seriesId, int raceId)
+        {
+            var stagePoints = await _pointsRepository.GetStagePointsAsync((SeriesTypes)seriesId, raceId);
+
+            if (stagePoints == null || !stagePoints.Any())
+                return;
+
+            var driverValues = stagePoints.
+                Where(s => (s.Stage1Points + s.Stage2Points + s.Stage3Points) > 0).
+                OrderByDescending(s => (s.Stage1Points + s.Stage2Points + s.Stage3Points)).
+                Select((s, i) => new DriverValueModel()
+                {
+                    Position = i,
+                    Driver = $"{s.FirstName} {s.LastName}",
+                    Value = s.Stage1Points + s.Stage2Points + s.Stage3Points
                 }).
                 ToList();
 
@@ -374,7 +462,8 @@ namespace rNascar23Multi.ViewModels
                 _moversFallersService = null;
                 _lapTimeRepository = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
 
         #endregion

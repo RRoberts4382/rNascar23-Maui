@@ -17,4 +17,6 @@
     <Color x:Key="TransparentColor">Transparent</Color>
     <Color x:Key="GreenHeaderBackColor">DarkGreen</Color>
     <Color x:Key="GreenHeaderTextColor">LightGray</Color>
+    <Color x:Key="PrimaryRowBackgroundColor">Black</Color>
+    <Color x:Key="AlternatingRowBackgroundColor">#202020</Color>
 </ResourceDictionary>

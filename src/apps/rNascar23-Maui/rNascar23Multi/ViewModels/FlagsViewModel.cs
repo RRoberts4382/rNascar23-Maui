@@ -5,7 +5,6 @@ using rNascar23.Sdk.Flags.Ports;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace rNascar23Multi.ViewModels
 {
@@ -51,11 +50,6 @@ namespace rNascar23Multi.ViewModels
 
         #region public
 
-        public async Task UserSettingsUpdatedAsync()
-        {
-
-        }
-
         public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
         {
             try
@@ -100,7 +94,8 @@ namespace rNascar23Multi.ViewModels
                     Models.Clear();
                 }
 
-                foreach (var flagState in flagStates)
+                int i = 0;
+                foreach (var flagState in flagStates.OrderBy(f => f.TimeOfDayOs))
                 {
                     var existing = Models.FirstOrDefault(m => m.Timestamp == flagState.TimeOfDayOs);
 
@@ -113,6 +108,7 @@ namespace rNascar23Multi.ViewModels
                     {
                         Models.Add(new FlagsModel()
                         {
+                            Index = i++,
                             FlagState = (int)flagState.State,
                             Lap = flagState.LapNumber,
                             CautionFor = flagState.Comment,
@@ -129,6 +125,8 @@ namespace rNascar23Multi.ViewModels
         }
 
         #endregion
+
+        #region IDisposable
 
         private bool _disposed;
         public void Dispose()
@@ -149,12 +147,10 @@ namespace rNascar23Multi.ViewModels
                 _logger = null;
                 _flagStateRepository = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
 
-        ~FlagsViewModel()
-        {
-            Debug.WriteLine("********************************* FlagsViewModel Disposed");
-        }
+        #endregion
     }
 }

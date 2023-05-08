@@ -1,6 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
 using rNascar23Multi.Logic;
 using rNascar23Multi.ViewModels;
-using System.Diagnostics;
 
 namespace rNascar23Multi.Views;
 
@@ -8,24 +8,21 @@ public partial class KeyMomentsView : ContentView, INotifyUpdateTarget, IDisposa
 {
     private KeyMomentsViewModel _viewModel;
 
-    public KeyMomentsView(KeyMomentsViewModel viewModel)
+    public KeyMomentsView()
     {
         InitializeComponent();
 
-        _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+        _viewModel = App.serviceProvider.GetRequiredService<KeyMomentsViewModel>();
 
         BindingContext = _viewModel;
-    }
-
-    public async Task UserSettingsUpdatedAsync()
-    {
-        await _viewModel.UserSettingsUpdatedAsync();
     }
 
     public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
     {
         await _viewModel.UpdateTimerElapsedAsync(e);
     }
+
+    #region IDisposable
 
     private bool _disposed;
     public void Dispose()
@@ -43,16 +40,11 @@ public partial class KeyMomentsView : ContentView, INotifyUpdateTarget, IDisposa
 
         if (disposing)
         {
-            if (_viewModel != null)
-                _viewModel.Dispose();
+            _viewModel?.Dispose();
         }
-        // free native resources if there are any.
 
         _disposed = true;
     }
 
-    ~KeyMomentsView()
-    {
-        Debug.WriteLine("********************************* KeyMomentsView Disposed");
-    }
+    #endregion
 }

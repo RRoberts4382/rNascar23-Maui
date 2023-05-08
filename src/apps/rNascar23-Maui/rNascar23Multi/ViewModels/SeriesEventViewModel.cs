@@ -123,7 +123,8 @@ namespace rNascar23Multi.ViewModels
             {
                 _logger = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
 
         #endregion

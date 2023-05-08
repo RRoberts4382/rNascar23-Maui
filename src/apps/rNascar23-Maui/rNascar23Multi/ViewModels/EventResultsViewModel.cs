@@ -120,7 +120,8 @@ namespace rNascar23Multi.ViewModels
                 _logger = null;
                 _weekendFeedRepository = null;
             }
-            // free native resources if there are any.
+
+            _disposed = true;
         }
 
         #endregion

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:rNascar23Multi.Converters"
+             xmlns:models="clr-namespace:rNascar23Multi.Models"
              x:Class="rNascar23Multi.Views.DriverValueListView"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <ContentView.Resources>
+        <converters:AlternatingRowBackColorConverter 
+            x:Key="alternatingRowBackColorConverter" />
+    </ContentView.Resources>
 
     <Grid WidthRequest="225">
         <Grid.RowDefinitions>
@@ -14,8 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <!--Grid header-->
-        <Label 
-            Text="{Binding ListHeader}"
+        <Label Text="{Binding ListHeader}"
             TextColor ="{Binding HeaderTextColor}"
             BackgroundColor ="{Binding HeaderBackgroundColor}"
             Style="{StaticResource GridHeaderLabelStyle}"/>
@@ -23,15 +29,17 @@
         <!-- Items -->
         <ListView ItemsSource="{Binding Models}" Grid.Row="1">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:DriverValueModel">
                     <ViewCell>
-                        <HorizontalStackLayout Style="{StaticResource HorizontalStackLayoutStyle}">
+                        <HorizontalStackLayout 
+                            BackgroundColor="{Binding Position, Converter={StaticResource alternatingRowBackColorConverter}}"
+                            Style="{StaticResource HorizontalStackLayoutStyle}">
                             <Label Text="{Binding Driver}"
-                                    WidthRequest="150"
-                                    Style="{StaticResource GridNameLabelStyle}"/>
+                                WidthRequest="150"
+                                Style="{StaticResource GridNameLabelStyle}"/>
                             <Label Text="{Binding Value}"
-                                    WidthRequest="50"
-                                    Style="{StaticResource GridValueLabelStyle}"/>
+                                WidthRequest="50"
+                                Style="{StaticResource GridValueLabelStyle}"/>
                         </HorizontalStackLayout>
                     </ViewCell>
                 </DataTemplate>
