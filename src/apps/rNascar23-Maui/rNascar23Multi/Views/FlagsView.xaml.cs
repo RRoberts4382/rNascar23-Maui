@@ -10,13 +10,13 @@ public partial class FlagsView : ContentView, INotifyUpdateTarget, IDisposable
     private ILogger<FlagsView> _logger;
     private FlagsViewModel _viewModel;
 
-    public FlagsView(FlagsViewModel viewModel)
+    public FlagsView()
     {
         _logger = App.serviceProvider.GetRequiredService<ILogger<FlagsView>>();
 
         InitializeComponent();
 
-        _viewModel = viewModel;
+        _viewModel = App.serviceProvider.GetRequiredService<FlagsViewModel>();
 
         BindingContext = _viewModel;
     }

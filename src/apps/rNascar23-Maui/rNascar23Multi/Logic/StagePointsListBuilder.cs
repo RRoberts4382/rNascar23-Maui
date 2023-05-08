@@ -34,13 +34,13 @@ namespace rNascar23Multi.Logic
         internal void UpdateData(ObservableCollection<DriverValueModel> models, IEnumerable<StagePointsDetails> stagePoints)
         {
             var driverValues = stagePoints.
-                Where(s => (s.Stage1Points + s.Stage2Points + s.Stage3Points) > 0).
-                OrderByDescending(s => (s.Stage1Points + s.Stage2Points + s.Stage3Points)).
+                Where(s => (s.TotalStagePoints) > 0).
+                OrderByDescending(s => (s.TotalStagePoints)).
                 Select((s, i) => new DriverValueModel()
                 {
                     Position = i,
                     Driver = $"{s.FirstName} {s.LastName}",
-                    Value = s.Stage1Points + s.Stage2Points + s.Stage3Points
+                    Value = s.TotalStagePoints
                 }).
                 ToList();
 

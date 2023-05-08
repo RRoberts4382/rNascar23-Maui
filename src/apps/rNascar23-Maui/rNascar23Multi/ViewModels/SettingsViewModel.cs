@@ -285,6 +285,10 @@ namespace rNascar23Multi.ViewModels
                 });
                 models.Add(new GridSelectionModel()
                 {
+                    GridViewType = GridViewTypes.DriverRatings,
+                });
+                models.Add(new GridSelectionModel()
+                {
                     GridViewType = GridViewTypes.Last5Laps,
                 });
                 models.Add(new GridSelectionModel()

@@ -31,7 +31,8 @@ namespace rNascar23Multi.Logic
                 }
                 else
                 {
-                    models[i] = driverValues[i];
+                    if (!models[i].Equals(driverValues[i]))
+                        models[i] = driverValues[i];
                 }
             }
         }

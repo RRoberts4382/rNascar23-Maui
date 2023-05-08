@@ -44,6 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Converters\GridViewConverter.cs" />
 	  <Compile Remove="Logic\ViewModelFactory.cs" />
 	  <Compile Remove="Pages\BaseContentPage.cs" />
 	  <Compile Remove="Pages\PracticePage.xaml.cs" />
@@ -102,7 +103,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.5.33428.366" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="rNascar23.Sdk" Version="1.0.14" />
+		<PackageReference Include="rNascar23.Sdk" Version="1.0.15" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
@@ -120,8 +121,8 @@
 	  <Compile Update="Pages\LeaderboardPage.xaml.cs">
 	    <DependentUpon>LeaderboardPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\DriverValueListView.xaml.cs">
-	    <DependentUpon>%(Filename)</DependentUpon>
+	  <Compile Update="Views\DriverValueView.xaml.cs">
+	    <DependentUpon>DriverValueView.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\EventDetailsView.xaml.cs">
 	    <DependentUpon>EventDetailsView.xaml</DependentUpon>
@@ -171,7 +172,7 @@
 	  <MauiXaml Update="Resources\Styles\LightTheme.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\DriverValueListView.xaml">
+	  <MauiXaml Update="Views\DriverValueView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EventActivitiesView.xaml">

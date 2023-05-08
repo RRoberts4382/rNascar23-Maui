@@ -6,11 +6,11 @@ using System.Diagnostics;
 
 namespace rNascar23Multi.Views;
 
-public partial class DriverValueListView : ContentView, INotifyUpdateTarget, INotifySettingsChanged, IDisposable
+public partial class DriverValueView : ContentView, INotifyUpdateTarget, INotifySettingsChanged, IDisposable
 {
     private DriverValueViewModel _viewModel;
 
-    public DriverValueListView(GridViewTypes gridViewType)
+    public DriverValueView(GridViewTypes gridViewType)
     {
         InitializeComponent();
 

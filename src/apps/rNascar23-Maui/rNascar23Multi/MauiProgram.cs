@@ -4,6 +4,7 @@ using rNascar23.Sdk;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Settings;
 using rNascar23Multi.ViewModels;
+using rNascar23Multi.Views;
 using Serilog;
 using Serilog.Events;
 
@@ -32,6 +33,8 @@ namespace rNascar23Multi
             builder.Services.AddSettings();
 
             builder.Services.AddSingleton<UpdateNotificationHandler>();
+
+            builder.Services.AddSingleton<GridViewFactory>();
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -86,9 +89,9 @@ namespace rNascar23Multi
             mauiAppBuilder.Services.AddTransient<FallersListBuilder>();
             mauiAppBuilder.Services.AddTransient<DriverPointsListBuilder>();
             mauiAppBuilder.Services.AddTransient<StagePointsListBuilder>();
-
-
-
+            mauiAppBuilder.Services.AddTransient<LastBestLapsListBuilder>();
+            mauiAppBuilder.Services.AddTransient<DriverRatingsListBuilder>();
+            
             return mauiAppBuilder;
         }
 

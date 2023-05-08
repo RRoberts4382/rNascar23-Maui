@@ -137,6 +137,13 @@ namespace rNascar23Multi.ViewModels
                         HeaderTextColor = Colors.White;
                         break;
                     }
+                case GridViewTypes.DriverRatings:
+                    {
+                        ListHeader = "Driver Ratings";
+                        HeaderBackgroundColor = Colors.White;
+                        HeaderTextColor = Colors.SteelBlue;
+                        break;
+                    }
                 case GridViewTypes.None:
                 default:
                     {
@@ -199,6 +206,7 @@ namespace rNascar23Multi.ViewModels
                     case GridViewTypes.Fallers:
                     case GridViewTypes.Points:
                     case GridViewTypes.StagePoints:
+                    case GridViewTypes.DriverRatings:
                         {
                             if (sessionDetails != null)
                             {
@@ -216,6 +224,17 @@ namespace rNascar23Multi.ViewModels
                     case GridViewTypes.Last5Laps:
                     case GridViewTypes.Last10Laps:
                     case GridViewTypes.Last15Laps:
+                        {
+                            if (sessionDetails != null)
+                            {
+                                await _listBuilder.UpdateDataAsync(
+                                    Models,
+                                    sessionDetails.SeriesId,
+                                    sessionDetails.RaceId);
+                            }
+
+                            break;
+                        }
                     case GridViewTypes.None:
                     default:
                         break;

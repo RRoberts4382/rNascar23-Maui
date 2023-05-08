@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:rNascar23Multi.Converters"
              xmlns:models="clr-namespace:rNascar23Multi.Models"
-             x:Class="rNascar23Multi.Views.DriverValueListView"
+             x:Class="rNascar23Multi.Views.DriverValueView"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
     <ContentView.Resources>
@@ -37,7 +37,7 @@
                             <Label Text="{Binding Driver}"
                                 WidthRequest="150"
                                 Style="{StaticResource GridNameLabelStyle}"/>
-                            <Label Text="{Binding Value}"
+                            <Label Text="{Binding Value, StringFormat='{}{0:N2}'}"
                                 WidthRequest="50"
                                 Style="{StaticResource GridValueLabelStyle}"/>
                         </HorizontalStackLayout>

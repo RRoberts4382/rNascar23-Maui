@@ -12,6 +12,7 @@ public partial class HorizontalGridView : ContentView, IDisposable
 
     private ILogger<HorizontalGridView> _logger;
     private GridSetViewModel _viewModel;
+    private GridViewFactory _viewFactory;
     private UpdateNotificationHandler _updateHandler;
 
     #endregion
@@ -53,6 +54,8 @@ public partial class HorizontalGridView : ContentView, IDisposable
 
         _viewModel.PropertyChanged += ViewModel_PropertyChanged;
         _viewModel.Models.CollectionChanged += Models_CollectionChanged;
+
+        _viewFactory = App.serviceProvider.GetRequiredService<GridViewFactory>();
 
         UpdateGrids();
 
@@ -127,7 +130,7 @@ public partial class HorizontalGridView : ContentView, IDisposable
 
         foreach (GridViewModel item in _viewModel.Models)
         {
-            var view = (IView)GridViewConverter.Instance.Convert(item.ViewType);
+            var view = _viewFactory.GetGridView(item.ViewType);
 
             gridLayout.Children.Add(view);
         }
