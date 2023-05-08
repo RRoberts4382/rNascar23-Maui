@@ -149,7 +149,7 @@ public partial class LeaderboardPage : ContentPage, INotifyPropertyChanged
             // TODO Speed versus time
             model.BestLap = orderedVehicles[i].BestLapSpeed;
             model.OnLap = orderedVehicles[i].BestLap;
-            model.Status = (int)orderedVehicles[i].Status;
+            model.Status = orderedVehicles[i].Status;
         }
     }
 

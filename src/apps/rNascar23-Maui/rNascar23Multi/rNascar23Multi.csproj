@@ -84,12 +84,17 @@
 	  <None Remove="Resources\Images\fs1.png" />
 	  <None Remove="Resources\Images\fs2.png" />
 	  <None Remove="Resources\Images\ims.png" />
+	  <None Remove="Resources\Images\in_garage_dark.png" />
+	  <None Remove="Resources\Images\in_garage_light.png" />
+	  <None Remove="Resources\Images\in_pits_dark.png" />
+	  <None Remove="Resources\Images\in_pits_light.png" />
 	  <None Remove="Resources\Images\left_tires.png" />
 	  <None Remove="Resources\Images\mrn.png" />
 	  <None Remove="Resources\Images\nbc.png" />
 	  <None Remove="Resources\Images\nbcsn.png" />
 	  <None Remove="Resources\Images\NCS_Small.png" />
 	  <None Remove="Resources\Images\prn_radio.png" />
+	  <None Remove="Resources\Images\retired.png" />
 	  <None Remove="Resources\Images\right_tires.png" />
 	  <None Remove="Resources\Images\rnascar_logo_small.png" />
 	  <None Remove="Resources\Images\sirius.png" />

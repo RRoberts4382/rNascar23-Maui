@@ -1,4 +1,6 @@
-﻿namespace rNascar23Multi.Models
+﻿using rNascar23.Sdk.Common;
+
+namespace rNascar23Multi.Models
 {
     public class LeaderboardModel : NotifyModel
     {
@@ -123,8 +125,8 @@
             }
         }
 
-        private int _status;
-        public int Status
+        private VehicleStatusTypes _status;
+        public VehicleStatusTypes Status
         {
             get { return _status; }
             set

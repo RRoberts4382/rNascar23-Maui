@@ -10,6 +10,8 @@
             x:Key="alternatingRowBackColorConverter" />
         <converters:ManufacturerLogoConverter 
             x:Key="manufacturerLogoConverter" />
+        <converters:VehicleStatusImageConverter 
+            x:Key="vehicleStatusImageConverter" />
     </ContentView.Resources>
     
     <Grid>
@@ -98,9 +100,13 @@
                                 <Label Text="{Binding LastPit}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding Status}"
+                                <!--<Label Text="{Binding Status}"
                                     WidthRequest="50"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>-->
+                                <Image Source="{Binding Status, 
+                                    Converter={StaticResource vehicleStatusImageConverter}}"
+                                    WidthRequest="35"
+                                    HeightRequest="20"/>
                             </HorizontalStackLayout>
                         </ViewCell>
                     </DataTemplate>
@@ -185,9 +191,13 @@
                                 <Label Text="{Binding LastPit}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding Status}"
+                                <!--<Label Text="{Binding Status}"
                                     WidthRequest="50"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>-->
+                                <Image Source="{Binding Status, 
+                                    Converter={StaticResource vehicleStatusImageConverter}}"
+                                    WidthRequest="35"
+                                    HeightRequest="20"/>
                             </HorizontalStackLayout>
                         </ViewCell>
                     </DataTemplate>

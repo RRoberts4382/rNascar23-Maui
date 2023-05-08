@@ -19,4 +19,6 @@
     <Color x:Key="GreenHeaderTextColor">Black</Color>
     <Color x:Key="PrimaryRowBackgroundColor">White</Color>
     <Color x:Key="AlternatingRowBackgroundColor">Gainsboro</Color>
+    <x:String x:Key="InPitsStatus">in_pits_light.png</x:String>
+    <x:String x:Key="InGarageStatus">in_garage_light.png</x:String>
 </ResourceDictionary>
