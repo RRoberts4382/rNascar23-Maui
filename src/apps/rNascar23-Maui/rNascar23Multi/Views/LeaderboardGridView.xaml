@@ -12,8 +12,10 @@
             x:Key="manufacturerLogoConverter" />
         <converters:VehicleStatusImageConverter 
             x:Key="vehicleStatusImageConverter" />
+        <converters:FavoriteDriverBorderConverter 
+            x:Key="favoriteDriverBorderConverter" />
     </ContentView.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -25,11 +27,11 @@
 
         <!-- LEFT -->
         <VerticalStackLayout Grid.Column="0">
-            
+
             <!-- Column headers -->
             <HorizontalStackLayout  Grid.Row="1"
                 Style="{StaticResource HorizontalStackLayoutStyle}">
-                
+
                 <Label Text="" WidthRequest="35"
                     Margin="12,0,0,0"
                     Style="{StaticResource GridColumnHeaderLabelStyle}"/>
@@ -60,7 +62,7 @@
             <!-- Items -->
             <ListView x:Name="LeftLeaderboardListView"
                 ItemsSource="{Binding LeftModels}">
-                
+
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -73,9 +75,12 @@
                                 <Label Text="{Binding CarNumber}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding DriverName}"
-                                    WidthRequest="150"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Border Stroke="{Binding IsFavoriteDriver, Converter={StaticResource favoriteDriverBorderConverter}}" 
+                                    Style="{StaticResource FavoriteDriverBorderStyle}">
+                                    <Label Text="{Binding DriverName}"
+                                        WidthRequest="150"
+                                        Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                </Border>
                                 <Image Source="{Binding Manufacturer, 
                                     Converter={StaticResource manufacturerLogoConverter}}"
                                     WidthRequest="35"/>
@@ -108,7 +113,7 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>            
+            </ListView>
         </VerticalStackLayout>
 
         <!-- RIGHT -->
@@ -117,7 +122,7 @@
             <!-- Column headers -->
             <HorizontalStackLayout  Grid.Row="1"
                 Style="{StaticResource HorizontalStackLayoutStyle}">
-                
+
                 <Label Text="" WidthRequest="35"
                     Margin="12,0,0,0"
                     Style="{StaticResource GridColumnHeaderLabelStyle}"/>
@@ -161,9 +166,12 @@
                                 <Label Text="{Binding CarNumber}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding DriverName}"
-                                    WidthRequest="150"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Border Stroke="{Binding IsFavoriteDriver, Converter={StaticResource favoriteDriverBorderConverter}}" 
+                                    Style="{StaticResource FavoriteDriverBorderStyle}">
+                                    <Label Text="{Binding DriverName}"
+                                        WidthRequest="150"
+                                        Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                </Border>
                                 <Image Source="{Binding Manufacturer, 
                                     Converter={StaticResource manufacturerLogoConverter}}"
                                     WidthRequest="35"/>

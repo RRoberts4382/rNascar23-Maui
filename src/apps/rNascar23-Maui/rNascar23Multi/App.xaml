@@ -258,6 +258,18 @@
                     Value="Center" />
         </Style>
 
+        <Style x:Key="FavoriteDriverBorderStyle"
+               TargetType="Border">
+            <Setter Property="StrokeThickness"
+                    Value="1" />
+            <Setter Property="Padding"
+                    Value="1" />
+            <Setter Property="StrokeShape"
+                    Value="RoundRectangle 4,4,4,4" />
+            <Setter Property="HorizontalOptions"
+                    Value="Center" />
+        </Style>
+
         <Style x:Key="ScheduleTypeBorderStyle"
                TargetType="Border">
             <Setter Property="StrokeThickness"

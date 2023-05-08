@@ -135,5 +135,16 @@ namespace rNascar23Multi.Models
                 OnPropertyChanged(nameof(Status));
             }
         }
+
+        private bool _isFavoriteDriver;
+        public bool IsFavoriteDriver
+        {
+            get { return _isFavoriteDriver; }
+            set
+            {
+                _isFavoriteDriver = value;
+                OnPropertyChanged(nameof(Position));
+            }
+        }
     }
 }

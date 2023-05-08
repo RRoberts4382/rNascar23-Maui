@@ -65,8 +65,8 @@ namespace rNascar23Multi.ViewModels
             {
                 _userSettings = settings;
 
-                ModelUpdater.ReloadModels(LeftModels);
-                ModelUpdater.ReloadModels(RightModels);
+                LeftModels.Clear();
+                RightModels.Clear();
             }
             catch (Exception ex)
             {
@@ -138,6 +138,7 @@ namespace rNascar23Multi.ViewModels
                 model.OnLap = orderedVehicles[i].BestLap;
                 model.LastPit = orderedVehicles[i].LastPit;
                 model.Status = orderedVehicles[i].Status;
+                model.IsFavoriteDriver = _userSettings.FavoriteDrivers.Contains(orderedVehicles[i].Driver?.FullName);
             }
         }
 
