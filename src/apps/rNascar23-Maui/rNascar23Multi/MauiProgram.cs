@@ -2,10 +2,8 @@
 using Microsoft.Extensions.Logging;
 using rNascar23.Sdk;
 using rNascar23Multi.Logic;
-using rNascar23Multi.Pages;
 using rNascar23Multi.Settings;
 using rNascar23Multi.ViewModels;
-using rNascar23Multi.Views;
 using Serilog;
 using Serilog.Events;
 
@@ -23,6 +21,7 @@ namespace rNascar23Multi
                .UseMauiApp<App>()
                .UseMauiCommunityToolkit()
                .RegisterViewModels()
+               .RegisterListBuilders()
                .RegisterSdk()
                .ConfigureFonts(fonts =>
                {
@@ -74,6 +73,21 @@ namespace rNascar23Multi
             mauiAppBuilder.Services.AddTransient<KeyMomentsViewModel>();
             mauiAppBuilder.Services.AddTransient<LeaderboardViewModel>();
             mauiAppBuilder.Services.AddTransient<RpqHeaderViewModel>();
+
+            return mauiAppBuilder;
+        }
+
+        public static MauiAppBuilder RegisterListBuilders(this MauiAppBuilder mauiAppBuilder)
+        {
+            mauiAppBuilder.Services.AddTransient<ListBuilderFactory>();
+            mauiAppBuilder.Services.AddTransient<LapLeaderListBuilder>();
+            mauiAppBuilder.Services.AddTransient<FastestLapsListBuilder>();
+            mauiAppBuilder.Services.AddTransient<MoversListBuilder>();
+            mauiAppBuilder.Services.AddTransient<FallersListBuilder>();
+            mauiAppBuilder.Services.AddTransient<DriverPointsListBuilder>();
+            mauiAppBuilder.Services.AddTransient<StagePointsListBuilder>();
+
+
 
             return mauiAppBuilder;
         }

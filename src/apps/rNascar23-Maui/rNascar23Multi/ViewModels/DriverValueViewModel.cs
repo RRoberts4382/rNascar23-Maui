@@ -20,13 +20,10 @@ namespace rNascar23Multi.ViewModels
     {
         #region fields
 
-        ILogger<DriverValueViewModel> _logger;
-        private ILiveFeedRepository _liveFeedRepository;
-        private IMoversFallersService _moversFallersService;
-        private ILapTimesRepository _lapTimeRepository;
-        private ISettingsRepository _settingsRepository;
-        private IPointsRepository _pointsRepository;
         private GridViewTypes _gridViewType;
+        private ILogger<DriverValueViewModel> _logger;
+        private IListBuilder<DriverValueModel> _listBuilder;
+        private ISettingsRepository _settingsRepository;
 
         #endregion
 
@@ -70,15 +67,11 @@ namespace rNascar23Multi.ViewModels
 
             _logger = App.serviceProvider.GetService<ILogger<DriverValueViewModel>>();
 
-            _liveFeedRepository = App.serviceProvider.GetService<ILiveFeedRepository>();
+            var listBuilderFactory = App.serviceProvider.GetService<ListBuilderFactory>();
 
-            _moversFallersService = App.serviceProvider.GetService<IMoversFallersService>();
-
-            _lapTimeRepository = App.serviceProvider.GetService<ILapTimesRepository>();
+            _listBuilder = listBuilderFactory.GetListBuilder(_gridViewType);
 
             _settingsRepository = App.serviceProvider.GetService<ISettingsRepository>();
-
-            _pointsRepository = App.serviceProvider.GetService<IPointsRepository>();
 
             var userSettings = _settingsRepository.GetSettings();
 
@@ -163,7 +156,7 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
-                ReloadModels();
+                ModelUpdater.ReloadModels(Models);
             }
             catch (Exception ex)
             {
@@ -190,15 +183,6 @@ namespace rNascar23Multi.ViewModels
 
         #region private
 
-        private void ReloadModels()
-        {
-            var existing = Models.ToList();
-
-            Models.Clear();
-
-            UpdateModels(existing);
-        }
-
         private async Task LoadModelsAsync(RaceSessionDetails sessionDetails)
         {
             try
@@ -206,53 +190,20 @@ namespace rNascar23Multi.ViewModels
                 switch (_gridViewType)
                 {
                     case GridViewTypes.FastestLaps:
-                        {
-                            await BuildFastestLapsDataAsync();
-                            break;
-                        }
                     case GridViewTypes.LapLeaders:
                         {
-                            await BuildLapLeadersDataAsync();
+                            await _listBuilder.UpdateDataAsync(Models);
                             break;
                         }
                     case GridViewTypes.Movers:
-                        {
-                            if (sessionDetails != null)
-                            {
-                                await BuildMoversDataAsync(
-                                    sessionDetails.SeriesId,
-                                    sessionDetails.RaceId);
-                            }
-
-                            break;
-                        }
                     case GridViewTypes.Fallers:
-                        {
-                            if (sessionDetails != null)
-                            {
-                                await BuildFallersDataAsync(
-                                    sessionDetails.SeriesId,
-                                    sessionDetails.RaceId);
-                            }
-
-                            break;
-                        }
                     case GridViewTypes.Points:
-                        {
-                            if (sessionDetails != null)
-                            {
-                                await BuildDriverPointsDataAsync(
-                                    sessionDetails.SeriesId,
-                                    sessionDetails.RaceId);
-                            }
-
-                            break;
-                        }
                     case GridViewTypes.StagePoints:
                         {
                             if (sessionDetails != null)
                             {
-                                await BuildStagePointsDataAsync(
+                                await _listBuilder.UpdateDataAsync(
+                                    Models,
                                     sessionDetails.SeriesId,
                                     sessionDetails.RaceId);
                             }
@@ -273,167 +224,6 @@ namespace rNascar23Multi.ViewModels
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error in DriverValueViewModel:LoadModelsAsync GridViewType:{_gridViewType}");
-            }
-        }
-
-        private async Task BuildLapLeadersDataAsync()
-        {
-            IList<DriverValueModel> driverValues = new List<DriverValueModel>();
-
-            var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
-
-            driverValues = liveFeed.Vehicles.
-                Where(v => v.LapsLed.Count > 0).
-                OrderByDescending(v => v.LapsLed.Sum(l => l.EndLap - l.StartLap)).
-                Take(5).
-                Select((v, i) => new DriverValueModel()
-                {
-                    Position = i,
-                    Driver = v.Driver.FullName,
-                    Value = v.LapsLed.Sum(l => l.EndLap - l.StartLap)
-                }).
-                ToList();
-
-            UpdateModels(driverValues);
-        }
-
-        private async Task BuildFastestLapsDataAsync()
-        {
-            IList<DriverValueModel> driverValues;
-
-            var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
-
-            var userSettings = _settingsRepository.GetSettings();
-
-            if (userSettings.UseMph)
-            {
-                driverValues = liveFeed.Vehicles.
-                    Where(v => v.BestLapSpeed > 0).
-                    OrderByDescending(v => v.BestLapSpeed).
-                    Take(5).
-                    Select((v, i) => new DriverValueModel()
-                    {
-                        Position = i,
-                        Driver = v.Driver.FullName,
-                        Value = (float)Math.Round(v.BestLapSpeed, 3)
-                    }).
-                    ToList();
-            }
-            else
-            {
-                driverValues = liveFeed.Vehicles.
-                    Where(v => v.BestLapTime > 0).
-                    OrderBy(v => v.BestLapTime).
-                    Take(10).
-                    Select((v, i) => new DriverValueModel()
-                    {
-                        Position = i,
-                        Driver = v.Driver.FullName,
-                        Value = (float)Math.Round(v.BestLapTime, 3)
-                    }).ToList();
-            }
-
-            UpdateModels(driverValues);
-        }
-
-        private async Task BuildMoversDataAsync(int seriesId, int raceId)
-        {
-            LapTimeData lapTimeData = await _lapTimeRepository.GetLapTimeDataAsync((SeriesTypes)seriesId, raceId);
-
-            var changes = _moversFallersService.GetDriverPositionChanges(lapTimeData);
-
-            var driverValues = changes.
-                OrderByDescending(c => c.ChangeSinceFlagChange).
-                Where(c => c.ChangeSinceFlagChange > 0).
-                Select((c, i) => new DriverValueModel()
-                {
-                    Position = i,
-                    Driver = c.Driver,
-                    Value = c.ChangeSinceFlagChange
-                }).
-                Take(5).
-                ToList();
-
-            UpdateModels(driverValues);
-        }
-
-        private async Task BuildFallersDataAsync(int seriesId, int raceId)
-        {
-            LapTimeData lapTimeData = await _lapTimeRepository.GetLapTimeDataAsync((SeriesTypes)seriesId, raceId);
-
-            var changes = _moversFallersService.GetDriverPositionChanges(lapTimeData);
-
-            var driverValues = changes.
-                OrderBy(c => c.ChangeSinceFlagChange).
-                Where(c => c.ChangeSinceFlagChange < 0).
-                Select((c, i) => new DriverValueModel()
-                {
-                    Position = i,
-                    Driver = c.Driver,
-                    Value = c.ChangeSinceFlagChange
-                }).
-                ToList();
-
-            UpdateModels(driverValues);
-        }
-
-        private async Task BuildDriverPointsDataAsync(int seriesId, int raceId)
-        {
-            var driverPoints = await _pointsRepository.GetDriverPointsAsync((SeriesTypes)seriesId, raceId);
-
-            var driverValues = driverPoints.
-                Select(p => new DriverValueModel()
-                {
-                    Position = p.PointsPosition,
-                    Driver = p.Driver,
-                    Value = p.Points
-                }).OrderBy(p => p.Position).ToList();
-
-            UpdateModels(driverValues);
-        }
-
-        private async Task BuildStagePointsDataAsync(int seriesId, int raceId)
-        {
-            var stagePoints = await _pointsRepository.GetStagePointsAsync((SeriesTypes)seriesId, raceId);
-
-            if (stagePoints == null || !stagePoints.Any())
-                return;
-
-            var driverValues = stagePoints.
-                Where(s => (s.Stage1Points + s.Stage2Points + s.Stage3Points) > 0).
-                OrderByDescending(s => (s.Stage1Points + s.Stage2Points + s.Stage3Points)).
-                Select((s, i) => new DriverValueModel()
-                {
-                    Position = i,
-                    Driver = $"{s.FirstName} {s.LastName}",
-                    Value = s.Stage1Points + s.Stage2Points + s.Stage3Points
-                }).
-                ToList();
-
-            UpdateModels(driverValues);
-        }
-
-        private void UpdateModels(IList<DriverValueModel> driverValues)
-        {
-            if (Models.Count > driverValues.Count)
-            {
-                for (int i = driverValues.Count - 1; i > Models.Count - 1; i--)
-                {
-                    Models.RemoveAt(i);
-                }
-            }
-
-            for (int i = 0; i < driverValues.Count; i++)
-            {
-                if (Models.Count <= i)
-                {
-                    Models.Add(driverValues[i]);
-                }
-                else
-                {
-                    Models[i].Driver = driverValues[i].Driver;
-                    Models[i].Value = driverValues[i].Value;
-                }
             }
         }
 
@@ -458,9 +248,8 @@ namespace rNascar23Multi.ViewModels
             if (disposing)
             {
                 _logger = null;
-                _liveFeedRepository = null;
-                _moversFallersService = null;
-                _lapTimeRepository = null;
+                _listBuilder = null;
+                _settingsRepository = null;
             }
 
             _disposed = true;
