@@ -26,8 +26,8 @@ public partial class MainView : ContentView
     }
 
     public MainView()
-	{
-		InitializeComponent(); 
+    {
+        InitializeComponent();
 
         EventViewType = EventViewType.Race;
 
@@ -59,6 +59,8 @@ public partial class MainView : ContentView
         try
         {
             _leaderboardView.UserSettingsUpdated(e);
+            _horizontalGridView.UserSettingsUpdated(e);
+            _verticalGridView.UserSettingsUpdated(e);
         }
         catch (Exception ex)
         {
@@ -72,6 +74,8 @@ public partial class MainView : ContentView
         {
             await _headerView.UpdateTimerElapsedAsync(e);
             await _leaderboardView.UpdateTimerElapsedAsync(e);
+            await _horizontalGridView.UpdateTimerElapsedAsync(e);
+            await _verticalGridView.UpdateTimerElapsedAsync(e);
         }
         catch (Exception ex)
         {

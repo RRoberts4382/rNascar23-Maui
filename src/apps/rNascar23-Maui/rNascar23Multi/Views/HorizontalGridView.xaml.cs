@@ -1,18 +1,18 @@
 using Microsoft.Extensions.Logging;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
+using rNascar23Multi.Settings.Models;
 using rNascar23Multi.ViewModels;
 
 namespace rNascar23Multi.Views;
 
-public partial class HorizontalGridView : ContentView, IDisposable
+public partial class HorizontalGridView : ContentView, INotifyUpdateTarget, INotifySettingsChanged, IDisposable
 {
     #region fields
 
     private ILogger<HorizontalGridView> _logger;
     private GridSetViewModel _viewModel;
     private GridViewFactory _viewFactory;
-    private UpdateNotificationHandler _updateHandler;
 
     #endregion
 
@@ -43,7 +43,6 @@ public partial class HorizontalGridView : ContentView, IDisposable
         InitializeComponent();
 
         _logger = App.serviceProvider.GetRequiredService<ILogger<HorizontalGridView>>();
-        _updateHandler = App.serviceProvider.GetRequiredService<UpdateNotificationHandler>();
 
         _viewType = viewType;
 
@@ -57,16 +56,31 @@ public partial class HorizontalGridView : ContentView, IDisposable
         _viewFactory = App.serviceProvider.GetRequiredService<GridViewFactory>();
 
         UpdateGrids();
-
-        _updateHandler.UpdateTimerElapsed += UpdateHandler_UpdateTimerElapsed;
-        _updateHandler.UserSettingsUpdated += UpdateHandler_UserSettingsUpdated;
     }
 
     #endregion
 
-    #region private
+    #region public
 
-    private async void UpdateHandler_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+    public void UserSettingsUpdated(SettingsModel settings)
+    {
+        try
+        {
+            _viewModel.UserSettingsUpdated(settings);
+
+            foreach (var childGrid in gridLayout.Children.OfType<INotifySettingsChanged>())
+            {
+                childGrid.UserSettingsUpdated(settings);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in HorizontalGridView.UserSettingsUpdated");
+        }
+    }
+
+    public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
     {
         try
         {
@@ -77,27 +91,13 @@ public partial class HorizontalGridView : ContentView, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error in HorizontalGridView.UserSettingsUpdated");
+            _logger.LogError(ex, "Error in HorizontalGridView.UpdateTimerElapsedAsync");
         }
     }
 
-    protected virtual void UpdateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
-    {
-        try
-        {
-            _viewModel.UserSettingsUpdated(e);
+    #endregion
 
-            foreach (var childGrid in gridLayout.Children.OfType<INotifySettingsChanged>())
-            {
-                childGrid.UserSettingsUpdated(e);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in HorizontalGridView.UserSettingsUpdated");
-        }
-    }
+    #region private
 
     private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -137,6 +137,8 @@ public partial class HorizontalGridView : ContentView, IDisposable
 
     #endregion
 
+    #region IDisposable
+
     private bool _disposed;
     public void Dispose()
     {
@@ -157,9 +159,10 @@ public partial class HorizontalGridView : ContentView, IDisposable
 
             _viewModel = null;
             _logger = null;
-            _updateHandler = null;
         }
 
         _disposed = true;
     }
+
+    #endregion
 }

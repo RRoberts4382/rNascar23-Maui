@@ -1,18 +1,18 @@
 using Microsoft.Extensions.Logging;
 using rNascar23Multi.Logic;
 using rNascar23Multi.Models;
+using rNascar23Multi.Settings.Models;
 using rNascar23Multi.ViewModels;
 
 namespace rNascar23Multi.Views;
 
-public partial class VerticalGridView : ContentView, IDisposable
+public partial class VerticalGridView : ContentView, INotifyUpdateTarget, INotifySettingsChanged, IDisposable
 {
     #region fields
 
     private ILogger<VerticalGridView> _logger;
     private GridSetViewModel _viewModel;
     private GridViewFactory _viewFactory;
-    private UpdateNotificationHandler _updateHandler;
 
     #endregion
 
@@ -43,7 +43,6 @@ public partial class VerticalGridView : ContentView, IDisposable
         InitializeComponent();
 
         _logger = App.serviceProvider.GetRequiredService<ILogger<VerticalGridView>>();
-        _updateHandler = App.serviceProvider.GetRequiredService<UpdateNotificationHandler>();
 
         _viewType = viewType;
 
@@ -57,16 +56,32 @@ public partial class VerticalGridView : ContentView, IDisposable
         _viewFactory = App.serviceProvider.GetRequiredService<GridViewFactory>();
 
         UpdateGrids();
-
-        _updateHandler.UpdateTimerElapsed += UpdateHandler_UpdateTimerElapsed;
-        _updateHandler.UserSettingsUpdated += UpdateHandler_UserSettingsUpdated;
     }
 
     #endregion
 
-    #region private
 
-    private async void UpdateHandler_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+    #region public
+
+    public void UserSettingsUpdated(SettingsModel settings)
+    {
+        try
+        {
+            _viewModel.UserSettingsUpdated(settings);
+
+            foreach (var childGrid in gridLayout.Children.OfType<INotifySettingsChanged>())
+            {
+                childGrid.UserSettingsUpdated(settings);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in VerticalGridView.UserSettingsUpdated");
+        }
+    }
+
+    public async Task UpdateTimerElapsedAsync(UpdateNotificationEventArgs e)
     {
         try
         {
@@ -77,26 +92,45 @@ public partial class VerticalGridView : ContentView, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error in VerticalGridView.UserSettingsUpdated");
+            _logger.LogError(ex, "Error in VerticalGridView.UpdateTimerElapsedAsync");
         }
     }
 
-    protected virtual void UpdateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
-    {
-        try
-        {
-            foreach (var childGrid in gridLayout.Children.OfType<INotifySettingsChanged>())
-            {
-                childGrid.UserSettingsUpdated(e);
-            }
+    #endregion
 
-            _viewModel.UserSettingsUpdated(e);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in VerticalGridView.UserSettingsUpdated");
-        }
-    }
+    #region private
+
+    //private async void UpdateHandler_UpdateTimerElapsed(object sender, UpdateNotificationEventArgs e)
+    //{
+    //    try
+    //    {
+    //        foreach (var childGrid in gridLayout.Children.OfType<INotifyUpdateTarget>())
+    //        {
+    //            await childGrid.UpdateTimerElapsedAsync(e);
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.LogError(ex, "Error in VerticalGridView.UserSettingsUpdated");
+    //    }
+    //}
+
+    //protected virtual void UpdateHandler_UserSettingsUpdated(object sender, Settings.Models.SettingsModel e)
+    //{
+    //    try
+    //    {
+    //        foreach (var childGrid in gridLayout.Children.OfType<INotifySettingsChanged>())
+    //        {
+    //            childGrid.UserSettingsUpdated(e);
+    //        }
+
+    //        _viewModel.UserSettingsUpdated(e);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.LogError(ex, "Error in VerticalGridView.UserSettingsUpdated");
+    //    }
+    //}
 
     private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -158,7 +192,6 @@ public partial class VerticalGridView : ContentView, IDisposable
 
             _viewModel = null;
             _logger = null;
-            _updateHandler = null;
         }
 
         _disposed = true;
