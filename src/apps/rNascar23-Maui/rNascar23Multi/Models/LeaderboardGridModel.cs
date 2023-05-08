@@ -114,8 +114,8 @@ namespace rNascar23Multi.Models
             }
         }
 
-        private int _lastPit;
-        public int LastPit
+        private int? _lastPit;
+        public int? LastPit
         {
             get { return _lastPit; }
             set

@@ -17,6 +17,7 @@ namespace rNascar23Multi.ViewModels
         private ILogger<LeaderboardGridViewModel> _logger;
         private ILiveFeedRepository _liveFeedRepository;
         private ISettingsRepository _settingsRepository;
+        private SettingsModel _userSettings;
 
         #endregion
 
@@ -49,6 +50,8 @@ namespace rNascar23Multi.ViewModels
 
             _settingsRepository = settingsRepository ?? throw new ArgumentNullException(nameof(settingsRepository));
 
+            _userSettings = _settingsRepository.GetSettings();
+
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -60,6 +63,8 @@ namespace rNascar23Multi.ViewModels
         {
             try
             {
+                _userSettings = settings;
+
                 ModelUpdater.ReloadModels(LeftModels);
                 ModelUpdater.ReloadModels(RightModels);
             }
@@ -127,13 +132,11 @@ namespace rNascar23Multi.ViewModels
                 model.Manufacturer = orderedVehicles[i].VehicleManufacturer;
                 model.Laps = orderedVehicles[i].LapsCompleted;
                 model.ToLeader = orderedVehicles[i].Delta;
-                // TODO Calculate ToNext
-                model.ToNext = orderedVehicles[i].Delta;
-                // TODO Speed versus time
-                model.LastLap = orderedVehicles[i].LastLapSpeed;
-                // TODO Speed versus time
-                model.BestLap = orderedVehicles[i].BestLapSpeed;
+                model.ToNext = (float)Math.Round(i == 0 ? 0 : orderedVehicles[i].Delta - orderedVehicles[i - 1].Delta, 2);
+                model.LastLap = _userSettings.UseMph ? orderedVehicles[i].LastLapSpeed : orderedVehicles[i].LastLapTime;
+                model.BestLap = _userSettings.UseMph ? orderedVehicles[i].BestLapSpeed : orderedVehicles[i].BestLapTime;
                 model.OnLap = orderedVehicles[i].BestLap;
+                model.LastPit = orderedVehicles[i].LastPit;
                 model.Status = orderedVehicles[i].Status;
             }
         }

@@ -82,16 +82,16 @@
                                 <Label Text="{Binding Laps}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding ToLeader}"
+                                <Label Text="{Binding ToLeader, StringFormat='{}{0:N2}'}"
                                     WidthRequest="75"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding ToNext}"
+                                <Label Text="{Binding ToNext, StringFormat='{}{0:N2}'}"
                                     WidthRequest="65"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding LastLap}"
+                                <Label Text="{Binding LastLap, StringFormat='{}{0:N2}'}"
                                     WidthRequest="65"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding BestLap}"
+                                <Label Text="{Binding BestLap, StringFormat='{}{0:N2}'}"
                                     WidthRequest="65"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Label Text="{Binding OnLap}"
