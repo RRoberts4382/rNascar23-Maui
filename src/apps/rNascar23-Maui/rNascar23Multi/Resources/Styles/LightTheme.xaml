@@ -19,6 +19,7 @@
     <Color x:Key="GreenHeaderTextColor">Black</Color>
     <Color x:Key="PrimaryRowBackgroundColor">White</Color>
     <Color x:Key="AlternatingRowBackgroundColor">Gainsboro</Color>
+    <Color x:Key="FavoriteDriverBorderColor">#005A9E</Color>
     <Color x:Key="FastestLapOfRaceBorderColor">Purple</Color>
     <Color x:Key="DriverFastestLapOfRaceBorderColor">Green</Color>
     <Color x:Key="FastestLastLapBackgroundColor">LawnGreen</Color>

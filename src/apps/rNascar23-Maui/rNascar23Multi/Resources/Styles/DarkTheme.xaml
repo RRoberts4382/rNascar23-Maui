@@ -19,6 +19,7 @@
     <Color x:Key="GreenHeaderTextColor">LightGray</Color>
     <Color x:Key="PrimaryRowBackgroundColor">Black</Color>
     <Color x:Key="AlternatingRowBackgroundColor">#202020</Color>
+    <Color x:Key="FavoriteDriverBorderColor">Gold</Color>
     <Color x:Key="FastestLapOfRaceBorderColor">MediumOrchid</Color>
     <Color x:Key="DriverFastestLapOfRaceBorderColor">Green</Color>
     <Color x:Key="FastestLastLapBackgroundColor">DarkGreen</Color>

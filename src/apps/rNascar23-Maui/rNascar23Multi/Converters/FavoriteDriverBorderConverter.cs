@@ -15,6 +15,15 @@ namespace rNascar23Multi.Converters
         {
             throw new NotImplementedException();
         }
+        protected override Color GetSelectedColor()
+        {
+            if (Application.Current.Resources.TryGetValue("FavoriteDriverBorderColor", out object notSelectedColor))
+            {
+                return (Color)notSelectedColor;
+            }
+
+            return Colors.Transparent;
+        }
 
         protected override Color GetNotSelectedColor()
         {
