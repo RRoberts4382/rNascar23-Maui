@@ -328,7 +328,7 @@ namespace rNascar23Multi.ViewModels
             {
                 var drivers = await _driverInfoRepository.GetDriversAsync();
 
-                return drivers.Select(d => new FavoriteDriverSelectionModel() { DriverName = d.Name }).ToList();
+                return drivers.OrderBy(d => d.Name).Select(d => new FavoriteDriverSelectionModel() { DriverName = d.Name }).ToList();
             }
             catch (Exception ex)
             {
