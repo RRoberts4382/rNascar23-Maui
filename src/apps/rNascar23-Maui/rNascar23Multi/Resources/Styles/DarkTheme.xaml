@@ -19,6 +19,9 @@
     <Color x:Key="GreenHeaderTextColor">LightGray</Color>
     <Color x:Key="PrimaryRowBackgroundColor">Black</Color>
     <Color x:Key="AlternatingRowBackgroundColor">#202020</Color>
+    <Color x:Key="FastestLapOfRaceBorderColor">MediumOrchid</Color>
+    <Color x:Key="DriverFastestLapOfRaceBorderColor">Green</Color>
+    <Color x:Key="FastestLastLapBackgroundColor">DarkGreen</Color>
     <x:String x:Key="InPitsStatus">in_pits_dark.png</x:String>
     <x:String x:Key="InGarageStatus">in_garage_dark.png</x:String>
 </ResourceDictionary>

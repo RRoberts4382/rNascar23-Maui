@@ -14,6 +14,8 @@ namespace rNascar23Multi.ViewModels
     {
         #region fields
 
+        private float _bestLapSpeedOfLastLap;
+        private float _bestLapSpeedOfRace;
         private ILogger<LeaderboardGridViewModel> _logger;
         private ILiveFeedRepository _liveFeedRepository;
         private ISettingsRepository _settingsRepository;
@@ -99,6 +101,10 @@ namespace rNascar23Multi.ViewModels
             {
                 var liveFeed = await _liveFeedRepository.GetLiveFeedAsync();
 
+                _bestLapSpeedOfRace = liveFeed.Vehicles.Max(v => v.BestLapSpeed);
+
+                _bestLapSpeedOfLastLap = liveFeed.Vehicles.Where(v => (int)v.Status <= 1).Max(v => v.LastLapSpeed);
+
                 UpdateModels(LeftModels, liveFeed.Vehicles.OrderBy(v => v.RunningPosition).Take(20));
 
                 UpdateModels(RightModels, liveFeed.Vehicles.OrderBy(v => v.RunningPosition).Skip(20));
@@ -139,6 +145,10 @@ namespace rNascar23Multi.ViewModels
                 model.LastPit = orderedVehicles[i].LastPit;
                 model.Status = orderedVehicles[i].Status;
                 model.IsFavoriteDriver = _userSettings.FavoriteDrivers.Contains(orderedVehicles[i].Driver?.FullName);
+
+                model.IsDriverFastestLapOfRace = (orderedVehicles[i].LastLapSpeed == orderedVehicles[i].BestLapSpeed);
+                model.IsFastestLapOfRace = (_bestLapSpeedOfRace == orderedVehicles[i].BestLapSpeed);
+                model.IsFastestLastLap = (_bestLapSpeedOfLastLap == orderedVehicles[i].LastLapSpeed);
             }
         }
 

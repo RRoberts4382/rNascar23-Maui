@@ -136,6 +136,39 @@ namespace rNascar23Multi.Models
             }
         }
 
+        private bool _isFastestLapOfRace;
+        public bool IsFastestLapOfRace
+        {
+            get { return _isFastestLapOfRace; }
+            set
+            {
+                _isFastestLapOfRace = value;
+                OnPropertyChanged(nameof(IsFastestLapOfRace));
+            }
+        }
+
+        private bool _isDriverFastestLapOfRace;
+        public bool IsDriverFastestLapOfRace
+        {
+            get { return _isDriverFastestLapOfRace; }
+            set
+            {
+                _isDriverFastestLapOfRace = value;
+                OnPropertyChanged(nameof(IsDriverFastestLapOfRace));
+            }
+        }
+
+        private bool _isFastestLastLap;
+        public bool IsFastestLastLap
+        {
+            get { return _isFastestLastLap; }
+            set
+            {
+                _isFastestLastLap = value;
+                OnPropertyChanged(nameof(IsFastestLastLap));
+            }
+        }
+
         private bool _isFavoriteDriver;
         public bool IsFavoriteDriver
         {

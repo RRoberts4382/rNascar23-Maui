@@ -14,6 +14,12 @@
             x:Key="vehicleStatusImageConverter" />
         <converters:FavoriteDriverBorderConverter 
             x:Key="favoriteDriverBorderConverter" />
+        <converters:FastestLapOfRaceBorderConverter 
+            x:Key="fastestLapOfRaceBorderConverter" />
+        <converters:DriverFastestLapOfRaceBorderConverter 
+            x:Key="driverFastestLapOfRaceBorderConverter" />
+        <converters:FastestLastLapBackgroundConverter 
+            x:Key="fastestLastLapBackgroundConverter" />
     </ContentView.Resources>
 
     <Grid>
@@ -93,12 +99,20 @@
                                 <Label Text="{Binding ToNext, StringFormat='{}{0:N2}'}"
                                     WidthRequest="65"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding LastLap, StringFormat='{}{0:N2}'}"
-                                    WidthRequest="65"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding BestLap, StringFormat='{}{0:N2}'}"
-                                    WidthRequest="65"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Border Stroke="{Binding IsDriverFastestLapOfRace, Converter={StaticResource driverFastestLapOfRaceBorderConverter}}" 
+                                    Style="{StaticResource FastestLapBorderStyle}">
+                                    <Label Text="{Binding LastLap, StringFormat='{}{0:N2}'}"
+                                        WidthRequest="60"
+                                        Padding="4,0,0,0"
+                                        Style="{StaticResource LeaderboardItemLabelStyle}"
+                                        BackgroundColor="{Binding IsFastestLastLap, Converter={StaticResource fastestLastLapBackgroundConverter}}"/>
+                                </Border>
+                                <Border Stroke="{Binding IsFastestLapOfRace, Converter={StaticResource fastestLapOfRaceBorderConverter}}" 
+                                    Style="{StaticResource FastestLapBorderStyle}">
+                                    <Label Text="{Binding BestLap, StringFormat='{}{0:N2}'}"
+                                        WidthRequest="60"
+                                        Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                </Border>
                                 <Label Text="{Binding OnLap}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
@@ -184,12 +198,20 @@
                                 <Label Text="{Binding ToNext}"
                                     WidthRequest="65"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding LastLap}"
-                                    WidthRequest="65"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding BestLap}"
-                                    WidthRequest="65"
-                                    Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                <Border Stroke="{Binding IsDriverFastestLapOfRace, Converter={StaticResource driverFastestLapOfRaceBorderConverter}}" 
+                                    Style="{StaticResource FastestLapBorderStyle}">
+                                    <Label Text="{Binding LastLap, StringFormat='{}{0:N2}'}"
+                                        WidthRequest="60"
+                                        Style="{StaticResource LeaderboardItemLabelStyle}"
+                                        Padding="4,0,0,0"
+                                        BackgroundColor="{Binding IsFastestLastLap, Converter={StaticResource fastestLastLapBackgroundConverter}}"/>
+                                </Border>
+                                <Border Stroke="{Binding IsFastestLapOfRace, Converter={StaticResource fastestLapOfRaceBorderConverter}}" 
+                                    Style="{StaticResource FastestLapBorderStyle}">
+                                    <Label Text="{Binding BestLap, StringFormat='{}{0:N2}'}"
+                                        WidthRequest="60"
+                                        Style="{StaticResource LeaderboardItemLabelStyle}"/>
+                                </Border>
                                 <Label Text="{Binding OnLap}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
