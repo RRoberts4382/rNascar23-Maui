@@ -37,9 +37,12 @@
                             <Label Text="{Binding Driver}"
                                 WidthRequest="150"
                                 Style="{StaticResource GridNameLabelStyle}"/>
-                            <Label Text="{Binding Value, StringFormat='{}{0:N2}'}"
+                            <Label Text="{Binding Value}"
                                 WidthRequest="50"
                                 Style="{StaticResource GridValueLabelStyle}"/>
+                            <!--<Label Text="{Binding Value, StringFormat='{}{0:N2}'}"
+                                WidthRequest="50"
+                                Style="{StaticResource GridValueLabelStyle}"/>-->
                         </HorizontalStackLayout>
                     </ViewCell>
                 </DataTemplate>

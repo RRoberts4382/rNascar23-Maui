@@ -93,10 +93,10 @@
                                 <Label Text="{Binding Laps}"
                                     WidthRequest="35"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding ToLeader, StringFormat='{}{0:N2}'}"
+                                <Label Text="{Binding ToLeader}"
                                     WidthRequest="75"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
-                                <Label Text="{Binding ToNext, StringFormat='{}{0:N2}'}"
+                                <Label Text="{Binding ToNext}"
                                     WidthRequest="65"
                                     Style="{StaticResource LeaderboardItemLabelStyle}"/>
                                 <Border Stroke="{Binding IsDriverFastestLapOfRace, Converter={StaticResource driverFastestLapOfRaceBorderConverter}}" 
